@@ -52,8 +52,8 @@ function drawGrid(grid, viewport) {
       console.timeEnd('get hexes in chunk');
       const chunkContainer = new PIXI.Container();
       chunkContainer.position.set(
-        HEX_WIDTH * CHUNK_SIZE * cx,
-        HEX_HEIGHT * CHUNK_SIZE * cy,
+        CHUNK_WIDTH * cx,
+        CHUNK_HEIGHT * cy,
       );
       const graphics = new PIXI.Graphics();
       graphics.lineStyle(1, 0x999999);
