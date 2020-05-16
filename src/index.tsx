@@ -2,9 +2,15 @@ import React from 'react';
 import { render } from 'react-dom';
 import { App } from './App';
 import './style.css';
+import { ThemeProvider, CssBaseline } from '@material-ui/core';
+import { theme } from './theme';
+import 'typeface-roboto';
 
 const AppContainer = ({ app }: { app: any }) => (
-  app
+  <ThemeProvider theme={theme}>
+    <CssBaseline />
+    {app}
+  </ThemeProvider>
 );
 const rootElementID = 'root';
 
