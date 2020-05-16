@@ -39,11 +39,12 @@ function drawGrid(grid, viewport) {
       chunkHexes = [];
       console.group(`Drawing chunk (${cx}, ${cy})`);
       console.time('get hexes in chunk');
+      const firstHexIndex = hexgrid.indexOf(hexgrid.get({
+        x: cx * CHUNK_SIZE,
+        y: cy * CHUNK_SIZE,
+      }));
       for (let hx = 0; hx < CHUNK_SIZE; hx++) {
-        const index = hexgrid.indexOf(hexgrid.get({
-          x: cx * CHUNK_SIZE,
-          y: cy * CHUNK_SIZE + hx,
-        }))
+        const index = firstHexIndex + (hx * GRID_WIDTH);
         for (let hy = 0; hy < CHUNK_SIZE; hy++) {
           chunkHexes.push(hexgrid[index + hy])
         }
