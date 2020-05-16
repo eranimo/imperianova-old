@@ -8,8 +8,8 @@ import Cull from 'pixi-cull';
 const HEX_SIZE = 10;
 const HEX_WIDTH = Math.sqrt(3) * HEX_SIZE;
 const HEX_HEIGHT = 2 * HEX_SIZE;
-const GRID_WIDTH = 50;
-const GRID_HEIGHT = 50;
+const GRID_WIDTH = 100;
+const GRID_HEIGHT = 100;
 const CHUNK_SIZE = 5;
 const GRID_CHUNK_WIDTH = GRID_WIDTH / CHUNK_SIZE;
 const GRID_CHUNK_HEIGHT = GRID_HEIGHT / CHUNK_SIZE;
@@ -40,20 +40,20 @@ function drawGrid(grid, viewport) {
       console.group(`Drawing chunk (${cx}, ${cy})`);
       console.time('get hexes in chunk');
       for (let hx = 0; hx < CHUNK_SIZE; hx++) {
+        const index = hexgrid.indexOf(hexgrid.get({
+          x: cx * CHUNK_SIZE,
+          y: cy * CHUNK_SIZE + hx,
+        }))
         for (let hy = 0; hy < CHUNK_SIZE; hy++) {
-          chunkHexes.push(
-            hexgrid.get({
-              x: cx * CHUNK_SIZE + hx,
-              y: cy * CHUNK_SIZE + hy,
-            })
-          );
+          chunkHexes.push(hexgrid[index + hy])
         }
       }
+      console.log(chunkHexes);
       console.timeEnd('get hexes in chunk');
       const chunkContainer = new PIXI.Container();
       chunkContainer.position.set(
-        CHUNK_WIDTH * cx,
-        CHUNK_HEIGHT * cy,
+        CHUNK_WIDTH * cx - ((HEX_WIDTH / 2) * cx),
+        CHUNK_HEIGHT * cy - (1/4 * HEX_HEIGHT * cy),
       );
       const graphics = new PIXI.Graphics();
       graphics.lineStyle(1, 0x999999);
