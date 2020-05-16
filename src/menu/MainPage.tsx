@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { initGame } from '../mapviewer/MapViewer';
 
 
 export const MainPage: React.FC = () => {
-  useEffect(() => initGame(), []);
+  const mapViewerRef = useRef(null);
+  useEffect(() => initGame(mapViewerRef.current), []);
   return (
-    <div id="map-viewer">
-      
+    <div ref={mapViewerRef}>
     </div>
   )
 }
