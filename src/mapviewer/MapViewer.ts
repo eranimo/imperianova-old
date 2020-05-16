@@ -37,19 +37,19 @@ function drawGrid(grid, viewport) {
   for (let cx = 0; cx < GRID_CHUNK_WIDTH; cx++) {
     for (let cy = 0; cy < GRID_CHUNK_HEIGHT; cy++) {
       chunkHexes = [];
-      console.group(`Drawing chunk (${cx}, ${cy})`);
+      console.groupCollapsed(`Drawing chunk (${cx}, ${cy})`);
       console.time('get hexes in chunk');
-      const firstHexIndex = hexgrid.indexOf(hexgrid.get({
-        x: cx * CHUNK_SIZE,
-        y: cy * CHUNK_SIZE,
-      }));
+      // const firstHexIndex = hexgrid.indexOf(hexgrid.get({
+      //   x: cx * CHUNK_SIZE,
+      //   y: cy * CHUNK_SIZE,
+      // }));
+      const firstHexIndex = (cx * CHUNK_SIZE) + GRID_WIDTH * (cy * CHUNK_SIZE);
       for (let hx = 0; hx < CHUNK_SIZE; hx++) {
         const index = firstHexIndex + (hx * GRID_WIDTH);
         for (let hy = 0; hy < CHUNK_SIZE; hy++) {
           chunkHexes.push(hexgrid[index + hy])
         }
       }
-      console.log(chunkHexes);
       console.timeEnd('get hexes in chunk');
       const chunkContainer = new PIXI.Container();
       chunkContainer.position.set(
