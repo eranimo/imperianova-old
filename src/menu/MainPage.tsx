@@ -1,13 +1,12 @@
-import React from 'react';
-import { Button } from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { initGame } from '../mapviewer/MapViewer';
 
 
 export const MainPage: React.FC = () => {
+  useEffect(() => initGame(), []);
   return (
-    <div>
-      <Button variant="contained" color="primary">
-        Hello World
-      </Button>
+    <div id="map-viewer">
+      
     </div>
   )
 }
