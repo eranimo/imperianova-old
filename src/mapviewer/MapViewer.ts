@@ -8,8 +8,16 @@ import Cull from 'pixi-cull';
 const HEX_SIZE = 10;
 const HEX_WIDTH = Math.sqrt(3) * HEX_SIZE;
 const HEX_HEIGHT = 2 * HEX_SIZE;
-const GRID_WIDTH = 170;
-const GRID_HEIGHT = 150;
+const GRID_WIDTH = 50;
+const GRID_HEIGHT = 50;
+const CHUNK_SIZE = 5;
+const GRID_CHUNK_WIDTH = GRID_WIDTH / CHUNK_SIZE;
+const GRID_CHUNK_HEIGHT = GRID_HEIGHT / CHUNK_SIZE;
+const CHUNK_WIDTH = (HEX_WIDTH * CHUNK_SIZE) + (HEX_WIDTH / 2);
+const CHUNK_HEIGHT = (HEX_HEIGHT * CHUNK_SIZE) - HEX_HEIGHT;
+
+// debug
+const DEBUG_CHUNK_GRID = false;
 
 function setupGrid() {
   const Hex = Honeycomb.extendHex({
@@ -21,26 +29,62 @@ function setupGrid() {
 
 function drawGrid(grid, viewport) {
   console.log('draw grid');
-  grid.rectangle({ width: GRID_WIDTH, height: GRID_HEIGHT }).forEach(hex => {
-    const graphics = new PIXI.Graphics();
-    graphics.lineStyle(1, 0x999999);
-    const point = hex.toPoint();
-    // // add the hex's position to each of its corner points
-    // const corners = hex.corners().map(corner => corner.add(point))
-    // separate the first from the other corners
-    const [firstCorner, ...otherCorners] = hex.corners();
-
-    // move the "pen" to the first corner
-    graphics.moveTo(firstCorner.x, firstCorner.y)
-    // draw lines to the other corners
-    otherCorners.forEach(({ x, y }) => graphics.lineTo(x, y))
-    // finish at the first corner
-    graphics.lineTo(firstCorner.x, firstCorner.y)
-    const hexContainer = new PIXI.Container();
-    hexContainer.addChild(graphics)
-    hexContainer.position.set(point.x, point.y);
-    viewport.addChild(hexContainer);
+  const hexgrid = grid.rectangle({
+    width: GRID_WIDTH,
+    height: GRID_HEIGHT,
   });
+  let chunkHexes;
+  for (let cx = 0; cx < GRID_CHUNK_WIDTH; cx++) {
+    for (let cy = 0; cy < GRID_CHUNK_HEIGHT; cy++) {
+      chunkHexes = [];
+      console.group(`Drawing chunk (${cx}, ${cy})`);
+      console.time('get hexes in chunk');
+      for (let hx = 0; hx < CHUNK_SIZE; hx++) {
+        for (let hy = 0; hy < CHUNK_SIZE; hy++) {
+          chunkHexes.push(
+            hexgrid.get({
+              x: cx * CHUNK_SIZE + hx,
+              y: cy * CHUNK_SIZE + hy,
+            })
+          );
+        }
+      }
+      console.timeEnd('get hexes in chunk');
+      const chunkContainer = new PIXI.Container();
+      chunkContainer.position.set(
+        HEX_WIDTH * CHUNK_SIZE * cx,
+        HEX_HEIGHT * CHUNK_SIZE * cy,
+      );
+      const graphics = new PIXI.Graphics();
+      graphics.lineStyle(1, 0x999999);
+      console.time('chunk draw');
+      chunkHexes.forEach(hex => {
+        const point = hex.toPoint() as PIXI.Point;
+        point.x -= chunkContainer.position.x;
+        point.y -= chunkContainer.position.y;
+        const [firstCorner, ...otherCorners] = hex.corners().map(corner => corner.add(point));
+
+        graphics.beginFill(0x333333);
+        graphics.moveTo(firstCorner.x, firstCorner.y);
+        otherCorners.forEach(({ x, y }) => graphics.lineTo(x, y))
+        graphics.lineTo(firstCorner.x, firstCorner.y);
+        graphics.endFill();
+      });
+
+      if (DEBUG_CHUNK_GRID) {
+        graphics.lineStyle(1, 0x009999);
+        graphics.moveTo(0, 0);
+        graphics.lineTo(0, CHUNK_HEIGHT);
+        graphics.lineTo(CHUNK_WIDTH, CHUNK_HEIGHT);
+        graphics.lineTo(CHUNK_WIDTH, 0);
+        graphics.lineTo(0, 0);
+      }
+      chunkContainer.addChild(graphics);
+      viewport.addChild(chunkContainer);
+      console.timeEnd('chunk draw');
+      console.groupEnd();
+    }
+  }
 }
 
 function setupApp(element: HTMLElement) {
@@ -72,8 +116,8 @@ function setupApp(element: HTMLElement) {
   });
 
   const cull = new Cull.SpatialHash({
-    xSize: HEX_WIDTH,
-    ySize: HEX_HEIGHT,
+    xSize: CHUNK_WIDTH,
+    ySize: CHUNK_HEIGHT,
   });
   cull.addContainer(viewport);
   cull.cull(viewport.getVisibleBounds());
