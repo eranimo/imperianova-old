@@ -8,16 +8,8 @@ import Cull from 'pixi-cull';
 const HEX_SIZE = 32;
 const HEX_WIDTH = Math.sqrt(3) * HEX_SIZE;
 const HEX_HEIGHT = 2 * HEX_SIZE;
-const GRID_WIDTH = 100;
-const GRID_HEIGHT = 100;
-const CHUNK_SIZE = 10;
-const GRID_CHUNK_WIDTH = GRID_WIDTH / CHUNK_SIZE;
-const GRID_CHUNK_HEIGHT = GRID_HEIGHT / CHUNK_SIZE;
-const CHUNK_WIDTH = (HEX_WIDTH * CHUNK_SIZE) + (HEX_WIDTH / 2);
-const CHUNK_HEIGHT = (HEX_HEIGHT * CHUNK_SIZE) - HEX_HEIGHT;
-
-// debug
-const DEBUG_CHUNK_GRID = false;
+const GRID_WIDTH = 200;
+const GRID_HEIGHT = 200;
 
 type Hex = {
   size: number,
@@ -62,7 +54,6 @@ class Tilemap {
     })
     this.gridFactory = Honeycomb.defineGrid(Hex)
     this.resources = options.resources;
-    this.createChunks();
   }
 
   createChunks() {
@@ -82,84 +73,32 @@ class Tilemap {
         },
       }
     };
-    const grass = getTilesetImage(tileset, 1);
+    const grass = getTilesetImage(tileset, 0);
     console.log(grass);
 
     const chunksContainer = new PIXI.Container();
     chunksContainer.sortableChildren = true;
     this.viewport.addChild(chunksContainer);
 
-    let chunkHexes;
-    for (let cx = 0; cx < GRID_CHUNK_WIDTH; cx++) {
-      for (let cy = 0; cy < GRID_CHUNK_HEIGHT; cy++) {
-        chunkHexes = [];
-        console.groupCollapsed(`Drawing chunk (${cx}, ${cy})`);
-        console.time('get hexes in chunk');
-        // const firstHexIndex = hexgrid.indexOf(hexgrid.get({
-        //   x: cx * CHUNK_SIZE,
-        //   y: cy * CHUNK_SIZE,
-        // }));
-        const firstHexIndex = (cx * CHUNK_SIZE) + GRID_WIDTH * (cy * CHUNK_SIZE);
-        for (let hx = 0; hx < CHUNK_SIZE; hx++) {
-          const index = firstHexIndex + (hx * GRID_WIDTH);
-          for (let hy = 0; hy < CHUNK_SIZE; hy++) {
-            chunkHexes.push(hexgrid[index + hy])
-          }
-        }
-        console.timeEnd('get hexes in chunk');
-        const chunkContainer = new PIXI.Container();
-        chunkContainer.sortableChildren = true;
-        chunkContainer.zIndex = (cx) * 1000;
-        chunkContainer.position.set(
-          CHUNK_WIDTH * cx - ((HEX_WIDTH / 2) * cx),
-          CHUNK_HEIGHT * cy - (1/4 * HEX_HEIGHT * cy),
-        );
-        const graphics = new PIXI.Graphics();
-        graphics.lineStyle(1, 0x999999);
-        console.time('chunk draw');
-        chunkHexes.forEach(hex => {
-          const point = hex.toPoint() as PIXI.Point;
-          point.x -= chunkContainer.position.x;
-          point.y -= chunkContainer.position.y;
-          const hexSprite = new PIXI.Sprite();
-          hexSprite.scale = new PIXI.Point(2, 2);
-          hexSprite.position = point;
-          hexSprite.position.y -= (24 * 2);
-          hexSprite.position.y += 8;
-          hexSprite.texture = grass;
-          hexSprite.zIndex = hex.toPoint().y;
-          chunkContainer.addChild(hexSprite);
+    hexgrid.forEach(hex => {
+      const point = hex.toPoint();
+      const hexSprite = new PIXI.Sprite();
+      hexSprite.scale = new PIXI.Point(2, 2);
+      hexSprite.position.set(point.x, point.y);
+      hexSprite.position.y -= (24 * 2);
+      hexSprite.position.y += 8;
+      hexSprite.texture = grass;
+      hexSprite.zIndex = (point.y * 1000)
+      chunksContainer.addChild(hexSprite);
+    });
 
-          const [firstCorner, ...otherCorners] = hex.corners().map(corner => corner.add(point));
-
-          // graphics.beginFill(0x333333);
-          graphics.moveTo(firstCorner.x, firstCorner.y);
-          otherCorners.forEach(({ x, y }) => graphics.lineTo(x, y))
-          graphics.lineTo(firstCorner.x, firstCorner.y);
-          // graphics.endFill();
-        });
-
-        if (DEBUG_CHUNK_GRID) {
-          graphics.lineStyle(1, 0x009999);
-          graphics.moveTo(0, 0);
-          graphics.lineTo(0, CHUNK_HEIGHT);
-          graphics.lineTo(CHUNK_WIDTH, CHUNK_HEIGHT);
-          graphics.lineTo(CHUNK_WIDTH, 0);
-          graphics.lineTo(0, 0);
-        }
-        // chunkContainer.addChild(graphics);
-        chunksContainer.addChild(chunkContainer);
-        console.timeEnd('chunk draw');
-        console.groupEnd();
-      }
-    }
-    console.timeEnd('chunks draw');
-    console.groupEnd();
+    return chunksContainer;
   }
 }
 class MapViewer {
   app: PIXI.Application;
   viewport: Viewport;
+  cull: any;
 
   constructor(element: HTMLElement) {
     PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
@@ -192,18 +131,9 @@ class MapViewer {
       interaction: app.renderer.plugins.interaction,
     });
   
-    // const cull = new Cull.SpatialHash({
-    //   xSize: CHUNK_WIDTH,
-    //   ySize: CHUNK_HEIGHT,
-    // });
-    // cull.addContainer(viewport);
-    // cull.cull(viewport.getVisibleBounds());
-    // app.ticker.add(() => {
-    //   if (viewport.dirty) {
-    //     cull.cull(viewport.getVisibleBounds());
-    //     viewport.dirty = false;
-    //   }
-    // });
+    this.cull = new Cull.Simple({
+      dirtyTest: false,
+    });
   
     // add the viewport to the stage
     app.stage.addChild(viewport);
@@ -217,6 +147,15 @@ class MapViewer {
   start(resources: PIXI.IResourceDictionary) {
     const tilemap = new Tilemap(this.app, this.viewport, {
       resources
+    });
+    const layer = tilemap.createChunks();
+    this.cull.addList(layer.children);
+    this.cull.cull(this.viewport.getVisibleBounds());
+    this.app.ticker.add(() => {
+      if (this.viewport.dirty) {
+        this.cull.cull(this.viewport.getVisibleBounds());
+        this.viewport.dirty = false;
+      }
     });
     console.log('resources', resources);
   }
