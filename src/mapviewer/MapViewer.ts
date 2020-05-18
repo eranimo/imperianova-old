@@ -1,15 +1,15 @@
-import * as PIXI from "pixi.js-legacy";
+import * as PIXI from "pixi.js";
 import { Viewport } from "pixi-viewport";
 import * as Honeycomb from 'honeycomb-grid'
 import Stats from 'stats.js';
 import Cull from 'pixi-cull';
 
 
-const HEX_SIZE = 32;
-const HEX_WIDTH = Math.sqrt(3) * HEX_SIZE;
-const HEX_HEIGHT = 2 * HEX_SIZE;
-const GRID_WIDTH = 200;
-const GRID_HEIGHT = 200;
+const HEX_SIZE = 16;
+const HEX_WIDTH = 2 * HEX_SIZE;
+const HEX_HEIGHT = Math.sqrt(3) * HEX_SIZE;
+const GRID_WIDTH = 10;
+const GRID_HEIGHT = 10;
 
 type Hex = {
   size: number,
@@ -26,7 +26,7 @@ type Tileset = {
   }
 };
 
-function getTilesetImage(tileset: Tileset, index: number) {
+function getTilesetImage(app: PIXI.Application, tileset: Tileset, index: number) {
   const { options } = tileset;
   const texture = new PIXI.Texture(tileset.texture, new PIXI.Rectangle(
     (index % options.columns) * options.grid.width,
@@ -35,6 +35,17 @@ function getTilesetImage(tileset: Tileset, index: number) {
     options.grid.height,
   ));
   return texture;
+}
+
+
+function sortHexes(a: Honeycomb.Hex<Hex>, b: Honeycomb.Hex<Hex>) {
+  if (a.r < b.r) {
+    return -1;
+  }
+  if (a.r === b.r) {
+    return 0;
+  }
+  return 1;
 }
 
 class Tilemap {
@@ -51,7 +62,7 @@ class Tilemap {
     const Hex = Honeycomb.extendHex<Hex>({
       size: HEX_SIZE,
       orientation: 'flat'
-    })
+    } as any)
     this.gridFactory = Honeycomb.defineGrid(Hex)
     this.resources = options.resources;
   }
@@ -73,28 +84,73 @@ class Tilemap {
         },
       }
     };
-    const grass = getTilesetImage(tileset, 0);
+    const grass = getTilesetImage(this.app, tileset, 1);
+    const selection = getTilesetImage(this.app, tileset, 24);
     console.log(grass);
 
-    const chunksContainer = new PIXI.Container();
-    chunksContainer.sortableChildren = true;
-    this.viewport.addChild(chunksContainer);
+    const hexGraphics = new PIXI.Graphics();
+    // hexGraphics.lineStyle(1, 0x999999);
+    this.viewport.addChild(hexGraphics);
 
-    hexgrid.forEach(hex => {
-      const point = hex.toPoint();
-      const hexSprite = new PIXI.Sprite();
-      hexSprite.scale = new PIXI.Point(2, 2);
-      hexSprite.position.set(point.x, point.y);
-      hexSprite.position.y -= (24 * 2);
-      hexSprite.position.y += 8;
-      hexSprite.texture = grass;
-      hexSprite.zIndex = (point.y * 1000)
-      chunksContainer.addChild(hexSprite);
+    const gridGraphics = new PIXI.Graphics();
+    // gridGraphics.lineStyle(1, 0x009999);
+    this.viewport.addChild(gridGraphics);
+
+    // const debugContainer = new PIXI.Container();
+    // debugContainer.cacheAsBitmap = true;
+    // this.viewport.addChild(debugContainer);
+
+
+    console.log('hexgrid', hexgrid);
+    hexgrid.sort(sortHexes).forEach(hex => {
+      const x = HEX_SIZE * 3/2 * hex.x;
+      const y = HEX_SIZE * Math.sqrt(3) * (hex.y + 0.5 * (hex.x & 1))
+      const w = 32;
+      const h = 48;
+      const texture = grass;
+      const half = (1/2) * HEX_HEIGHT;
+      const matrix = new PIXI.Matrix();
+      matrix.scale(w / texture.width, h / texture.height)
+      matrix.translate(x, y - (half + 4));
+      hexGraphics.beginTextureFill({
+        texture,
+        matrix,
+        color: 0xFFFFFF,
+      })
+      hexGraphics.moveTo(x, y);
+      hexGraphics.drawRect(
+        x,
+        y - (half + 4),
+        32,
+        48,
+      );
+      hexGraphics.endFill();
+
+      // const coordinate = new PIXI.Text(`${hex.q}, ${hex.r}`, {
+      //   fontSize: 10,
+      //   fill: 0xFFFFFF,
+      //   align: 'center',
+      // });
+      // coordinate.position.set(x, y);
+      // debugContainer.addChild(coordinate);
+      
+      // const point = hex.toPoint();
+      // // add the hex's position to each of its corner points
+      // const corners = hex.corners().map(corner => corner.add(point))
+      // // separate the first from the other corners
+      // const [firstCorner, ...otherCorners] = corners
+
+      // // move the "pen" to the first corner
+      // gridGraphics.moveTo(firstCorner.x, firstCorner.y)
+      // // draw lines to the other corners
+      // otherCorners.forEach(({ x, y }) => gridGraphics.lineTo(x, y))
+      // // finish at the first corner
+      // gridGraphics.lineTo(firstCorner.x, firstCorner.y)
     });
 
     console.timeEnd('draw');
     console.groupEnd();
-    return chunksContainer;
+    return hexGraphics;
   }
 }
 class MapViewer {
