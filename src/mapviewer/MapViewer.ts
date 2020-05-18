@@ -8,8 +8,8 @@ import Cull from 'pixi-cull';
 const HEX_SIZE = 16;
 const HEX_WIDTH = 2 * HEX_SIZE;
 const HEX_HEIGHT = Math.sqrt(3) * HEX_SIZE;
-const GRID_WIDTH = 5;
-const GRID_HEIGHT = 5;
+const GRID_WIDTH = 100;
+const GRID_HEIGHT = 100;
 
 type Hex = {
   size: number,
@@ -34,12 +34,18 @@ function getTilesetImage(app: PIXI.Application, tileset: Tileset, index: number)
     options.grid.width,
     options.grid.height,
   ));
-  // hack to turn it into its own Texture
-  const sprite = new PIXI.Sprite(texture);
-  const pixels = app.renderer.extract.pixels(sprite);
-  console.log(pixels);
-  const newTexture = PIXI.Texture.fromBuffer(pixels, options.grid.width, options.grid.height);
-  return newTexture;
+  return texture;
+}
+
+
+function sortHexes(a: Honeycomb.Hex<Hex>, b: Honeycomb.Hex<Hex>) {
+  if (a.r < b.r) {
+    return -1;
+  }
+  if (a.r === b.r) {
+    return 0;
+  }
+  return 1;
 }
 
 class Tilemap {
@@ -83,34 +89,35 @@ class Tilemap {
     console.log(grass);
 
     const hexGraphics = new PIXI.Graphics();
-    hexGraphics.lineStyle(1, 0x999999);
+    // hexGraphics.lineStyle(1, 0x999999);
     this.viewport.addChild(hexGraphics);
 
     const gridGraphics = new PIXI.Graphics();
-    gridGraphics.lineStyle(1, 0x009999);
+    // gridGraphics.lineStyle(1, 0x009999);
     this.viewport.addChild(gridGraphics);
 
-    const matrix = new PIXI.Matrix();
+    // const debugContainer = new PIXI.Container();
+    // debugContainer.cacheAsBitmap = true;
+    // this.viewport.addChild(debugContainer);
+
 
     console.log('hexgrid', hexgrid);
-    [
-      hexgrid.get({ x: 0, y: 0 }),
-      hexgrid.get({ x: 1, y: 0 }),
-      hexgrid.get({ x: 0, y: 1 }),
-      hexgrid.get({ x: 1, y: 1 }),
-    ].forEach(hex => {
+    hexgrid.sort(sortHexes).forEach(hex => {
       const x = HEX_SIZE * 3/2 * hex.x;
       const y = HEX_SIZE * Math.sqrt(3) * (hex.y + 0.5 * (hex.x & 1))
+      const w = 32;
+      const h = 48;
+      const texture = grass;
       const half = (1/2) * HEX_HEIGHT;
-      matrix.set(1, 0, 0, 1, 0, -(half + 4));
+      const matrix = new PIXI.Matrix();
+      matrix.scale(w / texture.width, h / texture.height)
+      matrix.translate(x, y - (half + 4));
       hexGraphics.beginTextureFill({
-        texture: grass,
+        texture,
         matrix,
         color: 0xFFFFFF,
-        // alpha: 0.5,
       })
-      // console.log(grass, hex, point);
-      // console.log(x, y, matrix);
+      hexGraphics.moveTo(x, y);
       hexGraphics.drawRect(
         x,
         y - (half + 4),
@@ -118,20 +125,27 @@ class Tilemap {
         48,
       );
       hexGraphics.endFill();
+
+      // const coordinate = new PIXI.Text(`${hex.q}, ${hex.r}`, {
+      //   fontSize: 10,
+      //   fill: 0xFFFFFF,
+      //   align: 'center',
+      // });
+      // coordinate.position.set(x, y);
+      // debugContainer.addChild(coordinate);
       
-      const point = hex.toPoint();
+      // const point = hex.toPoint();
+      // // add the hex's position to each of its corner points
+      // const corners = hex.corners().map(corner => corner.add(point))
+      // // separate the first from the other corners
+      // const [firstCorner, ...otherCorners] = corners
 
-      // add the hex's position to each of its corner points
-      const corners = hex.corners().map(corner => corner.add(point))
-      // separate the first from the other corners
-      const [firstCorner, ...otherCorners] = corners
-
-      // move the "pen" to the first corner
-      gridGraphics.moveTo(firstCorner.x, firstCorner.y)
-      // draw lines to the other corners
-      otherCorners.forEach(({ x, y }) => gridGraphics.lineTo(x, y))
-      // finish at the first corner
-      gridGraphics.lineTo(firstCorner.x, firstCorner.y)
+      // // move the "pen" to the first corner
+      // gridGraphics.moveTo(firstCorner.x, firstCorner.y)
+      // // draw lines to the other corners
+      // otherCorners.forEach(({ x, y }) => gridGraphics.lineTo(x, y))
+      // // finish at the first corner
+      // gridGraphics.lineTo(firstCorner.x, firstCorner.y)
     });
 
     console.timeEnd('draw');
