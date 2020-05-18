@@ -58,7 +58,7 @@ class Tilemap {
 
   createChunks() {
     console.groupCollapsed('draw grid');
-    console.time('chunks draw');
+    console.time('draw');
     const hexgrid = this.gridFactory.rectangle({
       width: GRID_WIDTH,
       height: GRID_HEIGHT,
@@ -92,6 +92,8 @@ class Tilemap {
       chunksContainer.addChild(hexSprite);
     });
 
+    console.timeEnd('draw');
+    console.groupEnd();
     return chunksContainer;
   }
 }
