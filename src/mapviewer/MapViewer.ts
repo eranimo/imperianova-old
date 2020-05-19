@@ -117,7 +117,7 @@ class Tilemap {
     console.groupCollapsed('draw grid');
     console.time('draw');
     const map = new Map({
-      size: 75
+      size: 200
     });
     const tileset: Tileset = {
       texture: this.resources.tilemap.texture.baseTexture,
@@ -129,13 +129,14 @@ class Tilemap {
         },
       }
     };
-    const grass = getTilesetImage(this.app, tileset, 1);
+    const grass = getTilesetImage(this.app, tileset, 0);
     const selection = getTilesetImage(this.app, tileset, 24);
     console.log(grass);
 
     const mapHexes = map.hexgrid.sort(sortHexes);
 
-    const hexGraphics = new PIXI.Graphics();
+    // const geo = new PIXI.GraphicsGeometry();
+    let hexGraphics = new PIXI.Graphics();
     this.viewport.addChild(hexGraphics);
 
     const gridGraphics = new PIXI.Graphics();
@@ -143,7 +144,13 @@ class Tilemap {
     this.viewport.addChild(gridGraphics);
 
     console.log('map', map);
+    let count = 0;
     mapHexes.forEach(hex => {
+      count++;
+      if (count % 10000 === 0) {
+        hexGraphics = new PIXI.Graphics();
+        this.viewport.addChild(hexGraphics);
+      }
       const point = hex.toPoint();
       const half = TEXTURE_HEIGHT - HEX_HEIGHT - HEX_OFFSET_Y;
       const matrix = new PIXI.Matrix();
