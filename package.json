@@ -28,10 +28,12 @@
   "dependencies": {
     "@material-ui/core": "^4.9.14",
     "@material-ui/icons": "^4.9.1",
+    "@types/ndarray": "^1.0.8",
     "@types/react": "^16.8.24",
     "@types/react-dom": "^16.8.5",
     "@types/react-router-dom": "^5.1.0",
     "honeycomb-grid": "^3.1.7",
+    "ndarray": "^1.0.19",
     "pixi-cull": "^0.6.0",
     "pixi-viewport": "^4.11.1",
     "pixi.js": "^5.2.4",

@@ -3,13 +3,17 @@ import { Viewport } from "pixi-viewport";
 import * as Honeycomb from 'honeycomb-grid'
 import Stats from 'stats.js';
 import Cull from 'pixi-cull';
+import ndarray from "ndarray";
 
 
-const HEX_SIZE = 16;
-const HEX_WIDTH = 2 * HEX_SIZE;
-const HEX_HEIGHT = Math.sqrt(3) * HEX_SIZE;
-const GRID_WIDTH = 10;
-const GRID_HEIGHT = 10;
+// 32 pixels wide
+// 28 pixels tall
+// 2 pixels border on bottom
+const HEX_WIDTH = 32;
+const HEX_HEIGHT = 28;
+const HEX_OFFSET_Y = 2;
+const TEXTURE_HEIGHT = 48;
+const TEXTURE_WIDTH = 32;
 
 type Hex = {
   size: number,
@@ -48,8 +52,55 @@ function sortHexes(a: Honeycomb.Hex<Hex>, b: Honeycomb.Hex<Hex>) {
   return 1;
 }
 
+const Hex = Honeycomb.extendHex<Hex>({
+  size: {
+    width: HEX_WIDTH,
+    height: HEX_HEIGHT,
+  },
+  orientation: 'flat'
+} as any);
+
+const Grid = Honeycomb.defineGrid(Hex);
+
+
+
+type MapOptions = {
+  size: number
+}
+
+class Map {
+  public width: number;
+  public height: number;
+  public sab: SharedArrayBuffer;
+  public hexgrid: Honeycomb.Grid<Honeycomb.Hex<Hex>>;
+
+  private data: ndarray<Uint32Array>;
+
+  constructor(options: MapOptions) {
+    this.width = options.size * 2;
+    this.height = options.size;
+    this.sab = new SharedArrayBuffer(Uint32Array.BYTES_PER_ELEMENT * this.width * this.height);
+    this.data = ndarray(new Uint32Array(this.sab), [this.width, this.height]);
+    this.hexgrid = Grid.rectangle({
+      width: this.width,
+      height: this.height
+    });
+  }
+
+  setAll(tileID: number) {
+    for (let x = 0; x < this.width; x++) {
+      for (let y = 0; y < this.height; y++) {
+        this.set(x, y, tileID);
+      }
+    }
+  }
+
+  set(x: number, y: number, tileID: number) {
+    this.data.set(x, y, tileID);
+  }
+}
+
 class Tilemap {
-  private gridFactory: Honeycomb.GridFactory<Honeycomb.Hex<Hex>>;
   resources: PIXI.IResourceDictionary;
 
   constructor(
@@ -59,20 +110,14 @@ class Tilemap {
       resources: PIXI.IResourceDictionary
     }
   ) {
-    const Hex = Honeycomb.extendHex<Hex>({
-      size: HEX_SIZE,
-      orientation: 'flat'
-    } as any)
-    this.gridFactory = Honeycomb.defineGrid(Hex)
     this.resources = options.resources;
   }
 
-  createChunks() {
+  createMap() {
     console.groupCollapsed('draw grid');
     console.time('draw');
-    const hexgrid = this.gridFactory.rectangle({
-      width: GRID_WIDTH,
-      height: GRID_HEIGHT,
+    const map = new Map({
+      size: 75
     });
     const tileset: Tileset = {
       texture: this.resources.tilemap.texture.baseTexture,
@@ -88,64 +133,33 @@ class Tilemap {
     const selection = getTilesetImage(this.app, tileset, 24);
     console.log(grass);
 
+    const mapHexes = map.hexgrid.sort(sortHexes);
+
     const hexGraphics = new PIXI.Graphics();
-    // hexGraphics.lineStyle(1, 0x999999);
     this.viewport.addChild(hexGraphics);
 
     const gridGraphics = new PIXI.Graphics();
-    // gridGraphics.lineStyle(1, 0x009999);
+    gridGraphics.alpha = 0;
     this.viewport.addChild(gridGraphics);
 
-    // const debugContainer = new PIXI.Container();
-    // debugContainer.cacheAsBitmap = true;
-    // this.viewport.addChild(debugContainer);
-
-
-    console.log('hexgrid', hexgrid);
-    hexgrid.sort(sortHexes).forEach(hex => {
-      const x = HEX_SIZE * 3/2 * hex.x;
-      const y = HEX_SIZE * Math.sqrt(3) * (hex.y + 0.5 * (hex.x & 1))
-      const w = 32;
-      const h = 48;
-      const texture = grass;
-      const half = (1/2) * HEX_HEIGHT;
+    console.log('map', map);
+    mapHexes.forEach(hex => {
+      const point = hex.toPoint();
+      const half = TEXTURE_HEIGHT - HEX_HEIGHT - HEX_OFFSET_Y;
       const matrix = new PIXI.Matrix();
-      matrix.scale(w / texture.width, h / texture.height)
-      matrix.translate(x, y - (half + 4));
+      matrix.translate(point.x, point.y - (half));
       hexGraphics.beginTextureFill({
-        texture,
+        texture: grass,
         matrix,
         color: 0xFFFFFF,
       })
-      hexGraphics.moveTo(x, y);
       hexGraphics.drawRect(
-        x,
-        y - (half + 4),
+        point.x,
+        point.y - (half),
         32,
         48,
       );
       hexGraphics.endFill();
-
-      // const coordinate = new PIXI.Text(`${hex.q}, ${hex.r}`, {
-      //   fontSize: 10,
-      //   fill: 0xFFFFFF,
-      //   align: 'center',
-      // });
-      // coordinate.position.set(x, y);
-      // debugContainer.addChild(coordinate);
-      
-      // const point = hex.toPoint();
-      // // add the hex's position to each of its corner points
-      // const corners = hex.corners().map(corner => corner.add(point))
-      // // separate the first from the other corners
-      // const [firstCorner, ...otherCorners] = corners
-
-      // // move the "pen" to the first corner
-      // gridGraphics.moveTo(firstCorner.x, firstCorner.y)
-      // // draw lines to the other corners
-      // otherCorners.forEach(({ x, y }) => gridGraphics.lineTo(x, y))
-      // // finish at the first corner
-      // gridGraphics.lineTo(firstCorner.x, firstCorner.y)
     });
 
     console.timeEnd('draw');
@@ -184,8 +198,6 @@ class MapViewer {
     const viewport = new Viewport({
       screenWidth: window.innerWidth,
       screenHeight: window.innerHeight,
-      worldWidth: HEX_SIZE * GRID_WIDTH,
-      worldHeight: HEX_SIZE * GRID_HEIGHT,
       interaction: app.renderer.plugins.interaction,
     });
   
@@ -206,15 +218,15 @@ class MapViewer {
     const tilemap = new Tilemap(this.app, this.viewport, {
       resources
     });
-    const layer = tilemap.createChunks();
-    this.cull.addList(layer.children);
-    this.cull.cull(this.viewport.getVisibleBounds());
-    this.app.ticker.add(() => {
-      if (this.viewport.dirty) {
-        this.cull.cull(this.viewport.getVisibleBounds());
-        this.viewport.dirty = false;
-      }
-    });
+    const layer = tilemap.createMap();
+    // this.cull.addList(layer.children);
+    // this.cull.cull(this.viewport.getVisibleBounds());
+    // this.app.ticker.add(() => {
+    //   if (this.viewport.dirty) {
+    //     this.cull.cull(this.viewport.getVisibleBounds());
+    //     this.viewport.dirty = false;
+    //   }
+    // });
     console.log('resources', resources);
   }
 
