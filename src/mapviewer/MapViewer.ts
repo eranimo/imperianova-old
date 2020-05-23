@@ -98,11 +98,11 @@ const oddq_directions = [
 ]
 
 class WorldMap {
-  public width: number;
-  public height: number;
-  public hexgrid: Honeycomb.Grid<Honeycomb.Hex<Hex>>;
-  public terrain: ndarray;
-  private tileID: ndarray;
+  width: number;
+  height: number;
+  hexgrid: Honeycomb.Grid<Honeycomb.Hex<Hex>>;
+  terrain: ndarray;
+  tileID: ndarray;
 
   constructor(
     options: { size: number },
@@ -188,13 +188,19 @@ class WorldMap {
   }
 }
 
+const fontStyle = {
+  font: { name: 'eightbitdragon', size: 16, },
+  align: 'center'
+};
+
 class HexTilemap extends PIXI.Container {
   tilesetMap: Map<number, Tileset>;
 
   constructor(
     public worldMap: WorldMap,
     public viewport: Viewport,
-    public resources: PIXI.IResourceDictionary
+    public resources: PIXI.IResourceDictionary,
+    public fonts: Record<string, any>,
   ) {
     super();
     this.tilesetMap = new Map();
@@ -244,7 +250,7 @@ class HexTilemap extends PIXI.Container {
     this.addChild(gridGraphics);
 
     console.log('worldMap', this.worldMap);
-    console.log(PIXI.BitmapFont.available);
+
     let count = 0;
     mapHexes.forEach(hex => {
       const texture = terrainTextures[this.worldMap.terrain.get(hex.x, hex.y)];
@@ -269,6 +275,16 @@ class HexTilemap extends PIXI.Container {
         48,
       );
       hexGraphics.endFill();
+
+      const center = hex.center();
+      const tileID = this.worldMap.tileID.get(hex.x, hex.y);
+      const text = new PIXI.BitmapText(tileID.toString(), {
+        font: { name: 'Eight Bit Dragon', size: 8 },
+        align: 'center'
+      });
+      text.x = point.x + center.x - (text.width / 2);
+      text.y = point.y + center.y - (text.height / 2);
+      this.addChild(text);
     });
 
     console.timeEnd('draw');
@@ -326,7 +342,7 @@ class MapViewer {
     this.viewport = viewport;
   }
 
-  start(resources: PIXI.IResourceDictionary) {
+  start(resources: PIXI.IResourceDictionary, fonts: Record<string, any>) {
     console.log('resources', resources);
 
     const map = new WorldMap({
@@ -341,7 +357,7 @@ class MapViewer {
     map.setTerrainRect(10, 10, 20, 35, TerrainType.LAND)
     console.timeEnd('setup terrain');
 
-    const tilemap = new HexTilemap(map, this.viewport, resources);
+    const tilemap = new HexTilemap(map, this.viewport, resources, fonts);
     console.log('tilemap', tilemap);
     this.viewport.addChild(tilemap);
   }
@@ -355,11 +371,24 @@ export function initGame(element: HTMLDivElement) {
   console.time('setup');
   const loader = new PIXI.Loader();
   loader.add('tilemap', require('../images/tilemap.png'));
+  loader.add('fontPng', require('../assets/eightbitdragon_0.png'));
   const mapViewer = new MapViewer(element);
+  loader.onError.add(error => console.error(error));
   loader.load(({ resources }) => {
+    // load fone
+    const parser = new DOMParser();
+    let fontXMLRaw = require('raw-loader!../assets/eightbitdragon.fnt').default;
+    const pageFile = require('file-loader!../assets/eightbitdragon_0.png')
+    fontXMLRaw = fontXMLRaw.replace('eightbitdragon_0.png', pageFile);
+    const fontXML = parser.parseFromString(fontXMLRaw, 'text/xml');
+    const font = PIXI.BitmapText.registerFont(fontXML, {
+      [pageFile]: resources.fontPng.texture,
+    });
+    console.log(font);
+
     console.timeEnd('setup');
     console.time('start');
-    mapViewer.start(resources);
+    mapViewer.start(resources, { eightBitDragon: font });
     console.timeEnd('start');
   });
   return () => {
