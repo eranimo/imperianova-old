@@ -30,7 +30,7 @@ type Tileset = {
   }
 };
 
-function getTilesetImage(app: PIXI.Application, tileset: Tileset, index: number) {
+function getTilesetImage(tileset: Tileset, index: number) {
   const { options } = tileset;
   const texture = new PIXI.Texture(tileset.texture, new PIXI.Rectangle(
     (index % options.columns) * options.grid.width,
@@ -87,6 +87,10 @@ class Map {
     });
   }
 
+  getHexFromPoint(point: PIXI.Point) {
+    return Grid.pointToHex(point.x, point.y);
+  }
+
   setAll(tileID: number) {
     for (let x = 0; x < this.width; x++) {
       for (let y = 0; y < this.height; y++) {
@@ -100,25 +104,29 @@ class Map {
   }
 }
 
-class Tilemap {
-  resources: PIXI.IResourceDictionary;
-
+class Tilemap extends PIXI.Container {
   constructor(
-    protected app: PIXI.Application,
-    protected viewport: Viewport,
-    options: {
-      resources: PIXI.IResourceDictionary
-    }
+    public map: Map,
+    public viewport: Viewport,
+    public resources: PIXI.IResourceDictionary
   ) {
-    this.resources = options.resources;
+    super();
+    this.draw();
+    this.setupEvents();
   }
 
-  createMap() {
+  private setupEvents() {
+    this.interactive = true;
+    this.on('click', event => {
+      const worldPoint = this.viewport.toWorld(event.data.global);
+      const hex = this.map.getHexFromPoint(worldPoint);
+      console.log(worldPoint, hex);
+    })
+  }
+
+  private draw() {
     console.groupCollapsed('draw grid');
     console.time('draw');
-    const map = new Map({
-      size: 200
-    });
     const tileset: Tileset = {
       texture: this.resources.tilemap.texture.baseTexture,
       options: {
@@ -129,27 +137,27 @@ class Tilemap {
         },
       }
     };
-    const grass = getTilesetImage(this.app, tileset, 0);
-    const selection = getTilesetImage(this.app, tileset, 24);
+    const grass = getTilesetImage(tileset, 0);
+    const selection = getTilesetImage(tileset, 24);
     console.log(grass);
 
-    const mapHexes = map.hexgrid.sort(sortHexes);
+    const mapHexes = this.map.hexgrid.sort(sortHexes);
 
     // const geo = new PIXI.GraphicsGeometry();
     let hexGraphics = new PIXI.Graphics();
-    this.viewport.addChild(hexGraphics);
+    this.addChild(hexGraphics);
 
     const gridGraphics = new PIXI.Graphics();
     gridGraphics.alpha = 0;
-    this.viewport.addChild(gridGraphics);
+    this.addChild(gridGraphics);
 
-    console.log('map', map);
+    console.log('map', this.map);
     let count = 0;
     mapHexes.forEach(hex => {
       count++;
       if (count % 10000 === 0) {
         hexGraphics = new PIXI.Graphics();
-        this.viewport.addChild(hexGraphics);
+        this.addChild(hexGraphics);
       }
       const point = hex.toPoint();
       const half = TEXTURE_HEIGHT - HEX_HEIGHT - HEX_OFFSET_Y;
@@ -171,9 +179,9 @@ class Tilemap {
 
     console.timeEnd('draw');
     console.groupEnd();
-    return hexGraphics;
   }
 }
+
 class MapViewer {
   app: PIXI.Application;
   viewport: Viewport;
@@ -200,12 +208,15 @@ class MapViewer {
       app.renderer.render(app.stage);
       stats.end();
     }, PIXI.UPDATE_PRIORITY.LOW);
-  
+    this.setupViewport();
+  }
+
+  setupViewport() {
     // create viewport
     const viewport = new Viewport({
       screenWidth: window.innerWidth,
       screenHeight: window.innerHeight,
-      interaction: app.renderer.plugins.interaction,
+      interaction: this.app.renderer.plugins.interaction,
     });
   
     this.cull = new Cull.Simple({
@@ -213,7 +224,7 @@ class MapViewer {
     });
   
     // add the viewport to the stage
-    app.stage.addChild(viewport);
+    this.app.stage.addChild(viewport);
     console.log('viewport', viewport);
   
     // activate plugins
@@ -222,18 +233,12 @@ class MapViewer {
   }
 
   start(resources: PIXI.IResourceDictionary) {
-    const tilemap = new Tilemap(this.app, this.viewport, {
-      resources
+    const map = new Map({
+      size: 200
     });
-    const layer = tilemap.createMap();
-    // this.cull.addList(layer.children);
-    // this.cull.cull(this.viewport.getVisibleBounds());
-    // this.app.ticker.add(() => {
-    //   if (this.viewport.dirty) {
-    //     this.cull.cull(this.viewport.getVisibleBounds());
-    //     this.viewport.dirty = false;
-    //   }
-    // });
+    const tilemap = new Tilemap(map, this.viewport, resources);
+    this.viewport.addChild(tilemap);
+    
     console.log('resources', resources);
   }
 
