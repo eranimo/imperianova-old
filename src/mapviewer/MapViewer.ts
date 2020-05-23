@@ -143,9 +143,9 @@ class WorldMap {
   }
 
   getHexNeighbor(x: number, y: number, direction: Direction) {
-    const parity = y & 1
+    const parity = x & 1
     const dir = oddq_directions[parity][direction]
-    return [y + dir[0], x + dir[1]]
+    return [x + dir[0], y + dir[1]]
   }
 
   calculateHexTile(x: number, y: number) {
@@ -169,13 +169,13 @@ class WorldMap {
     const s_hex_terrain = this.terrain.get(s_hex[0], s_hex[1]);
 
     this.tileID.set(x, y, (
-      (2 ** Direction.SE) * (se_hex_terrain || 0) +
-      (2 ** Direction.NE) * (ne_hex_terrain || 0) +
-      (2 ** Direction.N) * (n_hex_terrain || 0) +
-      (2 ** Direction.NW) * (nw_hex_terrain || 0) +
-      (2 ** Direction.SW) * (sw_hex_terrain || 0) +
-      (2 ** Direction.S) * (s_hex_terrain || 0) +
-      (2 ** 6) * terrain
+      ((2 ** Direction.SE) * (se_hex_terrain || 0)) +
+      ((2 ** Direction.NE) * (ne_hex_terrain || 0)) +
+      ((2 ** Direction.N) * (n_hex_terrain || 0)) +
+      ((2 ** Direction.NW) * (nw_hex_terrain || 0)) +
+      ((2 ** Direction.SW) * (sw_hex_terrain || 0)) +
+      ((2 ** Direction.S) * (s_hex_terrain || 0)) +
+      ((2 ** 6) * terrain)
     ));
   }
 
@@ -214,7 +214,7 @@ class HexTilemap extends PIXI.Container {
     this.on('click', event => {
       const worldPoint = this.viewport.toWorld(event.data.global);
       const hex = this.worldMap.getHexFromPoint(worldPoint);
-      // console.log(worldPoint, hex);
+      console.log(worldPoint, hex);
     })
   }
 
