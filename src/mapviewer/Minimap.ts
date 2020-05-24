@@ -1,5 +1,5 @@
 import { WorldMap } from './WorldMap';
-import { terrainColors } from './constants';
+import { terrainMinimapColors } from './constants';
 
 
 export function initMinimap(
@@ -11,13 +11,14 @@ export function initMinimap(
   const ctx = canvas.getContext('2d');
   const worldWidth = worldMap.hexgrid.pointWidth();
   const worldHeight = worldMap.hexgrid.pointHeight();
+  console.time('minimap');
 
   worldMap.hexgrid.forEach(hex => {
     const terrainType = worldMap.terrain.get(hex.x, hex.y);
     const point = hex.toPoint();
     const corners = hex.corners().map(corner => corner.add(point))
     const [firstCorner, ...otherCorners] = corners;
-    ctx.fillStyle = terrainColors[terrainType];
+    ctx.fillStyle = terrainMinimapColors[terrainType];
     ctx.beginPath();
     ctx.moveTo(
       (firstCorner.x / worldWidth) * width,
@@ -34,4 +35,5 @@ export function initMinimap(
     ctx.fill();
     ctx.closePath();
   });
+  console.timeEnd('minimap');
 }

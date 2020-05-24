@@ -19,7 +19,7 @@ export const MainPageLoaded: React.FC<{
       size: WORLD_SIZE
     });
     initGame(mapViewerRef.current, map, resources);
-    // initMinimap(minimapRef.current, map)
+    initMinimap(minimapRef.current, map)
   }, []);
 
   return (
@@ -27,7 +27,16 @@ export const MainPageLoaded: React.FC<{
       <div ref={mapViewerRef}>
       </div>
 
-      {/* <canvas ref={minimapRef} /> */}
+      <canvas
+        style={{
+          position: 'fixed',
+          bottom: 0,
+          right: 0,
+          width: 300,
+          height: 150,
+        }}
+        ref={minimapRef}
+      />
     </>
   )
 }

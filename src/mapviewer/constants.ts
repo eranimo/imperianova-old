@@ -6,6 +6,12 @@ export enum TerrainType {
 }
 
 export const terrainColors = {
+  [TerrainType.NONE]: 0x000000,
+  [TerrainType.OCEAN]: 0x3F78CB,
+  [TerrainType.LAND]: 0x81B446,
+};
+
+export const terrainMinimapColors = {
   [TerrainType.NONE]: '#000000',
   [TerrainType.OCEAN]: '#3F78CB',
   [TerrainType.LAND]: '#81B446',

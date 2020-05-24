@@ -8,6 +8,8 @@ import { IHex, Grid } from "./MapViewer";
 import { Direction, terrainTypeTitles, TerrainType, oddq_directions } from "./constants";
 import { octaveNoise } from "./utils";
 
+PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+
 export class WorldMap {
   size: {
     width: number;
