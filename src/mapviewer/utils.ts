@@ -19,3 +19,29 @@ export function octaveNoise(
 
   return total / maxValue;
 }
+
+
+export function logFuncTime<T>(label: string, func: () => T) {
+  console.time(label);
+  const value = func();
+  console.timeEnd(label);
+  return value;
+}
+
+export function logGroupTime(label: string, closed: boolean = false) {
+  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+    const originalMethod = descriptor.value;
+    descriptor.value = function (...args: any[]) {
+      if (closed) {
+        console.groupCollapsed(label);
+      } else {
+        console.group(label);
+      }
+      console.time(label);
+      const result = originalMethod.apply(this, args);
+      console.timeEnd(label);
+      console.groupEnd();
+      return result;
+    }
+  }
+}

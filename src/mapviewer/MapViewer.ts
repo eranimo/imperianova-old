@@ -5,6 +5,7 @@ import Stats from 'stats.js';
 import Cull from 'pixi-cull';
 import { HexTilemap } from "./HexTilemap";
 import { WorldMap } from "./WorldMap";
+import { MapManager } from './MapManager';
 
 // 32 pixels wide
 // 28 pixels tall
@@ -48,7 +49,7 @@ class MapViewer {
   viewport: Viewport;
   cull: any;
 
-  constructor(protected element: HTMLElement, protected map: WorldMap) {
+  constructor(protected element: HTMLElement, protected manager: MapManager) {
     PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
     this.app = new PIXI.Application({
       width: window.innerWidth,
@@ -99,11 +100,21 @@ class MapViewer {
     console.log('setup terrain');
     console.time('setup terrain');
 
-    this.map.generateTerrain();
+    this.manager.updateViewport(this.viewport);
+    this.viewport.on('moved', () => {
+      this.manager.updateViewport(this.viewport);
+    });
+
+    this.manager.moveEvents$.subscribe(point => {
+      this.viewport.moveCenter(point);
+      this.manager.updateViewport(this.viewport);
+    });
+
+    this.manager.worldMap.generateTerrain();
 
     console.timeEnd('setup terrain');
 
-    const tilemap = new HexTilemap(this.map, this.viewport, resources, fonts);
+    const tilemap = new HexTilemap(this.manager.worldMap, this.viewport, resources, fonts);
     console.log('tilemap', tilemap);
     this.viewport.addChild(tilemap);
   }
@@ -115,11 +126,11 @@ class MapViewer {
 
 export function initGame(
   element: HTMLDivElement,
-  map: WorldMap,
+  manager: MapManager,
   resources: PIXI.IResourceDictionary,
 ) {
   console.time('setup');
-  const mapViewer = new MapViewer(element, map);
+  const mapViewer = new MapViewer(element, manager);
   // load fone
   const parser = new DOMParser();
   let fontXMLRaw = require('raw-loader!../assets/eightbitdragon.fnt').default;

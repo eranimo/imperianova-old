@@ -8,3 +8,13 @@ body, html {
 canvas {
   image-rendering: pixelated;
 }
+
+
+.minimap {
+  position: relative;
+}
+.minimap canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}

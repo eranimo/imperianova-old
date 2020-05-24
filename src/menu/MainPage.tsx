@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useCallback, useState } from 'react';
 import * as PIXI from "pixi.js";
 import { initGame } from '../mapviewer/MapViewer';
 import { WorldMap } from '../mapviewer/WorldMap';
-import { initMinimap } from '../mapviewer/Minimap';
+import { Minimap } from '../mapviewer/Minimap';
 import { CircularProgress, Container } from '@material-ui/core';
+import { MapManager } from '../mapviewer/MapManager';
 
 
 const WORLD_SIZE = 200;
@@ -18,8 +19,14 @@ export const MainPageLoaded: React.FC<{
     const map = new WorldMap({
       size: WORLD_SIZE
     });
-    initGame(mapViewerRef.current, map, resources);
-    initMinimap(minimapRef.current, map)
+    const manager = new MapManager(map);
+    const destroyApp = initGame(mapViewerRef.current, manager, resources);
+    const minimap = new Minimap(minimapRef.current, manager)
+
+    return () => {
+      minimap.destroy();
+      destroyApp();
+    }
   }, []);
 
   return (
@@ -27,8 +34,11 @@ export const MainPageLoaded: React.FC<{
       <div ref={mapViewerRef}>
       </div>
 
-      <canvas
+      <div
+        className="minimap"
         style={{
+          border: '1px solid #111',
+          backgroundColor: '#000',
           position: 'fixed',
           bottom: 0,
           right: 0,
@@ -36,7 +46,8 @@ export const MainPageLoaded: React.FC<{
           height: 150,
         }}
         ref={minimapRef}
-      />
+      >
+      </div>
     </>
   )
 }
