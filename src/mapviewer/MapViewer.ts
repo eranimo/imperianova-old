@@ -4,6 +4,8 @@ import * as Honeycomb from 'honeycomb-grid'
 import Stats from 'stats.js';
 import Cull from 'pixi-cull';
 import ndarray from "ndarray";
+import SimplexNoise from 'simplex-noise';
+import Alea from 'alea';
 
 
 // 32 pixels wide
@@ -14,6 +16,10 @@ const HEX_HEIGHT = 28;
 const HEX_OFFSET_Y = 2;
 const TEXTURE_HEIGHT = 48;
 const TEXTURE_WIDTH = 32;
+
+// settings
+const WORLD_SIZE = 100;
+const DRAW_TILE_IDS = false;
 
 type Hex = {
   size: number,
@@ -98,45 +104,71 @@ const oddq_directions = [
 ]
 
 class WorldMap {
-  width: number;
-  height: number;
+  size: {
+    width: number;
+    height: number;
+  }
   hexgrid: Honeycomb.Grid<Honeycomb.Hex<Hex>>;
   terrain: ndarray;
+  heightmap: ndarray;
   tileID: ndarray;
 
   constructor(
     options: { size: number },
   ) {
-    this.width = options.size * 2;
-    this.height = options.size;
+    this.size = {
+      width: options.size * 2,
+      height: options.size,
+    };
     this.hexgrid = Grid.rectangle({
-      width: this.width,
-      height: this.height
+      width: this.size.width,
+      height: this.size.height
     });
-    const terrainBuffer = new SharedArrayBuffer(Uint32Array.BYTES_PER_ELEMENT * this.width * this.height);
-    this.terrain = ndarray(new Uint32Array(terrainBuffer), [this.width, this.height]);
+    const arraySize = Uint32Array.BYTES_PER_ELEMENT * this.size.width * this.size.height;
+    const arrayDim = [this.size.width, this.size.height];
+    const terrainBuffer = new SharedArrayBuffer(arraySize);
+    this.terrain = ndarray(new Uint32Array(terrainBuffer), arrayDim);
 
-    const tileIDBuffer = new SharedArrayBuffer(Uint32Array.BYTES_PER_ELEMENT * this.width * this.height);
-    this.tileID = ndarray(new Uint32Array(tileIDBuffer), [this.width, this.height]);
+    const heightBuffer = new SharedArrayBuffer(arraySize);
+    this.heightmap = ndarray(new Uint32Array(heightBuffer), arrayDim);
+
+    const tileIDBuffer = new SharedArrayBuffer(arraySize);
+    this.tileID = ndarray(new Uint32Array(tileIDBuffer), arrayDim);
   }
 
   getHexFromPoint(point: PIXI.Point) {
     return Grid.pointToHex(point.x, point.y);
   }
 
-  setAllTerrain(terrain: TerrainType) {
-    for (let x = 0; x < this.width; x++) {
-      for (let y = 0; y < this.height; y++) {
-        this.terrain.set(x, y, terrain);
-        this.calculateHexTile(x, y);
-      }
-    }
+  getHexCoordinate(x: number, y: number) {
+    const long = ((x / this.size.width) * 360) - 180;
+    const lat = ((-y / this.size.height) * 180) + 90;
+    return { lat, long };
   }
 
-  setTerrainRect(x1: number, y1: number, x2: number, y2: number, terrain: TerrainType) {
-    for (let x = x1; x < x2; x++) {
-      for (let y = y1; y < y2; y++) {
-        this.terrain.set(x, y, terrain);
+  generateTerrain() {
+    const seed = Math.random();
+    const rng = Alea(seed);
+    const noise = new SimplexNoise(rng);
+    for (let x = 0; x < this.size.width; x++) {
+      for (let y = 0; y < this.size.height; y++) {
+        const { lat, long } = this.getHexCoordinate(x, y);
+        const inc = ((lat + 90) / 180) * Math.PI;
+        const azi = ((long + 180) / 360) * (2 * Math.PI);
+        const nx = 1 * Math.sin(inc) * Math.cos(azi);
+        const ny = 1 * Math.sin(inc) * Math.sin(azi);
+        const nz = 1 * Math.cos(inc);
+        const raw = (
+          noise.noise3D(nx * 1, ny * 1, nz * 1)
+        );
+        const value = (raw + 1) / 2;
+        const height = value * 255;
+        this.heightmap.set(x, y, height);
+        if (height < 140) {
+          this.terrain.set(x, y, TerrainType.OCEAN);
+        } else {
+          this.terrain.set(x, y, TerrainType.LAND);
+        }
         this.calculateHexTile(x, y);
       }
     }
@@ -178,14 +210,6 @@ class WorldMap {
       ((2 ** 6) * terrain)
     ));
   }
-
-  calculateAllTiles() {
-    for (let x = 0; x < this.width; x++) {
-      for (let y = 0; y < this.height; y++) {
-        this.calculateHexTile(x, y);
-      }
-    }
-  }
 }
 
 const fontStyle = {
@@ -214,7 +238,7 @@ class HexTilemap extends PIXI.Container {
     this.on('click', event => {
       const worldPoint = this.viewport.toWorld(event.data.global);
       const hex = this.worldMap.getHexFromPoint(worldPoint);
-      console.log(worldPoint, hex);
+      console.log(this.worldMap.getHexCoordinate(hex.x, hex.y));
     })
   }
 
@@ -276,15 +300,17 @@ class HexTilemap extends PIXI.Container {
       );
       hexGraphics.endFill();
 
-      const center = hex.center();
-      const tileID = this.worldMap.tileID.get(hex.x, hex.y);
-      const text = new PIXI.BitmapText(tileID.toString(), {
-        font: { name: 'Eight Bit Dragon', size: 8 },
-        align: 'center'
-      });
-      text.x = point.x + center.x - (text.width / 2);
-      text.y = point.y + center.y - (text.height / 2);
-      this.addChild(text);
+      if (DRAW_TILE_IDS) {
+        const center = hex.center();
+        const tileID = this.worldMap.tileID.get(hex.x, hex.y);
+        const text = new PIXI.BitmapText(tileID.toString(), {
+          font: { name: 'Eight Bit Dragon', size: 8 },
+          align: 'center'
+        });
+        text.x = point.x + center.x - (text.width / 2);
+        text.y = point.y + center.y - (text.height / 2);
+        this.addChild(text);
+      }
     });
 
     console.timeEnd('draw');
@@ -346,15 +372,15 @@ class MapViewer {
     console.log('resources', resources);
 
     const map = new WorldMap({
-      size: 50
+      size: WORLD_SIZE
     });
     console.log('create map', map);
 
     console.log('setup terrain');
     console.time('setup terrain');
-    map.setAllTerrain(TerrainType.OCEAN);
 
-    map.setTerrainRect(10, 10, 20, 35, TerrainType.LAND)
+    map.generateTerrain();
+
     console.timeEnd('setup terrain');
 
     const tilemap = new HexTilemap(map, this.viewport, resources, fonts);
