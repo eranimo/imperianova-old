@@ -125,7 +125,7 @@ export class WorldMap {
   getTerrainForHex(x: number, y: number) {
     const index = this.indexMap.get(`${x},${y}`);
     return this.terrain.data[index] === undefined
-      ? TerrainType.MAP_EDGE
+      ? TerrainType.NONE
       : this.terrain.data[index];
   }
 

@@ -1,10 +1,11 @@
 
 export enum TerrainType {
   NONE = 0,
-  MAP_EDGE = 1,
-  OCEAN = 2,
-  LAND = 3
+  OCEAN = 1,
+  LAND = 2
 }
+export const NUM_TERRAIN_TYPES = 2;
+
 
 export const terrainColors = {
   [TerrainType.NONE]: 0x000000,
@@ -19,7 +20,7 @@ export const terrainMinimapColors = {
 };
 
 export const terrainTypeTitles = {
-  [TerrainType.MAP_EDGE]: 'MAP EDGE',
+  [TerrainType.NONE]: 'MAP EDGE',
   [TerrainType.OCEAN]: 'Ocean',
   [TerrainType.LAND]: 'Land',
 };
