@@ -103,6 +103,28 @@ const oddq_directions = [
    [-1,  0], [-1, +1], [ 0, +1]],
 ]
 
+function octaveNoise(
+  noiseFunc: (x: number, y: number, z: number) => number,
+  x: number,
+  y: number,
+  z: number,
+  octaves: number,
+  persistence: number,
+) {
+  let total = 0;
+  let frequency = 1;
+  let amplitude = 1;
+  let maxValue = 0;  // Used for normalizing result to 0.0 - 1.0
+  for(let i = 0; i < octaves; i++) {
+    total += noiseFunc(x * frequency, y * frequency, z * frequency) * amplitude;
+    maxValue += amplitude;
+    amplitude *= persistence;
+    frequency *= 2;
+  }
+  
+  return total/maxValue;
+}
+
 class WorldMap {
   size: {
     width: number;
@@ -158,9 +180,7 @@ class WorldMap {
         const nx = 1 * Math.sin(inc) * Math.cos(azi);
         const ny = 1 * Math.sin(inc) * Math.sin(azi);
         const nz = 1 * Math.cos(inc);
-        const raw = (
-          noise.noise3D(nx * 1, ny * 1, nz * 1)
-        );
+        const raw = octaveNoise(noise.noise3D.bind(noise), nx, ny, nz, 5, 0.5);
         const value = (raw + 1) / 2;
         const height = value * 255;
         this.heightmap.set(x, y, height);
