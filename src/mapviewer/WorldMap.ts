@@ -5,7 +5,7 @@ import SimplexNoise from 'simplex-noise';
 import Alea from 'alea';
 import { countBy } from "lodash";
 import { IHex, Grid } from "./MapViewer";
-import { Direction, terrainTypeTitles, TerrainType, oddq_directions } from "./constants";
+import { Direction, terrainTypeTitles, TerrainType, oddq_directions, directionTitles } from './constants';
 import { octaveNoise } from "./utils";
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
@@ -19,6 +19,7 @@ export class WorldMap {
   terrain: ndarray;
   heightmap: ndarray;
   tileIDs: ndarray;
+  indexMap: Map<string, number>;
 
   constructor(
     options: { size: number; }) {
@@ -41,6 +42,7 @@ export class WorldMap {
 
     const tileIDBuffer = new SharedArrayBuffer(arraySize);
     this.tileIDs = ndarray(new Uint32Array(tileIDBuffer), arrayDim);
+    this.indexMap = new Map();
   }
 
   get tileIDStats() {
@@ -76,7 +78,8 @@ export class WorldMap {
   }
 
   getHexFromPoint(point: PIXI.Point) {
-    return Grid.pointToHex(point.x, point.y);
+    const hexCoords = Grid.pointToHex(point.x, point.y);
+    return this.hexgrid.get(hexCoords);
   }
 
   getHexCoordinate(hex: Honeycomb.Hex<IHex>) {
@@ -91,6 +94,7 @@ export class WorldMap {
     const noise = new SimplexNoise(rng);
     this.hexgrid.forEach((hex, index) => {
       hex.index = index;
+      this.indexMap.set(`${hex.x},${hex.y}`, index);
       const { lat, long } = this.getHexCoordinate(hex);
       const inc = ((lat + 90) / 180) * Math.PI;
       const azi = ((long + 180) / 360) * (2 * Math.PI);
@@ -103,12 +107,13 @@ export class WorldMap {
       this.heightmap.set(hex.x, hex.y, height);
       if (height < 140) {
         this.terrain.set(hex.x, hex.y, TerrainType.OCEAN);
-      }
-      else {
+      } else {
         this.terrain.set(hex.x, hex.y, TerrainType.LAND);
       }
-      this.calculateHexTile(hex);
     });
+    this.hexgrid.forEach(hex => {
+      this.calculateHexTile(hex);
+    })
   }
 
   getHexNeighbor(x: number, y: number, direction: Direction) {
@@ -117,34 +122,86 @@ export class WorldMap {
     return [x + dir[0], y + dir[1]];
   }
 
-  calculateHexTile(hex: Honeycomb.Hex<IHex>) {
-    const { x, y } = hex;
-    const terrain = this.terrain.get(x, y);
+  getTerrainForHex(x: number, y: number) {
+    const index = this.indexMap.get(`${x},${y}`);
+    return this.terrain.data[index] === undefined
+      ? TerrainType.MAP_EDGE
+      : this.terrain.data[index];
+  }
+
+  getHexNeighborTerrain(x: number, y: number) {
     const se_hex = this.getHexNeighbor(x, y, Direction.SE);
-    const se_hex_terrain = this.terrain.get(se_hex[0], se_hex[1]);
+    const se_hex_terrain = this.getTerrainForHex(se_hex[0], se_hex[1]);
 
     const ne_hex = this.getHexNeighbor(x, y, Direction.NE);
-    const ne_hex_terrain = this.terrain.get(ne_hex[0], ne_hex[1]);
+    const ne_hex_terrain = this.getTerrainForHex(ne_hex[0], ne_hex[1]);
 
     const n_hex = this.getHexNeighbor(x, y, Direction.N);
-    const n_hex_terrain = this.terrain.get(n_hex[0], n_hex[1]);
+    const n_hex_terrain = this.getTerrainForHex(n_hex[0], n_hex[1]);
 
     const nw_hex = this.getHexNeighbor(x, y, Direction.NW);
-    const nw_hex_terrain = this.terrain.get(nw_hex[0], nw_hex[1]);
+    const nw_hex_terrain = this.getTerrainForHex(nw_hex[0], nw_hex[1]);
 
     const sw_hex = this.getHexNeighbor(x, y, Direction.SW);
-    const sw_hex_terrain = this.terrain.get(sw_hex[0], sw_hex[1]);
+    const sw_hex_terrain = this.getTerrainForHex(sw_hex[0], sw_hex[1]);
 
     const s_hex = this.getHexNeighbor(x, y, Direction.S);
-    const s_hex_terrain = this.terrain.get(s_hex[0], s_hex[1]);
+    const s_hex_terrain = this.getTerrainForHex(s_hex[0], s_hex[1]);
+
+    const terrain = this.getTerrainForHex(x, y);
+    const tileID = (
+      ((3 ** Direction.SE) * se_hex_terrain) +
+      ((3 ** Direction.NE) * ne_hex_terrain) +
+      ((3 ** Direction.N) *  n_hex_terrain) +
+      ((3 ** Direction.NW) * nw_hex_terrain) +
+      ((3 ** Direction.SW) * sw_hex_terrain) +
+      ((3 ** Direction.S) *  s_hex_terrain) +
+      ((3 ** 6) * terrain)
+    );
+
+    return {
+      tileID,
+      [directionTitles[Direction.SE]]: terrainTypeTitles[se_hex_terrain],
+      [directionTitles[Direction.NE]]: terrainTypeTitles[ne_hex_terrain],
+      [directionTitles[Direction.N]]: terrainTypeTitles[n_hex_terrain],
+      [directionTitles[Direction.NW]]: terrainTypeTitles[nw_hex_terrain],
+      [directionTitles[Direction.SW]]: terrainTypeTitles[sw_hex_terrain],
+      [directionTitles[Direction.S]]: terrainTypeTitles[s_hex_terrain],
+    }
+  }
+
+  calculateHexTile(hex: Honeycomb.Hex<IHex>) {
+    const { x, y } = hex;
+    const terrain = this.getTerrainForHex(x, y);
+    if (terrain === TerrainType.LAND) {
+      this.tileIDs.set(x, y, 381);
+      return;
+    }
+    const se_hex = this.getHexNeighbor(x, y, Direction.SE);
+    const se_hex_terrain = this.getTerrainForHex(se_hex[0], se_hex[1]);
+
+    const ne_hex = this.getHexNeighbor(x, y, Direction.NE);
+    const ne_hex_terrain = this.getTerrainForHex(ne_hex[0], ne_hex[1]);
+
+    const n_hex = this.getHexNeighbor(x, y, Direction.N);
+    const n_hex_terrain = this.getTerrainForHex(n_hex[0], n_hex[1]);
+
+    const nw_hex = this.getHexNeighbor(x, y, Direction.NW);
+    const nw_hex_terrain = this.getTerrainForHex(nw_hex[0], nw_hex[1]);
+
+    const sw_hex = this.getHexNeighbor(x, y, Direction.SW);
+    const sw_hex_terrain = this.getTerrainForHex(sw_hex[0], sw_hex[1]);
+
+    const s_hex = this.getHexNeighbor(x, y, Direction.S);
+    const s_hex_terrain = this.getTerrainForHex(s_hex[0], s_hex[1]);
 
     const tileID = (
-      ((2 ** Direction.SE) * (se_hex_terrain || 0)) +
-      ((2 ** Direction.NE) * (ne_hex_terrain || 0)) +
-      ((2 ** Direction.N) * (n_hex_terrain || 0)) +
-      ((2 ** Direction.NW) * (nw_hex_terrain || 0)) +
-      ((2 ** Direction.SW) * (sw_hex_terrain || 0)) +
-      ((2 ** Direction.S) * (s_hex_terrain || 0)) +
+      ((2 ** Direction.SE) * se_hex_terrain) +
+      ((2 ** Direction.NE) * ne_hex_terrain) +
+      ((2 ** Direction.N) *  n_hex_terrain) +
+      ((2 ** Direction.NW) * nw_hex_terrain) +
+      ((2 ** Direction.SW) * sw_hex_terrain) +
+      ((2 ** Direction.S) *  s_hex_terrain) +
       ((2 ** 6) * terrain)
     );
 

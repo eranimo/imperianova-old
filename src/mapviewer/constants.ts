@@ -1,8 +1,9 @@
 
 export enum TerrainType {
   NONE = 0,
-  OCEAN = 1,
-  LAND = 2
+  MAP_EDGE = 1,
+  OCEAN = 2,
+  LAND = 3
 }
 
 export const terrainColors = {
@@ -18,6 +19,7 @@ export const terrainMinimapColors = {
 };
 
 export const terrainTypeTitles = {
+  [TerrainType.MAP_EDGE]: 'MAP EDGE',
   [TerrainType.OCEAN]: 'Ocean',
   [TerrainType.LAND]: 'Land',
 };
@@ -31,9 +33,22 @@ export enum Direction {
   S = 5
 }
 
+export const directionTitles = {
+  [Direction.SE]: 'South East',
+  [Direction.NE]: 'North East',
+  [Direction.N]: 'North',
+  [Direction.NW]: 'North West',
+  [Direction.SW]: 'South West',
+  [Direction.S]: 'South',
+}
+
 export const oddq_directions = [
-  [[+1, 0], [+1, -1], [0, -1],
-  [-1, -1], [-1, 0], [0, +1]],
-  [[+1, +1], [+1, 0], [0, -1],
-  [-1, 0], [-1, +1], [0, +1]],
+  [
+    [+1, 0], [+1, -1], [0, -1],
+    [-1, -1], [-1, 0], [0, +1]
+  ],
+  [
+    [+1, +1], [+1, 0], [0, -1],
+    [-1, 0], [-1, +1], [0, +1]
+  ],
 ];

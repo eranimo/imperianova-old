@@ -17,8 +17,6 @@ const TEXTURE_HEIGHT = 48;
 const TEXTURE_WIDTH = 32;
 export const HEX_ADJUST_Y = TEXTURE_HEIGHT - HEX_HEIGHT - HEX_OFFSET_Y;
 
-// settings
-export const DRAW_TILE_IDS = false;
 
 export interface IHex {
   index: number,

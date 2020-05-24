@@ -7,7 +7,7 @@ import { CircularProgress, Container } from '@material-ui/core';
 import { MapManager } from '../mapviewer/MapManager';
 
 
-const WORLD_SIZE = 200;
+const WORLD_SIZE = 50;
 
 export const MainPageLoaded: React.FC<{
   resources: PIXI.IResourceDictionary,
@@ -57,6 +57,7 @@ export const MainPage: React.FC = () => {
   useEffect(() => {
     const loader = new PIXI.Loader();
     loader.add('tilemap', require('../images/tilemap.png'));
+    loader.add('coastline', require('../images/coastline.png'));
     loader.add('fontPng', require('../assets/eightbitdragon_0.png'));
     loader.onError.add(error => console.error(error));
     loader.load(({ resources }) => {
