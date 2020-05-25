@@ -5,6 +5,7 @@ import { IHex, Hex, HEX_ADJUST_Y, sortHexes } from "./MapViewer";
 import { TerrainType, terrainColors, terrainTypeTitles } from './constants';
 import { Tileset } from "./Tileset";
 import { WorldMap } from "./WorldMap";
+import { TerrainTileset } from './TerrainTileset';
 
 
 const DRAW_TILE_IDS = true;
@@ -16,6 +17,7 @@ export class HexTilemap extends PIXI.Container {
   selectionSprite: PIXI.Sprite;
   selectionHex: Honeycomb.Hex<IHex>;
   tilesets: Map<string, Tileset>;
+  coastline: TerrainTileset;
 
   constructor(
     public worldMap: WorldMap,
@@ -47,6 +49,11 @@ export class HexTilemap extends PIXI.Container {
         width: 32,
       },
     });
+    this.coastline = TerrainTileset.fromXML(
+      this.resources.coastline.texture.baseTexture,
+      this.resources.template.data as Document,
+    );
+    console.log('coastline', this.coastline);
     this.tilesets = new Map();
     this.tilesets.set('main', tileset);
     this.tilesets.set('coastline', new Tileset(this.resources.coastline.texture.baseTexture, {
@@ -78,7 +85,7 @@ export class HexTilemap extends PIXI.Container {
           coordinate: this.worldMap.getHexCoordinate(hex),
           terrainType: terrainType,
           terrainTitle: terrainTypeTitles[terrainType],
-          tileID: this.worldMap.tileIDs.data[hex.index],
+          tileID: this.worldMap.tileMasks.data[hex.index],
         });
         console.log(this.worldMap.getHexNeighborTerrain(hex.x, hex.y));
 
@@ -111,55 +118,6 @@ export class HexTilemap extends PIXI.Container {
     const main = this.tilesets.get('main');
     const coastline = this.tilesets.get('coastline');
 
-    const tileIDTextures = {
-      127: coastline.getTile(17), // ocean on all sides
-      381: coastline.getTile(8), // land on all sides
-      130: coastline.getTile(18),
-      131: coastline.getTile(2),
-      141: coastline.getTile(48),
-      142: coastline.getTile(3),
-      128: coastline.getTile(21),
-      129: coastline.getTile(52),
-      133: coastline.getTile(34),
-      135: coastline.getTile(51),
-      143: coastline.getTile(50),
-      159: coastline.getTile(32),
-      162: coastline.getTile(33),
-      136: coastline.getTile(6),
-      160: coastline.getTile(19),
-      134: coastline.getTile(34),
-      155: coastline.getTile(1),
-      183: coastline.getTile(31),
-      175: coastline.getTile(20),
-      176: coastline.getTile(63),
-      151: coastline.getTile(16),
-      178: coastline.getTile(61),
-      139: coastline.getTile(35),
-      157: coastline.getTile(45),
-      166: coastline.getTile(47),
-      184: coastline.getTile(60),
-      187: coastline.getTile(62),
-      186: coastline.getTile(30),
-      158: coastline.getTile(0),
-      190: coastline.getTile(15),
-      171: coastline.getTile(91),
-      149: coastline.getTile(92),
-      145: coastline.getTile(7),
-      165: coastline.getTile(90),
-      164: coastline.getTile(75),
-      144: coastline.getTile(65),
-      137: coastline.getTile(64),
-      188: coastline.getTile(66),
-      174: coastline.getTile(82),
-      182: coastline.getTile(96),
-      189: coastline.getTile(112),
-      154: coastline.getTile(4),
-      132: coastline.getTile(79),
-      147: coastline.getTile(80),
-      167: coastline.getTile(95),
-      161: coastline.getTile(94),
-    }
-
     const mapHexes = this.worldMap.hexgrid.sort(sortHexes);
 
     let hexGraphics = new PIXI.Graphics();
@@ -179,8 +137,8 @@ export class HexTilemap extends PIXI.Container {
     let count = 0;
     mapHexes.forEach(hex => {
       const terrainType = this.worldMap.terrain.get(hex.x, hex.y);
-      const tileID = this.worldMap.tileIDs.get(hex.x, hex.y);
-      const texture = tileIDTextures[tileID];
+      const mask = this.worldMap.tileMasks.get(hex.x, hex.y);
+      const texture = this.coastline.getTextureFromTileMask(mask);
       count++;
       if (count % 10000 === 0) {
         hexGraphics = new PIXI.Graphics();
@@ -220,7 +178,7 @@ export class HexTilemap extends PIXI.Container {
 
       if (!texture) {
         const center = hex.center();
-        const tileID = this.worldMap.tileIDs.get(hex.x, hex.y);
+        const tileID = this.worldMap.tileMasks.get(hex.x, hex.y);
         const text = new PIXI.BitmapText(tileID.toString(), {
           font: { name: 'Eight Bit Dragon', size: 8 },
           align: 'center'

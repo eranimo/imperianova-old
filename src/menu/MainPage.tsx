@@ -58,6 +58,7 @@ export const MainPage: React.FC = () => {
     const loader = new PIXI.Loader();
     loader.add('tilemap', require('../images/tilemap.png'));
     loader.add('coastline', require('../images/coastline.png'));
+    loader.add('template', require('file-loader!../assets/template.xml'));
     loader.add('fontPng', require('../assets/eightbitdragon_0.png'));
     loader.onError.add(error => console.error(error));
     loader.load(({ resources }) => {

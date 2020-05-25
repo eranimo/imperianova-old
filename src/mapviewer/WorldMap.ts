@@ -18,7 +18,7 @@ export class WorldMap {
   hexgrid: Honeycomb.Grid<Honeycomb.Hex<IHex>>;
   terrain: ndarray;
   heightmap: ndarray;
-  tileIDs: ndarray;
+  tileMasks: ndarray;
   indexMap: Map<string, number>;
 
   constructor(
@@ -41,17 +41,17 @@ export class WorldMap {
     this.heightmap = ndarray(new Uint32Array(heightBuffer), arrayDim);
 
     const tileIDBuffer = new SharedArrayBuffer(arraySize);
-    this.tileIDs = ndarray(new Uint32Array(tileIDBuffer), arrayDim);
+    this.tileMasks = ndarray(new Uint32Array(tileIDBuffer), arrayDim);
     this.indexMap = new Map();
   }
 
-  get tileIDStats() {
-    const grouped = countBy(this.tileIDs.data);
+  get tileStats() {
+    const grouped = countBy(this.tileMasks.data);
 
     let tileIDNeighborsTerrain = {};
 
     Object.keys(grouped).forEach(tileID => {
-      const firstHex = this.hexgrid.find(hex => this.tileIDs.get(hex.x, hex.y) === parseInt(tileID));
+      const firstHex = this.hexgrid.find(hex => this.tileMasks.get(hex.x, hex.y) === parseInt(tileID));
       if (!firstHex) {
         tileIDNeighborsTerrain[tileID] = null;
         return;
@@ -125,7 +125,7 @@ export class WorldMap {
   getTerrainForHex(x: number, y: number) {
     const index = this.indexMap.get(`${x},${y}`);
     return this.terrain.data[index] === undefined
-      ? TerrainType.NONE
+      ? TerrainType.MAP_EDGE
       : this.terrain.data[index];
   }
 
@@ -149,18 +149,19 @@ export class WorldMap {
     const s_hex_terrain = this.getTerrainForHex(s_hex[0], s_hex[1]);
 
     const terrain = this.getTerrainForHex(x, y);
-    const tileID = (
-      ((3 ** Direction.SE) * se_hex_terrain) +
-      ((3 ** Direction.NE) * ne_hex_terrain) +
-      ((3 ** Direction.N) *  n_hex_terrain) +
-      ((3 ** Direction.NW) * nw_hex_terrain) +
-      ((3 ** Direction.SW) * sw_hex_terrain) +
-      ((3 ** Direction.S) *  s_hex_terrain) +
-      ((3 ** 6) * terrain)
+    const mask = (
+      ((3 ** 0) * terrain) +
+      ((3 ** (Direction.SE + 1)) * se_hex_terrain) +
+      ((3 ** (Direction.NE + 1)) * ne_hex_terrain) +
+      ((3 ** (Direction.N + 1)) *  n_hex_terrain) +
+      ((3 ** (Direction.NW + 1)) * nw_hex_terrain) +
+      ((3 ** (Direction.SW + 1)) * sw_hex_terrain) +
+      ((3 ** (Direction.S + 1)) *  s_hex_terrain)
     );
 
     return {
-      tileID,
+      mask,
+      mask2: this.tileMasks.get(x, y),
       [directionTitles[Direction.SE]]: terrainTypeTitles[se_hex_terrain],
       [directionTitles[Direction.NE]]: terrainTypeTitles[ne_hex_terrain],
       [directionTitles[Direction.N]]: terrainTypeTitles[n_hex_terrain],
@@ -174,7 +175,7 @@ export class WorldMap {
     const { x, y } = hex;
     const terrain = this.getTerrainForHex(x, y);
     if (terrain === TerrainType.LAND) {
-      this.tileIDs.set(x, y, 381);
+      this.tileMasks.set(x, y, 2186);
       return;
     }
     const se_hex = this.getHexNeighbor(x, y, Direction.SE);
@@ -195,16 +196,16 @@ export class WorldMap {
     const s_hex = this.getHexNeighbor(x, y, Direction.S);
     const s_hex_terrain = this.getTerrainForHex(s_hex[0], s_hex[1]);
 
-    const tileID = (
-      ((2 ** Direction.SE) * se_hex_terrain) +
-      ((2 ** Direction.NE) * ne_hex_terrain) +
-      ((2 ** Direction.N) *  n_hex_terrain) +
-      ((2 ** Direction.NW) * nw_hex_terrain) +
-      ((2 ** Direction.SW) * sw_hex_terrain) +
-      ((2 ** Direction.S) *  s_hex_terrain) +
-      ((2 ** 6) * terrain)
+    const mask = (
+      ((3 ** 0) * terrain) +
+      ((3 ** (Direction.SE + 1)) * se_hex_terrain) +
+      ((3 ** (Direction.NE + 1)) * ne_hex_terrain) +
+      ((3 ** (Direction.N + 1)) *  n_hex_terrain) +
+      ((3 ** (Direction.NW + 1)) * nw_hex_terrain) +
+      ((3 ** (Direction.SW + 1)) * sw_hex_terrain) +
+      ((3 ** (Direction.S + 1)) *  s_hex_terrain)
     );
 
-    this.tileIDs.set(x, y, tileID);
+    this.tileMasks.set(x, y, mask);
   }
 }

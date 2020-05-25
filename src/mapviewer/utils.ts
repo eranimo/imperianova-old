@@ -45,3 +45,9 @@ export function logGroupTime(label: string, closed: boolean = false) {
     }
   }
 }
+
+export function loadXML(xmlString: string) {
+  const parser = new DOMParser();
+  const xml = parser.parseFromString(xmlString, 'text/xml');
+  return xml;
+}

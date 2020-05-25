@@ -1,26 +1,25 @@
 
 export enum TerrainType {
-  NONE = 0,
+  MAP_EDGE = 0,
   OCEAN = 1,
   LAND = 2
 }
-export const NUM_TERRAIN_TYPES = 2;
 
 
 export const terrainColors = {
-  [TerrainType.NONE]: 0x000000,
+  [TerrainType.MAP_EDGE]: 0x000000,
   [TerrainType.OCEAN]: 0x3F78CB,
   [TerrainType.LAND]: 0x81B446,
 };
 
 export const terrainMinimapColors = {
-  [TerrainType.NONE]: '#000000',
+  [TerrainType.MAP_EDGE]: '#000000',
   [TerrainType.OCEAN]: '#3F78CB',
   [TerrainType.LAND]: '#81B446',
 };
 
 export const terrainTypeTitles = {
-  [TerrainType.NONE]: 'MAP EDGE',
+  [TerrainType.MAP_EDGE]: 'MAP EDGE',
   [TerrainType.OCEAN]: 'Ocean',
   [TerrainType.LAND]: 'Land',
 };
@@ -32,6 +31,16 @@ export enum Direction {
   NW = 3,
   SW = 4,
   S = 5
+}
+
+
+export const directionShort = {
+  [Direction.SE]: 'SE',
+  [Direction.NE]: 'NE',
+  [Direction.N]: 'N',
+  [Direction.NW]: 'NW',
+  [Direction.SW]: 'SW',
+  [Direction.S]: 'S',
 }
 
 export const directionTitles = {
