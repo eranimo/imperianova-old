@@ -1,5 +1,6 @@
 import * as PIXI from "pixi.js";
 import { Direction, directionShort, TerrainType } from './constants';
+import { getTilesetMask } from './utils';
 
 const foo = import('file-loader!../assets/template.xml');
 
@@ -104,15 +105,7 @@ export class TerrainTileset {
         used: (properties as XMLTileProperties).used,
         terrainType,
         neighborTerrainTypes,
-        mask: (
-          ((3 ** 0) * terrainType) +
-          ((3 ** (Direction.SE + 1)) * neighborTerrainTypes[Direction.SE]) + 
-          ((3 ** (Direction.NE + 1)) * neighborTerrainTypes[Direction.NE]) + 
-          ((3 ** (Direction.N + 1)) * neighborTerrainTypes[Direction.N]) + 
-          ((3 ** (Direction.NW + 1)) * neighborTerrainTypes[Direction.NW]) + 
-          ((3 ** (Direction.SW + 1)) * neighborTerrainTypes[Direction.SW]) + 
-          ((3 ** (Direction.S + 1)) * neighborTerrainTypes[Direction.S])
-        ),
+        mask: getTilesetMask(terrainType, neighborTerrainTypes),
       });
     });
     return new TerrainTileset(baseTexture, options);

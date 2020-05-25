@@ -1,3 +1,4 @@
+import { TerrainType, Direction } from './constants';
 
 export function octaveNoise(
   noiseFunc: (x: number, y: number, z: number) => number,
@@ -50,4 +51,19 @@ export function loadXML(xmlString: string) {
   const parser = new DOMParser();
   const xml = parser.parseFromString(xmlString, 'text/xml');
   return xml;
+}
+
+export function getTilesetMask(
+  terrainType: TerrainType,
+  neighborTerrainTypes: Record<Direction, TerrainType>,
+) {
+  return (
+    ((3 ** 0) * terrainType) +
+    ((3 ** (Direction.SE + 1)) * neighborTerrainTypes[Direction.SE]) + 
+    ((3 ** (Direction.NE + 1)) * neighborTerrainTypes[Direction.NE]) + 
+    ((3 ** (Direction.N + 1)) * neighborTerrainTypes[Direction.N]) + 
+    ((3 ** (Direction.NW + 1)) * neighborTerrainTypes[Direction.NW]) + 
+    ((3 ** (Direction.SW + 1)) * neighborTerrainTypes[Direction.SW]) + 
+    ((3 ** (Direction.S + 1)) * neighborTerrainTypes[Direction.S])
+  );
 }

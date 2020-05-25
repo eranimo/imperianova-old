@@ -6,7 +6,7 @@ import Alea from 'alea';
 import { countBy } from "lodash";
 import { IHex, Grid } from "./MapViewer";
 import { Direction, terrainTypeTitles, TerrainType, oddq_directions, directionTitles } from './constants';
-import { octaveNoise } from "./utils";
+import { octaveNoise, getTilesetMask } from './utils';
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
@@ -129,7 +129,7 @@ export class WorldMap {
       : this.terrain.data[index];
   }
 
-  getHexNeighborTerrain(x: number, y: number) {
+  getHexNeighborTerrain(x: number, y: number): Record<Direction, TerrainType> {
     const se_hex = this.getHexNeighbor(x, y, Direction.SE);
     const se_hex_terrain = this.getTerrainForHex(se_hex[0], se_hex[1]);
 
@@ -148,26 +148,13 @@ export class WorldMap {
     const s_hex = this.getHexNeighbor(x, y, Direction.S);
     const s_hex_terrain = this.getTerrainForHex(s_hex[0], s_hex[1]);
 
-    const terrain = this.getTerrainForHex(x, y);
-    const mask = (
-      ((3 ** 0) * terrain) +
-      ((3 ** (Direction.SE + 1)) * se_hex_terrain) +
-      ((3 ** (Direction.NE + 1)) * ne_hex_terrain) +
-      ((3 ** (Direction.N + 1)) *  n_hex_terrain) +
-      ((3 ** (Direction.NW + 1)) * nw_hex_terrain) +
-      ((3 ** (Direction.SW + 1)) * sw_hex_terrain) +
-      ((3 ** (Direction.S + 1)) *  s_hex_terrain)
-    );
-
     return {
-      mask,
-      mask2: this.tileMasks.get(x, y),
-      [directionTitles[Direction.SE]]: terrainTypeTitles[se_hex_terrain],
-      [directionTitles[Direction.NE]]: terrainTypeTitles[ne_hex_terrain],
-      [directionTitles[Direction.N]]: terrainTypeTitles[n_hex_terrain],
-      [directionTitles[Direction.NW]]: terrainTypeTitles[nw_hex_terrain],
-      [directionTitles[Direction.SW]]: terrainTypeTitles[sw_hex_terrain],
-      [directionTitles[Direction.S]]: terrainTypeTitles[s_hex_terrain],
+      [Direction.SE]: se_hex_terrain,
+      [Direction.NE]: ne_hex_terrain,
+      [Direction.N]: n_hex_terrain,
+      [Direction.NW]: nw_hex_terrain,
+      [Direction.SW]: sw_hex_terrain,
+      [Direction.S]: s_hex_terrain,
     }
   }
 
@@ -178,33 +165,9 @@ export class WorldMap {
       this.tileMasks.set(x, y, 2186);
       return;
     }
-    const se_hex = this.getHexNeighbor(x, y, Direction.SE);
-    const se_hex_terrain = this.getTerrainForHex(se_hex[0], se_hex[1]);
+    const neighborTerrainTypes = this.getHexNeighborTerrain(x, y);
 
-    const ne_hex = this.getHexNeighbor(x, y, Direction.NE);
-    const ne_hex_terrain = this.getTerrainForHex(ne_hex[0], ne_hex[1]);
-
-    const n_hex = this.getHexNeighbor(x, y, Direction.N);
-    const n_hex_terrain = this.getTerrainForHex(n_hex[0], n_hex[1]);
-
-    const nw_hex = this.getHexNeighbor(x, y, Direction.NW);
-    const nw_hex_terrain = this.getTerrainForHex(nw_hex[0], nw_hex[1]);
-
-    const sw_hex = this.getHexNeighbor(x, y, Direction.SW);
-    const sw_hex_terrain = this.getTerrainForHex(sw_hex[0], sw_hex[1]);
-
-    const s_hex = this.getHexNeighbor(x, y, Direction.S);
-    const s_hex_terrain = this.getTerrainForHex(s_hex[0], s_hex[1]);
-
-    const mask = (
-      ((3 ** 0) * terrain) +
-      ((3 ** (Direction.SE + 1)) * se_hex_terrain) +
-      ((3 ** (Direction.NE + 1)) * ne_hex_terrain) +
-      ((3 ** (Direction.N + 1)) *  n_hex_terrain) +
-      ((3 ** (Direction.NW + 1)) * nw_hex_terrain) +
-      ((3 ** (Direction.SW + 1)) * sw_hex_terrain) +
-      ((3 ** (Direction.S + 1)) *  s_hex_terrain)
-    );
+    const mask = getTilesetMask(terrain, neighborTerrainTypes);
 
     this.tileMasks.set(x, y, mask);
   }
