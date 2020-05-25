@@ -7,7 +7,7 @@ import { CircularProgress, Container } from '@material-ui/core';
 import { MapManager } from '../mapviewer/MapManager';
 
 
-const WORLD_SIZE = 50;
+const WORLD_SIZE = 100;
 
 export const MainPageLoaded: React.FC<{
   resources: PIXI.IResourceDictionary,

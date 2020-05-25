@@ -645,7 +645,7 @@
  </tile>
  <tile id="49">
   <properties>
-   <property name="0 - SE" type="int" value="2"/>
+   <property name="0 - SE" type="int" value="1"/>
    <property name="1 - NE" type="int" value="1"/>
    <property name="2 - N" type="int" value="1"/>
    <property name="3 - NW" type="int" value="1"/>
@@ -653,7 +653,7 @@
    <property name="5 - S" type="int" value="1"/>
    <property name="note" value=""/>
    <property name="terrainType" type="int" value="1"/>
-   <property name="used" type="bool" value="true"/>
+   <property name="used" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="50">
@@ -666,7 +666,7 @@
    <property name="5 - S" type="int" value="1"/>
    <property name="note" value=""/>
    <property name="terrainType" type="int" value="1"/>
-   <property name="used" type="bool" value="true"/>
+   <property name="used" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="51">
@@ -686,7 +686,7 @@
   <properties>
    <property name="0 - SE" type="int" value="2"/>
    <property name="1 - NE" type="int" value="1"/>
-   <property name="2 - N" type="int" value="1"/>
+   <property name="2 - N" type="int" value="2"/>
    <property name="3 - NW" type="int" value="1"/>
    <property name="4 - SW" type="int" value="2"/>
    <property name="5 - S" type="int" value="1"/>
@@ -1257,27 +1257,27 @@
  <tile id="96">
   <properties>
    <property name="0 - SE" type="int" value="1"/>
-   <property name="1 - NE" type="int" value="2"/>
-   <property name="2 - N" type="int" value="2"/>
+   <property name="1 - NE" type="int" value="1"/>
+   <property name="2 - N" type="int" value="1"/>
    <property name="3 - NW" type="int" value="1"/>
-   <property name="4 - SW" type="int" value="2"/>
-   <property name="5 - S" type="int" value="2"/>
+   <property name="4 - SW" type="int" value="1"/>
+   <property name="5 - S" type="int" value="1"/>
    <property name="note" value=""/>
    <property name="terrainType" type="int" value="1"/>
-   <property name="used" type="bool" value="true"/>
+   <property name="used" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="97">
   <properties>
-   <property name="0 - SE" type="int" value="2"/>
+   <property name="0 - SE" type="int" value="1"/>
    <property name="1 - NE" type="int" value="1"/>
-   <property name="2 - N" type="int" value="2"/>
-   <property name="3 - NW" type="int" value="2"/>
-   <property name="4 - SW" type="int" value="2"/>
-   <property name="5 - S" type="int" value="2"/>
+   <property name="2 - N" type="int" value="1"/>
+   <property name="3 - NW" type="int" value="1"/>
+   <property name="4 - SW" type="int" value="1"/>
+   <property name="5 - S" type="int" value="1"/>
    <property name="note" value=""/>
    <property name="terrainType" type="int" value="1"/>
-   <property name="used" type="bool" value="true"/>
+   <property name="used" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="98">
@@ -1452,27 +1452,27 @@
  <tile id="111">
   <properties>
    <property name="0 - SE" type="int" value="2"/>
-   <property name="1 - NE" type="int" value="2"/>
-   <property name="2 - N" type="int" value="2"/>
-   <property name="3 - NW" type="int" value="2"/>
+   <property name="1 - NE" type="int" value="1"/>
+   <property name="2 - N" type="int" value="1"/>
+   <property name="3 - NW" type="int" value="1"/>
    <property name="4 - SW" type="int" value="1"/>
-   <property name="5 - S" type="int" value="2"/>
+   <property name="5 - S" type="int" value="1"/>
    <property name="note" value=""/>
    <property name="terrainType" type="int" value="1"/>
-   <property name="used" type="bool" value="true"/>
+   <property name="used" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="112">
   <properties>
    <property name="0 - SE" type="int" value="1"/>
-   <property name="1 - NE" type="int" value="2"/>
-   <property name="2 - N" type="int" value="2"/>
-   <property name="3 - NW" type="int" value="2"/>
-   <property name="4 - SW" type="int" value="2"/>
-   <property name="5 - S" type="int" value="2"/>
+   <property name="1 - NE" type="int" value="1"/>
+   <property name="2 - N" type="int" value="1"/>
+   <property name="3 - NW" type="int" value="1"/>
+   <property name="4 - SW" type="int" value="1"/>
+   <property name="5 - S" type="int" value="1"/>
    <property name="note" value=""/>
    <property name="terrainType" type="int" value="1"/>
-   <property name="used" type="bool" value="true"/>
+   <property name="used" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="113">
@@ -1569,27 +1569,27 @@
  <tile id="120">
   <properties>
    <property name="0 - SE" type="int" value="1"/>
-   <property name="1 - NE" type="int" value="2"/>
-   <property name="2 - N" type="int" value="2"/>
+   <property name="1 - NE" type="int" value="1"/>
+   <property name="2 - N" type="int" value="1"/>
    <property name="3 - NW" type="int" value="1"/>
-   <property name="4 - SW" type="int" value="2"/>
-   <property name="5 - S" type="int" value="2"/>
+   <property name="4 - SW" type="int" value="1"/>
+   <property name="5 - S" type="int" value="1"/>
    <property name="note" value=""/>
    <property name="terrainType" type="int" value="1"/>
-   <property name="used" type="bool" value="true"/>
+   <property name="used" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="121">
   <properties>
-   <property name="0 - SE" type="int" value="2"/>
+   <property name="0 - SE" type="int" value="1"/>
    <property name="1 - NE" type="int" value="1"/>
-   <property name="2 - N" type="int" value="2"/>
-   <property name="3 - NW" type="int" value="2"/>
+   <property name="2 - N" type="int" value="1"/>
+   <property name="3 - NW" type="int" value="1"/>
    <property name="4 - SW" type="int" value="1"/>
-   <property name="5 - S" type="int" value="2"/>
+   <property name="5 - S" type="int" value="1"/>
    <property name="note" value=""/>
    <property name="terrainType" type="int" value="1"/>
-   <property name="used" type="bool" value="true"/>
+   <property name="used" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="122">
