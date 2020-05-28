@@ -17,7 +17,7 @@ export class HexTilemap extends PIXI.Container {
   selectionSprite: PIXI.Sprite;
   selectionHex: Honeycomb.Hex<IHex>;
   tilesets: Map<string, Tileset>;
-  coastline: TerrainTileset;
+  terrainTileset: TerrainTileset;
 
   constructor(
     public worldMap: WorldMap,
@@ -49,20 +49,13 @@ export class HexTilemap extends PIXI.Container {
         width: 32,
       },
     });
-    this.coastline = TerrainTileset.fromXML(
-      this.resources.coastline.texture.baseTexture,
-      this.resources.template.data as Document,
+    this.terrainTileset = TerrainTileset.fromJSON(
+      this.resources.terrainPNG.texture.baseTexture,
+      this.resources.terrainJSON.data,
     );
-    console.log('coastline', this.coastline);
+    console.log('terrainTileset', this.terrainTileset);
     this.tilesets = new Map();
     this.tilesets.set('main', tileset);
-    this.tilesets.set('coastline', new Tileset(this.resources.coastline.texture.baseTexture, {
-      columns: 15,
-      grid: {
-        height: 48,
-        width: 32,
-      },
-    }));
     const selectionTexture = tileset.getTile(24);
     this.selectionHex = null;
     this.selectionSprite = new PIXI.Sprite(selectionTexture);
@@ -87,7 +80,7 @@ export class HexTilemap extends PIXI.Container {
           terrainTitle: terrainTypeTitles[terrainType],
           tileID: this.worldMap.tileMasks.data[hex.index],
         });
-        console.log(this.worldMap.getHexNeighborTerrain(hex.x, hex.y));
+        console.log(this.worldMap.debugNeighborTerrain(hex.x, hex.y));
 
         this.updateSelection(hex);
       }
@@ -138,7 +131,7 @@ export class HexTilemap extends PIXI.Container {
     mapHexes.forEach(hex => {
       const terrainType = this.worldMap.terrain.get(hex.x, hex.y);
       const mask = this.worldMap.tileMasks.get(hex.x, hex.y);
-      const texture = this.coastline.getTextureFromTileMask(mask);
+      const texture = this.terrainTileset.getTextureFromTileMask(mask);
       count++;
       if (count % 10000 === 0) {
         hexGraphics = new PIXI.Graphics();

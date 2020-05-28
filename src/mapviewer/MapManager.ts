@@ -14,6 +14,7 @@ export class MapManager {
   ) {
     this.viewport$ = new BehaviorSubject(null);
     this.worldMap$ = new BehaviorSubject(worldMap);
+    console.log('worldMap', worldMap);
     this.moveEvents$ = new Subject();
   }
 

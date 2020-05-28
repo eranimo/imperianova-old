@@ -1,0 +1,919 @@
+{
+  "columns": 10,
+  "tileSize": {
+    "width": 32,
+    "height": 48
+  },
+  "tiles": [
+    {
+      "id": 0,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      },
+      "mask": 1093
+    },
+    {
+      "id": 1,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "mask": 1822
+    },
+    {
+      "id": 2,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 1
+      },
+      "mask": 1336
+    },
+    {
+      "id": 3,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      },
+      "mask": 2065
+    },
+    {
+      "id": 4,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 1,
+        "2": 1,
+        "3": 2,
+        "4": 1,
+        "5": 1
+      },
+      "mask": 1174
+    },
+    {
+      "id": 5,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 1,
+        "2": 1,
+        "3": 2,
+        "4": 1,
+        "5": 2
+      },
+      "mask": 1903
+    },
+    {
+      "id": 6,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 1,
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 1
+      },
+      "mask": 1417
+    },
+    {
+      "id": 7,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 1,
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      },
+      "mask": 2146
+    },
+    {
+      "id": 8,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 1,
+        "2": 2,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      },
+      "mask": 1120
+    },
+    {
+      "id": 9,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 1,
+        "2": 2,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "mask": 1849
+    },
+    {
+      "id": 10,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 1,
+        "2": 2,
+        "3": 1,
+        "4": 2,
+        "5": 1
+      },
+      "mask": 1363
+    },
+    {
+      "id": 11,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 1,
+        "2": 2,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      },
+      "mask": 2092
+    },
+    {
+      "id": 12,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 1,
+        "2": 2,
+        "3": 2,
+        "4": 1,
+        "5": 1
+      },
+      "mask": 1201
+    },
+    {
+      "id": 13,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 1,
+        "2": 2,
+        "3": 2,
+        "4": 1,
+        "5": 2
+      },
+      "mask": 1930
+    },
+    {
+      "id": 14,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 1,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 1
+      },
+      "mask": 1444
+    },
+    {
+      "id": 15,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 1,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      },
+      "mask": 2173
+    },
+    {
+      "id": 16,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 2,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      },
+      "mask": 1102
+    },
+    {
+      "id": 17,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 2,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "mask": 1831
+    },
+    {
+      "id": 18,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 2,
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 1
+      },
+      "mask": 1345
+    },
+    {
+      "id": 19,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 2,
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      },
+      "mask": 2074
+    },
+    {
+      "id": 20,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 2,
+        "2": 1,
+        "3": 2,
+        "4": 1,
+        "5": 1
+      },
+      "mask": 1183
+    },
+    {
+      "id": 21,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 2,
+        "2": 1,
+        "3": 2,
+        "4": 1,
+        "5": 2
+      },
+      "mask": 1912
+    },
+    {
+      "id": 22,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 2,
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 1
+      },
+      "mask": 1426
+    },
+    {
+      "id": 23,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 2,
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      },
+      "mask": 2155
+    },
+    {
+      "id": 24,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 2,
+        "2": 2,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      },
+      "mask": 1129
+    },
+    {
+      "id": 25,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 2,
+        "2": 2,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "mask": 1858
+    },
+    {
+      "id": 26,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 2,
+        "2": 2,
+        "3": 1,
+        "4": 2,
+        "5": 1
+      },
+      "mask": 1372
+    },
+    {
+      "id": 27,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 2,
+        "2": 2,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      },
+      "mask": 2101
+    },
+    {
+      "id": 28,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 1,
+        "5": 1
+      },
+      "mask": 1210
+    },
+    {
+      "id": 29,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 1,
+        "5": 2
+      },
+      "mask": 1939
+    },
+    {
+      "id": 30,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 1
+      },
+      "mask": 1453
+    },
+    {
+      "id": 31,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 1,
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      },
+      "mask": 2182
+    },
+    {
+      "id": 32,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      },
+      "mask": 1096
+    },
+    {
+      "id": 33,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "mask": 1825
+    },
+    {
+      "id": 34,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 1
+      },
+      "mask": 1339
+    },
+    {
+      "id": 35,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      },
+      "mask": 2068
+    },
+    {
+      "id": 36,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 1,
+        "2": 1,
+        "3": 2,
+        "4": 1,
+        "5": 1
+      },
+      "mask": 1177
+    },
+    {
+      "id": 37,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 1,
+        "2": 1,
+        "3": 2,
+        "4": 1,
+        "5": 2
+      },
+      "mask": 1906
+    },
+    {
+      "id": 38,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 1,
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 1
+      },
+      "mask": 1420
+    },
+    {
+      "id": 39,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 1,
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      },
+      "mask": 2149
+    },
+    {
+      "id": 40,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 1,
+        "2": 2,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      },
+      "mask": 1123
+    },
+    {
+      "id": 41,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 1,
+        "2": 2,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "mask": 1852
+    },
+    {
+      "id": 42,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 1,
+        "2": 2,
+        "3": 1,
+        "4": 2,
+        "5": 1
+      },
+      "mask": 1366
+    },
+    {
+      "id": 43,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 1,
+        "2": 2,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      },
+      "mask": 2095
+    },
+    {
+      "id": 44,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 1,
+        "2": 2,
+        "3": 2,
+        "4": 1,
+        "5": 1
+      },
+      "mask": 1204
+    },
+    {
+      "id": 45,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 1,
+        "2": 2,
+        "3": 2,
+        "4": 1,
+        "5": 2
+      },
+      "mask": 1933
+    },
+    {
+      "id": 46,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 1,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 1
+      },
+      "mask": 1447
+    },
+    {
+      "id": 47,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 1,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      },
+      "mask": 2176
+    },
+    {
+      "id": 48,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 2,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      },
+      "mask": 1105
+    },
+    {
+      "id": 49,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 2,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "mask": 1834
+    },
+    {
+      "id": 50,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 2,
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 1
+      },
+      "mask": 1348
+    },
+    {
+      "id": 51,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 2,
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      },
+      "mask": 2077
+    },
+    {
+      "id": 52,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 2,
+        "2": 1,
+        "3": 2,
+        "4": 1,
+        "5": 1
+      },
+      "mask": 1186
+    },
+    {
+      "id": 53,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 2,
+        "2": 1,
+        "3": 2,
+        "4": 1,
+        "5": 2
+      },
+      "mask": 1915
+    },
+    {
+      "id": 54,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 2,
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 1
+      },
+      "mask": 1429
+    },
+    {
+      "id": 55,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 2,
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      },
+      "mask": 2158
+    },
+    {
+      "id": 56,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 2,
+        "2": 2,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      },
+      "mask": 1132
+    },
+    {
+      "id": 57,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 2,
+        "2": 2,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "mask": 1861
+    },
+    {
+      "id": 58,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 2,
+        "2": 2,
+        "3": 1,
+        "4": 2,
+        "5": 1
+      },
+      "mask": 1375
+    },
+    {
+      "id": 59,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 2,
+        "2": 2,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      },
+      "mask": 2104
+    },
+    {
+      "id": 60,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 1,
+        "5": 1
+      },
+      "mask": 1213
+    },
+    {
+      "id": 61,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 1,
+        "5": 2
+      },
+      "mask": 1942
+    },
+    {
+      "id": 62,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 1
+      },
+      "mask": 1456
+    },
+    {
+      "id": 63,
+      "used": true,
+      "terrainType": 1,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      },
+      "mask": 2185
+    },
+    {
+      "id": 64,
+      "used": true,
+      "terrainType": 2,
+      "neighborTerrainTypes": {
+        "0": 2,
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      },
+      "mask": 2186
+    }
+  ]
+}

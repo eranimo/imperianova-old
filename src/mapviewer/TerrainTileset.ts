@@ -4,7 +4,7 @@ import { getTilesetMask } from './utils';
 
 const foo = import('file-loader!../assets/template.xml');
 
-type Tile = {
+export type TerrainTile = {
   id: number;
   used: boolean;
   terrainType: number;
@@ -12,13 +12,13 @@ type Tile = {
   mask: number;
 }
 
-type TilesetOptions = {
+export type TerrainTilesetOptions = {
   columns: number;
   tileSize: {
     width: number,
     height: number,
   };
-  tiles: Tile[];
+  tiles: TerrainTile[];
 }
 
 const typeParsers = {
@@ -39,11 +39,11 @@ type XMLTileProperties = {
 
 export class TerrainTileset {
   tileTextures: Map<number, PIXI.Texture>;
-  tileMask: Map<number, Tile[]>;
+  tileMask: Map<number, TerrainTile[]>;
 
   constructor(
     public baseTexture: PIXI.BaseTexture,
-    public options: TilesetOptions,
+    public options: TerrainTilesetOptions,
   ) {
 
     const { width, height } = this.options.tileSize;
@@ -66,6 +66,13 @@ export class TerrainTileset {
       }
     }
     console.log('ocean', this.tileMask.get(1093));
+  }
+
+  static fromJSON(
+    baseTexture: PIXI.BaseTexture,
+    tilesetData: any
+  ) {
+    return new TerrainTileset(baseTexture, tilesetData);
   }
 
   static fromXML(

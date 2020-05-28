@@ -3,7 +3,7 @@ import * as Honeycomb from 'honeycomb-grid';
 import ndarray from "ndarray";
 import SimplexNoise from 'simplex-noise';
 import Alea from 'alea';
-import { countBy } from "lodash";
+import { countBy, map, sortBy } from "lodash";
 import { IHex, Grid } from "./MapViewer";
 import { Direction, terrainTypeTitles, TerrainType, oddq_directions, directionTitles } from './constants';
 import { octaveNoise, getTilesetMask } from './utils';
@@ -48,12 +48,12 @@ export class WorldMap {
   get tileStats() {
     const grouped = countBy(this.tileMasks.data);
 
-    let tileIDNeighborsTerrain = {};
+    let maskNeighbors = {};
 
     Object.keys(grouped).forEach(tileID => {
       const firstHex = this.hexgrid.find(hex => this.tileMasks.get(hex.x, hex.y) === parseInt(tileID));
       if (!firstHex) {
-        tileIDNeighborsTerrain[tileID] = null;
+        maskNeighbors[tileID] = null;
         return;
       }
       let data = {};
@@ -67,13 +67,21 @@ export class WorldMap {
           data[direction] = `${terrainType} - ${terrainTypeTitles[terrainType]}`;
         }
       });
-      tileIDNeighborsTerrain[tileID] = data;
+      maskNeighbors[tileID] = data;
     });
 
     return {
-      tileIDCounts: grouped,
-      distinctTileIDs: Object.keys(grouped).length,
-      tileIDNeighborsTerrain,
+      tileMaskCount: grouped,
+      distinctTileMasks: Object.keys(grouped).length,
+      mostCommonMasks: sortBy(
+        Object.entries(grouped).map(i => ({
+          mask: i[0],
+          count: i[1],
+          neighbors: maskNeighbors[i[0]],
+        })),
+        ({ count }) => count,
+      ).reverse(),
+      maskNeighbors,
     };
   }
 
@@ -155,6 +163,18 @@ export class WorldMap {
       [Direction.NW]: nw_hex_terrain,
       [Direction.SW]: sw_hex_terrain,
       [Direction.S]: s_hex_terrain,
+    }
+  }
+
+  debugNeighborTerrain(x: number, y: number) {
+    const neighborTerrainTypes = this.getHexNeighborTerrain(x, y);
+    return {
+      [directionTitles[Direction.SE]]: terrainTypeTitles[neighborTerrainTypes[Direction.SE]],
+      [directionTitles[Direction.NE]]: terrainTypeTitles[neighborTerrainTypes[Direction.NE]],
+      [directionTitles[Direction.N]]:  terrainTypeTitles[neighborTerrainTypes[Direction.N]],
+      [directionTitles[Direction.NW]]: terrainTypeTitles[neighborTerrainTypes[Direction.NW]],
+      [directionTitles[Direction.SW]]: terrainTypeTitles[neighborTerrainTypes[Direction.SW]],
+      [directionTitles[Direction.S]]:  terrainTypeTitles[neighborTerrainTypes[Direction.S]],
     }
   }
 

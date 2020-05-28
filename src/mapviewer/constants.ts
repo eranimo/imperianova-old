@@ -4,7 +4,7 @@ export enum TerrainType {
   OCEAN = 1,
   LAND = 2
 }
-
+export const terrainTypeMax = 2;
 
 export const terrainColors = {
   [TerrainType.MAP_EDGE]: 0x000000,
