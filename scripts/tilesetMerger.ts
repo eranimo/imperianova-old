@@ -9,8 +9,10 @@ import { getTilesetMask } from '../src/mapviewer/utils';
 import { TerrainType, Direction, directionShort, terrainTypeMax } from '../src/mapviewer/constants';
 import { sum } from 'lodash';
 
-const filePath = process.argv[2];
-const fileName = process.argv[3];
+const sectionalDef = process.argv[2];
+const sectionalPNG = process.argv[3];
+const outputPath = process.argv[4];
+const outputName = process.argv[5];
 
 type SectionalTile = {
   tileID: number;
@@ -67,19 +69,19 @@ let columns: number;
 let tileWidth: number;
 let tileHeight: number;
 
-function getFilePath(name: string) {
-  return path.resolve(__dirname, '../', path.join(filePath, name));
+function getFilePath(...paths: string[]) {
+  return path.resolve(__dirname, '../', path.join(...paths));
 }
 
 async function loadFiles() {
-  if (!filePath || !fileName) {
+  if (!sectionalDef || !sectionalPNG || !outputPath || !outputName) {
     console.error('Invalid arguments');
     process.exit(1);
   }
 
-  const xmlFilePath = getFilePath(fileName + '.xml');
-  const pngFilePath = getFilePath(fileName + '.png');
-  console.log(`Processing ${fileName}`);
+  const xmlFilePath = getFilePath(sectionalDef);
+  const pngFilePath = getFilePath(sectionalPNG);
+  console.log(`Processing ${pngFilePath}`);
 
   const xmlFileRaw = fs.readFileSync(xmlFilePath, { encoding: 'utf-8' });
   const xmlFile = await parseStringPromise(xmlFileRaw);
@@ -249,8 +251,8 @@ async function createTileset() {
     ...getVariantsForTerrainType(2),
   ];
   console.log(`Creating tileset with ${variants.length} tiles`);
-  const outImagePath = getFilePath(fileName + '.tileset.png');
-  const outJSONPath = getFilePath(fileName + '.tileset.json');
+  const outImagePath = getFilePath(outputPath, outputName + '.tileset.png');
+  const outJSONPath = getFilePath(outputPath, outputName + '.tileset.json');
   const outputColumnCount = 10;
 
   await createTilesetImage(variants, outputColumnCount, outImagePath);
