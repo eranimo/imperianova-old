@@ -46,6 +46,8 @@ class MapViewer {
   app: PIXI.Application;
   viewport: Viewport;
   cull: any;
+  movePoint: PIXI.Point;
+  keyMap: Record<string, boolean>;
 
   constructor(protected element: HTMLElement, protected manager: MapManager) {
     PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
@@ -77,7 +79,7 @@ class MapViewer {
       screenWidth: window.innerWidth,
       screenHeight: window.innerHeight,
       interaction: this.app.renderer.plugins.interaction,
-    });
+    })
   
     this.cull = new Cull.Simple({
       dirtyTest: false,
@@ -90,6 +92,31 @@ class MapViewer {
     // activate plugins
     viewport.drag().pinch().wheel().decelerate();
     this.viewport = viewport;
+
+    this.movePoint = new PIXI.Point();
+    this.keyMap = {};
+    document.addEventListener('keydown', this.handleKeyboard.bind(this), false);
+    document.addEventListener('keyup', this.handleKeyboard.bind(this), false);
+  }
+
+  private handleKeyboard(event: KeyboardEvent) {
+    this.keyMap[event.key] = event.type === 'keydown';
+    this.movePoint.x = this.viewport.center.x;
+    this.movePoint.y = this.viewport.center.y;
+
+    if (this.keyMap['w'] || this.keyMap['ArrowUp']) {
+      this.movePoint.y -= 50;
+    }
+    if (this.keyMap['s'] || this.keyMap['ArrowDown']) {
+      this.movePoint.y += 50;
+    }
+    if (this.keyMap['a'] || this.keyMap['ArrowLeft']) {
+      this.movePoint.x -= 50;
+    }
+    if (this.keyMap['d'] || this.keyMap['ArrowRight']) {
+      this.movePoint.x += 50;
+    }
+    this.viewport.moveCenter(this.movePoint);
   }
 
   start(resources: PIXI.IResourceDictionary, fonts: Record<string, any>) {
@@ -119,6 +146,8 @@ class MapViewer {
 
   destroy() {
     this.app.destroy();
+    document.removeEventListener('keydown', this.handleKeyboard.bind(this), false);
+    document.removeEventListener('keyup', this.handleKeyboard.bind(this), false);
   }
 }
 
