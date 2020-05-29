@@ -3,9 +3,8 @@ import * as PIXI from "pixi.js";
 import { initGame } from '../mapviewer/MapViewer';
 import { WorldMap } from '../mapviewer/WorldMap';
 import { Minimap } from '../mapviewer/Minimap';
-import { CircularProgress, Container } from '@material-ui/core';
 import { MapManager } from '../mapviewer/MapManager';
-
+import { IconButton, Box, Spinner, DarkMode, Button } from '@chakra-ui/core';
 
 const WORLD_SIZE = 100;
 
@@ -33,6 +32,19 @@ export const MainPageLoaded: React.FC<{
     <>
       <div ref={mapViewerRef}>
       </div>
+
+      <Box
+        style={{
+          backgroundColor: 'rgba(50, 50, 50, 0.75)',
+          padding: '1rem',
+          position: 'fixed',
+          right: 0,
+          width: '300px',
+          bottom: '150px',
+        }}
+      >
+        <Button size="sm" aria-label="Search" leftIcon="search">Search</Button>
+      </Box>
 
       <div
         className="minimap"
@@ -68,9 +80,10 @@ export const MainPage: React.FC = () => {
 
   if (resources === null) {
     return (
-      <Container>
-        <CircularProgress />
-      </Container>
+      <Box>
+        ImperiaNova
+        <Spinner />
+      </Box>
     );
   }
   return <MainPageLoaded resources={resources} />;

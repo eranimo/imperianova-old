@@ -13,23 +13,25 @@ import { MainPage } from './menu';
 
 export const history = createBrowserHistory();
 
-export const App: React.FC = () => (
-  <Router history={history}>
-    <Switch>
-      <Route exact path="/" component={MainPage} />
+export const App: React.FC = () => {
+  return (
+    <Router history={history}>
+      <Switch>
+        <Route exact path="/" component={MainPage} />
 
-      {/* <Suspense fallback={<LoadingOverlay />}>
-        <Route path="/new" component={NewWorldPage} />
-      </Suspense>
-      <Suspense fallback={<LoadingOverlay />}>
-        <Route path="/worlds" component={WorldListPage} />
-      </Suspense>
-      <Suspense fallback={<LoadingOverlay />}>
-        <Route path="/world/:worldName" component={LoadWorldPage} />
-      </Suspense>
-      <Suspense fallback={<LoadingOverlay />}>
-        <Route path="/game" component={MapViewer} />
-      </Suspense> */}
-    </Switch>
-  </Router>
-)
+        {/* <Suspense fallback={<LoadingOverlay />}>
+          <Route path="/new" component={NewWorldPage} />
+        </Suspense>
+        <Suspense fallback={<LoadingOverlay />}>
+          <Route path="/worlds" component={WorldListPage} />
+        </Suspense>
+        <Suspense fallback={<LoadingOverlay />}>
+          <Route path="/world/:worldName" component={LoadWorldPage} />
+        </Suspense>
+        <Suspense fallback={<LoadingOverlay />}>
+          <Route path="/game" component={MapViewer} />
+        </Suspense> */}
+      </Switch>
+    </Router>
+  );
+}

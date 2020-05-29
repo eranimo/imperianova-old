@@ -2,14 +2,15 @@ import React from 'react';
 import { render } from 'react-dom';
 import { App } from './App';
 import './style.css';
-import { ThemeProvider, CssBaseline } from '@material-ui/core';
-import { theme } from './theme';
-import 'typeface-roboto';
+import { ThemeProvider, CSSReset, DarkMode, ColorModeProvider, theme } from "@chakra-ui/core"
+
 
 const AppContainer = ({ app }: { app: any }) => (
-  <ThemeProvider theme={theme}>
-    <CssBaseline />
-    {app}
+  <ThemeProvider>
+    <ColorModeProvider value="dark">
+      <CSSReset />
+      {app}
+    </ColorModeProvider>
   </ThemeProvider>
 );
 const rootElementID = 'root';
