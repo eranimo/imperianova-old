@@ -100,7 +100,6 @@ class MapViewer {
   }
 
   private handleKeyboard(event: KeyboardEvent) {
-    console.log(event.key);
     this.keyMap[event.key] = event.type === 'keydown';
     this.movePoint.x = this.viewport.center.x;
     this.movePoint.y = this.viewport.center.y;

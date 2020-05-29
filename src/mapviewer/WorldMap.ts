@@ -98,7 +98,6 @@ export class WorldMap {
     const hex = this.hexgrid.get({ x, y });
     if (!hex) return null;
     const p = hex.toPoint();
-    console.log(p);
     return new PIXI.Point(p.x, p.y);
   }
 
