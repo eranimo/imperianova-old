@@ -54,7 +54,7 @@ class MapViewer {
     this.app = new PIXI.Application({
       width: window.innerWidth,
       height: window.innerHeight,
-      resolution: window.devicePixelRatio,
+      // resolution: window.devicePixelRatio,
       antialias: false,
     });
     const app = this.app;
@@ -76,8 +76,8 @@ class MapViewer {
   setupViewport() {
     // create viewport
     const viewport = new Viewport({
-      screenWidth: window.innerWidth,
-      screenHeight: window.innerHeight,
+      screenWidth: this.app.view.offsetWidth,
+      screenHeight: this.app.view.offsetHeight,
       interaction: this.app.renderer.plugins.interaction,
     })
   
@@ -100,6 +100,7 @@ class MapViewer {
   }
 
   private handleKeyboard(event: KeyboardEvent) {
+    console.log(event.key);
     this.keyMap[event.key] = event.type === 'keydown';
     this.movePoint.x = this.viewport.center.x;
     this.movePoint.y = this.viewport.center.y;
@@ -140,6 +141,13 @@ class MapViewer {
     console.timeEnd('setup terrain');
 
     const tilemap = new HexTilemap(this.manager.worldMap, this.viewport, resources, fonts);
+
+    // update selected hex layer when selected hex changes
+    this.manager.selectHex$.subscribe(hexCoordinate => {
+      if (hexCoordinate) {
+        tilemap.updateSelection(hexCoordinate);
+      }
+    });
     console.log('tilemap', tilemap);
     this.viewport.addChild(tilemap);
   }

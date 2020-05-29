@@ -79,6 +79,7 @@ export class HexTilemap extends PIXI.Container {
         console.log({
           hex,
           coordinate: this.worldMap.getHexCoordinate(hex),
+          position: this.worldMap.getPointFromPosition(hex.x, hex.y),
           terrainType: terrainType,
           terrainTitle: terrainTypeTitles[terrainType],
           tileID: this.worldMap.tileMasks.data[hex.index],

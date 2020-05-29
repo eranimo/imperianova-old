@@ -85,9 +85,21 @@ export class WorldMap {
     };
   }
 
+  getHex(x: number, y: number) {
+    return this.hexgrid.get({ x, y});
+  }
+
   getHexFromPoint(point: PIXI.Point) {
     const hexCoords = Grid.pointToHex(point.x, point.y);
     return this.hexgrid.get(hexCoords);
+  }
+
+  getPointFromPosition(x: number, y: number) {
+    const hex = this.hexgrid.get({ x, y });
+    if (!hex) return null;
+    const p = hex.toPoint();
+    console.log(p);
+    return new PIXI.Point(p.x, p.y);
   }
 
   getHexCoordinate(hex: Honeycomb.Hex<IHex>) {
