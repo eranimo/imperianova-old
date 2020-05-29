@@ -8,7 +8,7 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Program",
-      "program": "${workspaceFolder}/scripts/tilesetMerger.ts",
+      "program": "${workspaceFolder}/scripts/tilesetBuilder.ts",
       "args": [
         "./src/assets/tilesets/ coastline-sectional",
         "2"

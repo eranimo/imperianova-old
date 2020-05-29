@@ -6,7 +6,7 @@
 
 Tileset builder script:
 ```
-./scripts/tilesetMerger.ts <tilesetName> -d <tilesetDefPath> -i <tilesetImagePath> -o <outputPath>
+./scripts/tilesetBuilder.ts <tilesetName> -d <tilesetDefPath> -i <tilesetImagePath> -o <outputPath>
 ```
 
 - *tilesetName*: Filename of tileset
