@@ -6,6 +6,9 @@ import { logGroupTime } from './utils';
 import { memoize } from 'lodash';
 import { Viewport } from 'pixi-viewport';
 
+
+const scale = 1; // window.devicePixelRatio;
+
 export class Minimap {
   width: number;
   height: number;
@@ -66,7 +69,6 @@ export class Minimap {
 
   private centerViewport(event: MouseEvent) {
     const viewport = this.manager.viewport$.value;
-    const scale = window.devicePixelRatio;
     const x = (event.offsetX / this.width);
     const y = (event.offsetY / this.height);
     const worldX = viewport.worldWidth * x + (viewport.worldScreenWidth / scale / 2);
@@ -77,7 +79,6 @@ export class Minimap {
 
   private drawFrame(viewport: Viewport) {
     if (viewport === null) return;
-    const scale = window.devicePixelRatio;
     const width = Math.floor(this.width * scale);
     const height = Math.floor(this.height * scale);
     this.frame.clearRect(-10, -10, width + 10, height + 10);
@@ -116,7 +117,6 @@ export class Minimap {
   }
 
   private scalePoint(x: number, y: number): [number, number] {
-    const scale = window.devicePixelRatio;
     const width = Math.floor(this.width * scale);
     const height = Math.floor(this.height * scale);
 
@@ -134,8 +134,6 @@ export class Minimap {
     canvas.style.height = `${this.height}px`;
     const ctx = canvas.getContext('2d');
 
-    const scale = window.devicePixelRatio;
-    ctx.scale(scale, scale);
     canvas.width = Math.floor(this.width * scale);
     canvas.height = Math.floor(this.height * scale);
     ctx.translate(0.5, 0.5);
