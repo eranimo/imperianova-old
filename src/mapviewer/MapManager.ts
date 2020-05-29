@@ -27,6 +27,7 @@ export class MapManager {
   }
 
   updateViewport(viewport: Viewport) {
+    (window as any).viewport = viewport;
     this.viewport$.next(viewport);
   }
 }

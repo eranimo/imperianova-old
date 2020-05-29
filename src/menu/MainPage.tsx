@@ -4,7 +4,9 @@ import { initGame } from '../mapviewer/MapViewer';
 import { WorldMap } from '../mapviewer/WorldMap';
 import { Minimap } from '../mapviewer/Minimap';
 import { MapManager } from '../mapviewer/MapManager';
-import { IconButton, Box, Spinner, DarkMode, Button } from '@chakra-ui/core';
+import { IconButton, Box, Spinner, DarkMode, Button, Tooltip } from '@chakra-ui/core';
+import { FaArrowsAlt } from 'react-icons/fa';
+
 
 const WORLD_SIZE = 100;
 
@@ -13,12 +15,13 @@ export const MainPageLoaded: React.FC<{
 }> = ({ resources }) => {
   const mapViewerRef = useRef(null);
   const minimapRef = useRef(null);
+  let manager: MapManager;
 
   useEffect(() => {
     const map = new WorldMap({
       size: WORLD_SIZE
     });
-    const manager = new MapManager(map);
+    manager = new MapManager(map);
     const destroyApp = initGame(mapViewerRef.current, manager, resources);
     const minimap = new Minimap(minimapRef.current, manager)
 
@@ -34,16 +37,28 @@ export const MainPageLoaded: React.FC<{
       </div>
 
       <Box
+        p={1}
         style={{
           backgroundColor: 'rgba(50, 50, 50, 0.75)',
-          padding: '1rem',
           position: 'fixed',
           right: 0,
           width: '300px',
           bottom: '150px',
         }}
       >
-        <Button size="sm" aria-label="Search" leftIcon="search">Search</Button>
+        <Tooltip
+          label="Reset viewport"
+          aria-label=""
+          bg="gray.900"
+          color="gray.50"
+          placement="top"
+        >
+          <IconButton
+            aria-label="Reset viewport"
+            icon={FaArrowsAlt}
+            color="gray.200"
+          />
+        </Tooltip>
       </Box>
 
       <div

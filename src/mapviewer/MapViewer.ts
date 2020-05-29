@@ -116,7 +116,7 @@ class MapViewer {
     if (this.keyMap['d'] || this.keyMap['ArrowRight']) {
       this.movePoint.x += 50;
     }
-    this.viewport.moveCenter(this.movePoint);
+    this.manager.moveEvents$.next(this.movePoint);
   }
 
   start(resources: PIXI.IResourceDictionary, fonts: Record<string, any>) {

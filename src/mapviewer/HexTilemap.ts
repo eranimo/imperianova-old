@@ -31,6 +31,9 @@ export class HexTilemap extends PIXI.Container {
     this.farLayer.alpha = 0;
     this.addChild(this.closeLayer, this.farLayer);
 
+    this.viewport.worldWidth = worldMap.hexgrid.pointWidth();
+    this.viewport.worldHeight = worldMap.hexgrid.pointHeight();
+
     this.viewport.on('zoomed', (...args) => {
       if (this.viewport.scale.x < 0.1) {
         this.closeLayer.alpha = 0;
