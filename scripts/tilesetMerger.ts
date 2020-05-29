@@ -8,11 +8,31 @@ import ndarray from 'ndarray';
 import { getTilesetMask } from '../src/mapviewer/utils';
 import { TerrainType, Direction, directionShort, terrainTypeMax } from '../src/mapviewer/constants';
 import { sum } from 'lodash';
+import yargs from 'yargs';
 
-const sectionalDef = process.argv[2];
-const sectionalPNG = process.argv[3];
-const outputPath = process.argv[4];
-const outputName = process.argv[5];
+
+yargs.command('* <tilesetName>', 'Builds tilesets from Tiled definition');
+const argv = yargs.options({
+  tilesetDefPath: {
+    type: 'string',
+    description: 'Path to the tileset .tsx/.xml Tiled tileset file',
+    alias: 'd',
+    demandOption: true,
+  },
+  tilesetImagePath: {
+    type: 'string',
+    description: 'Path to tileset image',
+    alias: 'i',
+    demandOption: true,
+  },
+  outputPath: {
+    type: 'string',
+    description: 'Output folder for tileset',
+    alias: 'o',
+    default: './',
+  },
+}).argv;
+
 
 type SectionalTile = {
   tileID: number;
@@ -74,13 +94,8 @@ function getFilePath(...paths: string[]) {
 }
 
 async function loadFiles() {
-  if (!sectionalDef || !sectionalPNG || !outputPath || !outputName) {
-    console.error('Invalid arguments');
-    process.exit(1);
-  }
-
-  const xmlFilePath = getFilePath(sectionalDef);
-  const pngFilePath = getFilePath(sectionalPNG);
+  const xmlFilePath = getFilePath(argv.tilesetDefPath);
+  const pngFilePath = getFilePath(argv.tilesetImagePath);
   console.log(`Processing ${pngFilePath}`);
 
   const xmlFileRaw = fs.readFileSync(xmlFilePath, { encoding: 'utf-8' });
@@ -251,8 +266,8 @@ async function createTileset() {
     ...getVariantsForTerrainType(2),
   ];
   console.log(`Creating tileset with ${variants.length} tiles`);
-  const outImagePath = getFilePath(outputPath, outputName + '.tileset.png');
-  const outJSONPath = getFilePath(outputPath, outputName + '.tileset.json');
+  const outImagePath = getFilePath(argv.outputPath, argv.tilesetName + '.tileset.png');
+  const outJSONPath = getFilePath(argv.outputPath, argv.tilesetName + '.tileset.json');
   const outputColumnCount = 10;
 
   await createTilesetImage(variants, outputColumnCount, outImagePath);
