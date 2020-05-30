@@ -2,55 +2,76 @@
 export enum TerrainType {
   MAP_EDGE = 0,
   OCEAN = 1,
-  LAND = 2,
+  GRASSLAND = 2,
   FOREST = 3,
   DESERT = 4,
+  TAIGA = 5,
+  TUNDRA = 6,
+  GLACIAL = 7,
 }
 export const terrainTypes = [
   TerrainType.MAP_EDGE,
   TerrainType.OCEAN,
-  TerrainType.LAND,
+  TerrainType.GRASSLAND,
   TerrainType.FOREST,
   TerrainType.DESERT,
+  TerrainType.TAIGA,
+  TerrainType.TUNDRA,
+  TerrainType.GLACIAL,
 ];
-export const terrainTypeMax = 4;
+export const terrainTypeMax = 7;
 
 // a map of center terrain types to edge terrain types
 // representing which terrains have transitions
 export const terrainTransitions: Partial<Record<TerrainType, TerrainType[]>> = {
-  [TerrainType.LAND]: [TerrainType.FOREST, TerrainType.DESERT],
-  [TerrainType.OCEAN]: [TerrainType.LAND, TerrainType.FOREST, TerrainType.DESERT],
+  [TerrainType.GRASSLAND]: [TerrainType.FOREST, TerrainType.DESERT],
+  [TerrainType.OCEAN]: [TerrainType.GRASSLAND, TerrainType.FOREST, TerrainType.DESERT, TerrainType.TAIGA, TerrainType.TUNDRA, TerrainType.GLACIAL],
+  [TerrainType.FOREST]: [TerrainType.TAIGA],
+  [TerrainType.TAIGA]: [TerrainType.TUNDRA, TerrainType.GLACIAL],
 };
 
+// edge -> center
 export const terrainBackTransitions = {
-  [TerrainType.FOREST]: [TerrainType.LAND],
-  [TerrainType.LAND]: [TerrainType.OCEAN],
-  [TerrainType.FOREST]: [TerrainType.OCEAN, TerrainType.LAND],
-  [TerrainType.DESERT]: [TerrainType.OCEAN, TerrainType.LAND],
+  [TerrainType.FOREST]: [TerrainType.GRASSLAND],
+  [TerrainType.GRASSLAND]: [TerrainType.OCEAN],
+  [TerrainType.FOREST]: [TerrainType.OCEAN, TerrainType.GRASSLAND],
+  [TerrainType.DESERT]: [TerrainType.OCEAN, TerrainType.GRASSLAND],
+  [TerrainType.TAIGA]: [TerrainType.OCEAN, TerrainType.FOREST],
+  [TerrainType.TUNDRA]: [TerrainType.OCEAN, TerrainType.TAIGA],
+  [TerrainType.GLACIAL]: [TerrainType.OCEAN, TerrainType.TAIGA],
 }
 
 export const terrainColors: Record<TerrainType, number> = {
   [TerrainType.MAP_EDGE]: 0x000000,
   [TerrainType.OCEAN]: 0x3F78CB,
-  [TerrainType.LAND]: 0x81B446,
+  [TerrainType.GRASSLAND]: 0x81B446,
   [TerrainType.FOREST]: 0x236e29,
   [TerrainType.DESERT]: 0xD9BF8C,
+  [TerrainType.TAIGA]: 0x006259,
+  [TerrainType.TUNDRA]: 0x96D1C3,
+  [TerrainType.GLACIAL]: 0xFAFAFA,
 };
 
 export const terrainMinimapColors: Record<TerrainType, string> = {
   [TerrainType.MAP_EDGE]: '#000000',
   [TerrainType.OCEAN]: '#3F78CB',
-  [TerrainType.LAND]: '#81B446',
+  [TerrainType.GRASSLAND]: '#81B446',
   [TerrainType.FOREST]: '#236e29',
   [TerrainType.DESERT]: '#D9BF8C',
+  [TerrainType.TAIGA]: '#006259',
+  [TerrainType.TUNDRA]: '#96D1C3',
+  [TerrainType.GLACIAL]: '#FAFAFA',
 };
 
 export const terrainTypeTitles: Record<TerrainType, string> = {
   [TerrainType.MAP_EDGE]: 'MAP EDGE',
   [TerrainType.OCEAN]: 'Ocean',
-  [TerrainType.LAND]: 'Land',
+  [TerrainType.GRASSLAND]: 'Land',
   [TerrainType.FOREST]: 'Forest',
   [TerrainType.DESERT]: 'Desert',
+  [TerrainType.TAIGA]: 'Taiga',
+  [TerrainType.TUNDRA]: 'Tundra',
+  [TerrainType.GLACIAL]: 'Glacial',
 };
 
 export enum Direction {

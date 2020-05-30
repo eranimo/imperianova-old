@@ -127,7 +127,7 @@ export class WorldMap {
       if (height < 140) {
         this.terrain.set(hex.x, hex.y, TerrainType.OCEAN);
       } else {
-        this.terrain.set(hex.x, hex.y, TerrainType.LAND);
+        this.terrain.set(hex.x, hex.y, TerrainType.GRASSLAND);
       }
     });
     this.hexgrid.forEach(hex => {
@@ -192,7 +192,7 @@ export class WorldMap {
   calculateHexTile(hex: Honeycomb.Hex<IHex>) {
     const { x, y } = hex;
     const terrain = this.getTerrainForHex(x, y);
-    if (terrain === TerrainType.LAND) {
+    if (terrain === TerrainType.GRASSLAND) {
       this.tileMasks.set(x, y, 2186);
       return;
     }
