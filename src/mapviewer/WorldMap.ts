@@ -120,7 +120,7 @@ export class WorldMap {
       const nx = 1 * Math.sin(inc) * Math.cos(azi);
       const ny = 1 * Math.sin(inc) * Math.sin(azi);
       const nz = 1 * Math.cos(inc);
-      const raw = octaveNoise(noise.noise3D.bind(noise), nx, ny, nz, 5, 0.5);
+      const raw = octaveNoise(noise.noise3D.bind(noise), nx, ny, nz, 7, 0.5);
       const value = (raw + 1) / 2;
       const height = value * 255;
       this.heightmap.set(hex.x, hex.y, height);

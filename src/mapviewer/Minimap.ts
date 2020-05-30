@@ -71,8 +71,8 @@ export class Minimap {
     const viewport = this.manager.viewport$.value;
     const x = (event.offsetX / this.width);
     const y = (event.offsetY / this.height);
-    const worldX = viewport.worldWidth * x + (viewport.worldScreenWidth / scale / 2);
-    const worldY = viewport.worldHeight * y + (viewport.worldScreenHeight / scale / 2);
+    const worldX = viewport.worldWidth * x;
+    const worldY = viewport.worldHeight * y;
     this.centerPoint.set(worldX, worldY);
     this.manager.moveEvents$.next(this.centerPoint);
   }
@@ -83,6 +83,7 @@ export class Minimap {
     const height = Math.floor(this.height * scale);
     this.frame.clearRect(-10, -10, width + 10, height + 10);
     this.frame.strokeStyle = 'white';
+    this.frame.lineWidth = 1.5;
     this.frame.beginPath();
     const p1 = this.scalePoint(viewport.left, viewport.top);
     const p2 = this.scalePoint(viewport.worldScreenWidth / scale, viewport.worldScreenHeight / scale);
@@ -93,6 +94,7 @@ export class Minimap {
   @logGroupTime('draw minimap background')
   private drawBackground(worldMap: WorldMap) {
     const background = this.background;
+    background.lineWidth = 1;
 
     worldMap.hexgrid.forEach(hex => {
       const terrainType = worldMap.terrain.get(hex.x, hex.y);
@@ -100,6 +102,7 @@ export class Minimap {
       const corners = hex.corners().map(corner => corner.add(point))
       const [firstCorner, ...otherCorners] = corners;
       background.fillStyle = terrainMinimapColors[terrainType];
+      background.strokeStyle = terrainMinimapColors[terrainType],
       background.beginPath();
       background.moveTo(
         ...this.scalePoint(firstCorner.x, firstCorner.y)
@@ -111,9 +114,9 @@ export class Minimap {
         ...this.scalePoint(firstCorner.x, firstCorner.y)
       )
       background.fill();
+      background.stroke();
       background.closePath();
     });
-    // background.translate(-0.5, -0.5);
   }
 
   private scalePoint(x: number, y: number): [number, number] {
@@ -136,7 +139,6 @@ export class Minimap {
 
     canvas.width = Math.floor(this.width * scale);
     canvas.height = Math.floor(this.height * scale);
-    ctx.translate(0.5, 0.5);
     return ctx;
   }
 }

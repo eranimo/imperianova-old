@@ -22,6 +22,8 @@ const FindHex: React.FC<{ manager: MapManager }> = ({ manager }) => {
       setError(!result);
       if (result) {
         setOpen(false);
+        setX(0);
+        setY(0);
         manager.selectHex(x, y);
       }
     }
@@ -30,49 +32,55 @@ const FindHex: React.FC<{ manager: MapManager }> = ({ manager }) => {
     <>
       <Modal
         isOpen={isOpen}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false);
+          setX(0);
+          setY(0);
+        }}
         blockScrollOnMount
       >
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Find Hex</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Text mb={3}>
-              Enter the hex coordinate below to jump to and select that hex.
-            </Text>
-            <FormControl isInvalid={hasError}>
-              <Stack isInline>
-                <InputGroup size="sm">
-                  <InputLeftAddon children="X" />
-                  <Input
-                    type="number"
-                    value={x}
-                    onChange={event => setX(parseInt(event.target.value, 10))}
-                    min={0}
-                    max={manager.worldMap$.value.size.width}
-                  />
-                </InputGroup>
-                <InputGroup size="sm">
-                  <InputLeftAddon children="Y" />
-                  <Input
-                    type="number"
-                    value={y}
-                    onChange={event => setY(parseInt(event.target.value, 10))}
-                    min={0}
-                    max={manager.worldMap$.value.size.height}
-                  />
-                </InputGroup>
-              </Stack>
-              <FormErrorMessage>Invalid hex coordinate</FormErrorMessage>
-            </FormControl>
-          </ModalBody>
-          <ModalFooter>
-            <Button variantColor="blue" mr={3} onClick={handleSubmit}>
-              Go
-            </Button>
-          </ModalFooter>
-        </ModalContent>
+        <form onSubmit={handleSubmit}>
+          <ModalContent>
+            <ModalHeader>Find Hex</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Text mb={3}>
+                Enter the hex coordinate below to jump to and select that hex.
+              </Text>
+              <FormControl isInvalid={hasError}>
+                <Stack isInline>
+                  <InputGroup size="sm">
+                    <InputLeftAddon children="X" />
+                    <Input
+                      type="number"
+                      value={x}
+                      onChange={event => setX(parseInt(event.target.value, 10))}
+                      min={0}
+                      max={manager.worldMap$.value.size.width}
+                    />
+                  </InputGroup>
+                  <InputGroup size="sm">
+                    <InputLeftAddon children="Y" />
+                    <Input
+                      type="number"
+                      value={y}
+                      onChange={event => setY(parseInt(event.target.value, 10))}
+                      min={0}
+                      max={manager.worldMap$.value.size.height}
+                    />
+                  </InputGroup>
+                </Stack>
+                <FormErrorMessage>Invalid hex coordinate</FormErrorMessage>
+              </FormControl>
+            </ModalBody>
+            <ModalFooter>
+              <Button type="submit" variantColor="blue" mr={3}>
+                Go
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </form>
       </Modal>
       <Tooltip
         label="Find Hex"
@@ -114,8 +122,7 @@ export const MainPageLoaded: React.FC<{
 
   return (
     <>
-      <div ref={mapViewerRef}>
-      </div>
+      <div ref={mapViewerRef} tabIndex={0}></div>
 
       <Box
         p={1}

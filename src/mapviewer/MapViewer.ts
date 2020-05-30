@@ -6,6 +6,7 @@ import Cull from 'pixi-cull';
 import { HexTilemap } from "./HexTilemap";
 import { WorldMap } from "./WorldMap";
 import { MapManager } from './MapManager';
+import { BehaviorSubject } from "rxjs";
 
 // 32 pixels wide
 // 28 pixels tall
@@ -48,6 +49,7 @@ class MapViewer {
   cull: any;
   movePoint: PIXI.Point;
   keyMap: Record<string, boolean>;
+  mapFocused$: BehaviorSubject<boolean>;
 
   constructor(protected element: HTMLElement, protected manager: MapManager) {
     PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
@@ -60,6 +62,18 @@ class MapViewer {
     const app = this.app;
   
     element.appendChild(app.view);
+
+    // handle map focus
+    this.mapFocused$ = new BehaviorSubject(false);
+    element.addEventListener('focus', () => {
+      this.mapFocused$.next(true);
+    });
+    element.addEventListener('blur', () => {
+      this.mapFocused$.next(false);
+    });
+    element.addEventListener('mouseenter', () => {
+      element.focus();
+    });
   
     const stats = new Stats();
     stats.showPanel(0);
@@ -80,6 +94,14 @@ class MapViewer {
       screenHeight: this.app.view.offsetHeight,
       interaction: this.app.renderer.plugins.interaction,
     })
+
+    this.mapFocused$.subscribe(isFocused => {
+      if (isFocused) {
+        viewport.pause = false;
+      } else {
+        viewport.pause = true;
+      }
+    });
   
     this.cull = new Cull.Simple({
       dirtyTest: false,
@@ -174,7 +196,6 @@ export function initGame(
   const font = PIXI.BitmapText.registerFont(fontXML, {
     [pageFile]: resources.fontPng.texture,
   });
-  console.log(font);
 
   console.timeEnd('setup');
   console.time('start');

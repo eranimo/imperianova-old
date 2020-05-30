@@ -1,6 +1,5 @@
 #!/usr/bin/env ts-node-script
 
-import path from 'path';
 import fs from 'fs';
 import Jimp from 'jimp';
 import { parseStringPromise, parseString } from 'xml2js';
@@ -9,6 +8,7 @@ import { getTilesetMask } from '../src/mapviewer/utils';
 import { TerrainType, Direction, directionShort, terrainTypeMax } from '../src/mapviewer/constants';
 import { sum } from 'lodash';
 import yargs from 'yargs';
+import { SectionalTile, TileVariant, renderOrder, adjacentDirections, newImage, getFilePath } from './shared';
 
 
 yargs.command('* <tilesetName>', 'Builds tilesets from Tiled definition');
@@ -34,45 +34,6 @@ const argv = yargs.options({
 }).argv;
 
 
-type SectionalTile = {
-  tileID: number;
-  direction: Direction,
-  terrainType: TerrainType,
-  terrainTypeCenter: TerrainType,
-
-  terrainTypeSE?: TerrainType,
-  terrainTypeNE?: TerrainType,
-  terrainTypeN?: TerrainType,
-  terrainTypeNW?: TerrainType,
-  terrainTypeSW?: TerrainType,
-  terrainTypeS?: TerrainType,
-}
-
-type TileVariant = {
-  terrainTypeCenter: TerrainType,
-  neighborTerrainTypes: Record<Direction, TerrainType>,
-  sideTileIDs: Record<Direction, number>,
-  mask: number,
-}
-
-const adjacentDirections = {
-  [Direction.SE]: [Direction.NE, Direction.S],
-  [Direction.NE]: [Direction.N, Direction.SE],
-  [Direction.N]: [Direction.NW, Direction.NE],
-  [Direction.NW]: [Direction.SW, Direction.N],
-  [Direction.SW]: [Direction.NW, Direction.S],
-  [Direction.S]: [Direction.SW, Direction.SE],
-}
-
-const renderOrder = [
-  Direction.N,
-  Direction.NW,
-  Direction.NE,
-  Direction.SW,
-  Direction.SE,
-  Direction.S,
-];
-
 const propertyTypeProcess = {
   int: (value: string) => parseInt(value, 10),
   str: (value: string) => value,
@@ -88,10 +49,6 @@ let imagePNG: Jimp;
 let columns: number;
 let tileWidth: number;
 let tileHeight: number;
-
-function getFilePath(...paths: string[]) {
-  return path.resolve(__dirname, '../', path.join(...paths));
-}
 
 async function loadFiles() {
   const xmlFilePath = getFilePath(argv.tilesetDefPath);
@@ -198,18 +155,6 @@ function createTilesetVariants(
     }
   }
   return sectionCombinations;
-}
-
-async function newImage(width: number, height: number): Promise<Jimp> {
-  return new Promise((resolve, reject) => {
-    new Jimp(width, height, (err, image) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(image);
-      }
-    })
-  })
 }
 
 async function createTilesetImage(
