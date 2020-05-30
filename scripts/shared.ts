@@ -29,8 +29,8 @@ export const adjacentDirections = {
   [Direction.NE]: [Direction.N, Direction.SE],
   [Direction.N]: [Direction.NW, Direction.NE],
   [Direction.NW]: [Direction.SW, Direction.N],
-  [Direction.SW]: [Direction.NW, Direction.S],
-  [Direction.S]: [Direction.SW, Direction.SE],
+  [Direction.SW]: [Direction.S, Direction.NW],
+  [Direction.S]: [Direction.SE, Direction.SW],
 };
 
 export const renderOrder = [

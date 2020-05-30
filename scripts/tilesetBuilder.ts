@@ -5,7 +5,7 @@ import Jimp from 'jimp';
 import { parseStringPromise, parseString } from 'xml2js';
 import ndarray from 'ndarray';
 import { getTilesetMask } from '../src/mapviewer/utils';
-import { TerrainType, Direction, directionShort, terrainTypeMax } from '../src/mapviewer/constants';
+import { TerrainType, Direction, directionShort, terrainTypeMax, terrainTypes } from '../src/mapviewer/constants';
 import { sum } from 'lodash';
 import yargs from 'yargs';
 import { SectionalTile, TileVariant, renderOrder, adjacentDirections, newImage, getFilePath } from './shared';
@@ -31,6 +31,12 @@ const argv = yargs.options({
     alias: 'o',
     default: './',
   },
+  columns: {
+    type: 'number',
+    description: 'Number of columns in tileset',
+    alias: 'c',
+    default: 25,
+  }
 }).argv;
 
 
@@ -206,20 +212,16 @@ function getVariantsForTerrainType(terrainType: TerrainType) {
 }
 
 async function createTileset() {
-  const variants = [
-    ...getVariantsForTerrainType(1),
-    ...getVariantsForTerrainType(2),
-  ];
+  const variants = terrainTypes.slice(1).reduce((prev, terrainType) => [...prev, ...getVariantsForTerrainType(terrainType)], []);
   console.log(`Creating tileset with ${variants.length} tiles`);
   const outImagePath = getFilePath(argv.outputPath, argv.tilesetName + '.tileset.png');
   const outJSONPath = getFilePath(argv.outputPath, argv.tilesetName + '.tileset.json');
-  const outputColumnCount = 10;
 
-  await createTilesetImage(variants, outputColumnCount, outImagePath);
+  await createTilesetImage(variants, argv.columns, outImagePath);
   console.log(`Output tileset image: ${outImagePath}`);
 
   fs.writeFileSync(outJSONPath, JSON.stringify({
-    columns: outputColumnCount,
+    columns: argv.columns,
     tileSize: {
       width: tileWidth,
       height: tileHeight,

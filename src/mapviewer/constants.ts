@@ -5,6 +5,12 @@ export enum TerrainType {
   LAND = 2,
   FOREST = 3,
 }
+export const terrainTypes = [
+  TerrainType.MAP_EDGE,
+  TerrainType.OCEAN,
+  TerrainType.LAND,
+  TerrainType.FOREST,
+];
 export const terrainTypeMax = 3;
 
 export const terrainColors = {

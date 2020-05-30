@@ -93,7 +93,7 @@ async function buildTilesetDef(template: Jimp) {
                 $: {
                   name: 'direction',
                   value: directionShort[direction],
-                  type: 'string',
+                  type: 'str',
                 }
               },
               {
