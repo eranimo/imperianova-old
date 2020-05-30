@@ -4,34 +4,53 @@ export enum TerrainType {
   OCEAN = 1,
   LAND = 2,
   FOREST = 3,
+  DESERT = 4,
 }
 export const terrainTypes = [
   TerrainType.MAP_EDGE,
   TerrainType.OCEAN,
   TerrainType.LAND,
   TerrainType.FOREST,
+  TerrainType.DESERT,
 ];
-export const terrainTypeMax = 3;
+export const terrainTypeMax = 4;
 
-export const terrainColors = {
+// a map of center terrain types to edge terrain types
+// representing which terrains have transitions
+export const terrainTransitions: Partial<Record<TerrainType, TerrainType[]>> = {
+  [TerrainType.LAND]: [TerrainType.FOREST, TerrainType.DESERT],
+  [TerrainType.OCEAN]: [TerrainType.LAND, TerrainType.FOREST, TerrainType.DESERT],
+};
+
+export const terrainBackTransitions = {
+  [TerrainType.FOREST]: [TerrainType.LAND],
+  [TerrainType.LAND]: [TerrainType.OCEAN],
+  [TerrainType.FOREST]: [TerrainType.OCEAN, TerrainType.LAND],
+  [TerrainType.DESERT]: [TerrainType.OCEAN, TerrainType.LAND],
+}
+
+export const terrainColors: Record<TerrainType, number> = {
   [TerrainType.MAP_EDGE]: 0x000000,
   [TerrainType.OCEAN]: 0x3F78CB,
   [TerrainType.LAND]: 0x81B446,
   [TerrainType.FOREST]: 0x236e29,
+  [TerrainType.DESERT]: 0xD9BF8C,
 };
 
-export const terrainMinimapColors = {
+export const terrainMinimapColors: Record<TerrainType, string> = {
   [TerrainType.MAP_EDGE]: '#000000',
   [TerrainType.OCEAN]: '#3F78CB',
   [TerrainType.LAND]: '#81B446',
   [TerrainType.FOREST]: '#236e29',
+  [TerrainType.DESERT]: '#D9BF8C',
 };
 
-export const terrainTypeTitles = {
+export const terrainTypeTitles: Record<TerrainType, string> = {
   [TerrainType.MAP_EDGE]: 'MAP EDGE',
   [TerrainType.OCEAN]: 'Ocean',
   [TerrainType.LAND]: 'Land',
   [TerrainType.FOREST]: 'Forest',
+  [TerrainType.DESERT]: 'Desert',
 };
 
 export enum Direction {

@@ -5,7 +5,7 @@ import Jimp from 'jimp';
 import { parseStringPromise, parseString } from 'xml2js';
 import ndarray from 'ndarray';
 import { getTilesetMask } from '../src/mapviewer/utils';
-import { TerrainType, Direction, directionShort, terrainTypeMax, terrainTypes } from '../src/mapviewer/constants';
+import { TerrainType, Direction, directionShort, terrainTypeMax, terrainTypes, terrainTypeTitles, terrainTransitions } from '../src/mapviewer/constants';
 import { sum } from 'lodash';
 import yargs from 'yargs';
 import { SectionalTile, TileVariant, renderOrder, adjacentDirections, newImage, getFilePath } from './shared';
@@ -88,6 +88,10 @@ async function loadFiles() {
       }
     }
   }
+  console.log('Loaded all files');
+  for (const [direction, tiles] of tilesByDirection) {
+    console.log(`Found ${tiles.length} ${directionShort[direction]} tiles`);
+  }
 
   // load image
   imagePNG = await Jimp.read(pngFilePath);
@@ -115,6 +119,10 @@ function createTilesetVariants(
     ));
     directionTileOptions[direction] = matchingTiles;
   });
+  // console.log(`Variants for ${terrainTypeTitles[terrainTypeCenter]}`, directionTerrain);
+  // Object.entries(directionTileOptions).forEach(([k, v]) => {
+  //   console.log(`\tdirection: ${directionShort[k]} - ${v.length} tiles`);
+  // });
 
   // all possible combination of tiles
   const sectionCombinations: TileVariant[] = [];
@@ -171,6 +179,7 @@ async function createTilesetImage(
   const count = tileVariants.length;
   const tilesetWidth = columnCount * tileWidth;
   const tilesetHeight = tileHeight * Math.ceil(count / columnCount);
+  console.log(`Creating tileset image with ${tileVariants.length} tiles (image size: ${tilesetWidth}x${tilesetHeight})`);
   const image = await newImage(tilesetWidth, tilesetHeight);
   tileVariants.forEach((tileVariant, index) => {
     const tx = (index % columnCount) * tileWidth;
@@ -188,12 +197,13 @@ async function createTilesetImage(
 
 function getVariantsForTerrainType(terrainType: TerrainType) {
   const variants: TileVariant[] = [];
-  for (let se = 1; se <= terrainTypeMax; se++) {
-    for (let ne = 1; ne <= terrainTypeMax; ne++) {
-      for (let n = 1; n <= terrainTypeMax; n++) {
-        for (let nw = 1; nw <= terrainTypeMax; nw++) {
-          for (let sw = 1; sw <= terrainTypeMax; sw++) {
-            for (let s = 1; s <= terrainTypeMax; s++) {
+  const neighbors = [terrainType, ...(terrainTransitions[terrainType] || [])];
+  for (let se of neighbors) {
+    for (let ne of neighbors) {
+      for (let n of neighbors) {
+        for (let nw of neighbors) {
+          for (let sw of neighbors) {
+            for (let s of neighbors) {
               variants.push(...createTilesetVariants(terrainType, {
                 [Direction.SE]: se,
                 [Direction.NE]: ne,
@@ -208,12 +218,12 @@ function getVariantsForTerrainType(terrainType: TerrainType) {
       }
     }
   }
+  console.log(`Found ${variants.length} variants for terrain type ${terrainTypeTitles[terrainType]}`);
   return variants;
 }
 
 async function createTileset() {
   const variants = terrainTypes.slice(1).reduce((prev, terrainType) => [...prev, ...getVariantsForTerrainType(terrainType)], []);
-  console.log(`Creating tileset with ${variants.length} tiles`);
   const outImagePath = getFilePath(argv.outputPath, argv.tilesetName + '.tileset.png');
   const outJSONPath = getFilePath(argv.outputPath, argv.tilesetName + '.tileset.json');
 

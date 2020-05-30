@@ -3,8 +3,8 @@
 import path from 'path';
 import fs from 'fs';
 import { Builder } from 'xml2js';
-import yargs, { number } from 'yargs';
-import { TerrainType, terrainTypeMax, directionShort, Direction, terrainColors, terrainMinimapColors } from '../src/mapviewer/constants';
+import yargs, { number, boolean } from 'yargs';
+import { TerrainType, terrainTypeMax, directionShort, Direction, terrainColors, terrainMinimapColors, terrainTransitions, terrainTypeTitles, terrainBackTransitions } from '../src/mapviewer/constants';
 import { renderOrder, adjacentDirections, newImage, SectionalTile, getFilePath, indexOrder } from './shared';
 import Jimp from 'jimp';
 
@@ -81,78 +81,109 @@ async function buildTilesetDef(template: Jimp) {
   const tiles: SectionalTile[] = [];
 
   let tileID = 0;
-  for (let terrainType = 1; terrainType <= terrainTypeMax; terrainType++) {
-    for (let terrainTypeCenter = 1; terrainTypeCenter <= terrainTypeMax; terrainTypeCenter++) {
-      for (let adj1 = 1; adj1 <= terrainTypeMax; adj1++) {
-        for (let adj2 = 1; adj2 <= terrainTypeMax; adj2++) {
-          indexOrder.forEach(direction => {
-            const adj1Terrain = `terrainType${directionShort[adjacentDirections[direction][0]]}`;
-            const adj2Terrain = `terrainType${directionShort[adjacentDirections[direction][1]]}`;
-            const properties = [
-              {
-                $: {
-                  name: 'direction',
-                  value: directionShort[direction],
-                  type: 'str',
-                }
-              },
-              {
-                $: {
-                  name: 'terrainType',
-                  value: terrainType,
-                  type: 'int',
-                }
-              },
-              {
-                $: {
-                  name: 'terrainTypeCenter',
-                  value: terrainTypeCenter,
-                  type: 'int',
-                }
-              },
-              {
-                $: {
-                  name: adj1Terrain,
-                  value: adj1,
-                  type: 'int',
-                },
-              },
-              {
-                $: {
-                  name: adj2Terrain,
-                  value: adj2,
-                  type: 'int',
-                },
-              }
-            ];
-            tiles.push({
-              tileID,
-              direction,
-              terrainType,
-              terrainTypeCenter,
-              [adj1Terrain]: adj1,
-              [adj2Terrain]: adj2,
-            })
 
-            tilesXML.push({
+  const addTileType = (
+    terrainTypeCenter: TerrainType,
+    terrainType: TerrainType,
+    neighbors: TerrainType[],
+    shouldAddTile: (adj1: TerrainType, adj2: TerrainType) => boolean = () => true,
+  ) => {
+    console.log(`Building tile type ${terrainTypeTitles[terrainTypeCenter]} (center) <--> ${terrainTypeTitles[terrainType]} (edge)`)
+    console.log(neighbors);
+    for (const adj1 of neighbors) {
+      for (const adj2 of neighbors) {
+        if (!shouldAddTile(adj1, adj2)) continue;
+        indexOrder.forEach(direction => {
+          const adj1Terrain = `terrainType${directionShort[adjacentDirections[direction][0]]}`;
+          const adj2Terrain = `terrainType${directionShort[adjacentDirections[direction][1]]}`;
+          const properties = [
+            {
               $: {
-                id: tileID,
-              },
-              properties: {
-                property: properties, 
+                name: 'direction',
+                value: directionShort[direction],
+                type: 'str',
               }
-            })
-            tileID++;
-          });
-        }
+            },
+            {
+              $: {
+                name: 'terrainType',
+                value: terrainType,
+                type: 'int',
+              }
+            },
+            {
+              $: {
+                name: 'terrainTypeCenter',
+                value: terrainTypeCenter,
+                type: 'int',
+              }
+            },
+            {
+              $: {
+                name: adj1Terrain,
+                value: adj1,
+                type: 'int',
+              },
+            },
+            {
+              $: {
+                name: adj2Terrain,
+                value: adj2,
+                type: 'int',
+              },
+            }
+          ];
+          tiles.push({
+            tileID,
+            direction,
+            terrainType: (terrainType as unknown) as TerrainType,
+            terrainTypeCenter,
+            [adj1Terrain]: adj1,
+            [adj2Terrain]: adj2,
+          })
+
+          tilesXML.push({
+            $: {
+              id: tileID,
+            },
+            properties: {
+              property: properties, 
+            }
+          })
+          tileID++;
+        });
       }
     }
   }
-  console.log('tiles', tiles);
+
+  // add base tiles
+  console.log('Adding base tiles');
+  for (let t = 1; t <= terrainTypeMax; t++) {
+    addTileType(t, t, [t]);
+  }
+
+  // add transition tiles
+  console.log('Adding transition tiles');
+  for (const [terrainTypeCenter_, edgeTerrainTypes] of Object.entries(terrainTransitions)) {
+    for (const edgeTerrainType of edgeTerrainTypes) {
+      const terrainTypeCenter = parseInt(terrainTypeCenter_, 10) as unknown as TerrainType;
+      addTileType(
+        terrainTypeCenter,
+        edgeTerrainType,
+        [edgeTerrainType, ...(terrainBackTransitions[edgeTerrainType] || [])],
+      );
+      addTileType(
+        terrainTypeCenter,
+        terrainTypeCenter,
+        [terrainTypeCenter, edgeTerrainType],
+        (adj1, adj2) => !(adj1 === terrainTypeCenter && adj2 === terrainTypeCenter)
+      );
+    }
+  }
 
   const tilesWidth = 12;
   const tilesHeight = Math.ceil(tileID / tilesWidth);
-  console.log('building tiles:', tileID, tilesWidth, tilesHeight);
+  console.log(`Building template with ${tiles.length} sectional tiles`);
 
   const image = await buildTemplateTileset(template, tiles, tilesWidth, tilesHeight);
 
