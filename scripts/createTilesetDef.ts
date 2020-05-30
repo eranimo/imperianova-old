@@ -180,7 +180,7 @@ async function buildTilesetDef(template: Jimp) {
     addTileType(
       terrainTypeCenter,
       terrainTypeCenter,
-      edgeTerrainTypes,
+      [terrainTypeCenter, ...edgeTerrainTypes],
       (adj1, adj2) => !(adj1 === terrainTypeCenter && adj2 === terrainTypeCenter)
     );
   }
