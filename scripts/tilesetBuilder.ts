@@ -8,7 +8,7 @@ import { getTilesetMask } from '../src/mapviewer/utils';
 import { TerrainType, Direction, directionShort, terrainTypeMax, terrainTypes, terrainTypeTitles, terrainTransitions } from '../src/mapviewer/constants';
 import { sum } from 'lodash';
 import yargs from 'yargs';
-import { SectionalTile, TileVariant, renderOrder, adjacentDirections, newImage, getFilePath } from './shared';
+import { SectionalTile, TileVariant, renderOrder, adjacentDirections, newImage, getFilePath, propertyTypeProcess } from './shared';
 
 
 yargs.command('* <tilesetName>', 'Builds tilesets from Tiled definition');
@@ -38,12 +38,6 @@ const argv = yargs.options({
     default: 25,
   }
 }).argv;
-
-
-const propertyTypeProcess = {
-  int: (value: string) => parseInt(value, 10),
-  str: (value: string) => value,
-}
 
 const tiles: SectionalTile[] = [];
 const tilesByID: Map<number, SectionalTile> = new Map();

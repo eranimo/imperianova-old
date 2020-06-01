@@ -2,12 +2,12 @@
 
 import path from 'path';
 import fs from 'fs';
-import { Builder } from 'xml2js';
+import { parseStringPromise, Builder } from 'xml2js';
 import yargs, { number, boolean } from 'yargs';
 import { TerrainType, terrainTypeMax, directionShort, Direction, terrainColors, terrainMinimapColors, terrainTransitions, terrainTypeTitles, terrainBackTransitions } from '../src/mapviewer/constants';
-import { renderOrder, adjacentDirections, newImage, SectionalTile, getFilePath, indexOrder } from './shared';
+import { renderOrder, adjacentDirections, newImage, SectionalTile, getFilePath, indexOrder, propertyTypeProcess } from './shared';
 import Jimp from 'jimp';
-import { forEach } from 'lodash';
+import { forEach, random } from 'lodash';
 
 
 yargs.command('* <tilesetDefName>', 'Builds tileset definition xml file');
@@ -127,8 +127,8 @@ const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainTy
     ],
     [TerrainType.FOREST]: [
       Jimp.rgbaToInt(120, 178, 76, 255),
-      Jimp.rgbaToInt(89, 135, 55, 255),
-      Jimp.rgbaToInt(99, 150, 61, 255),
+      Jimp.rgbaToInt(120, 178, 76, 255),
+      Jimp.rgbaToInt(120, 178, 76, 255),
       Jimp.rgbaToInt(143, 194, 72, 255),
       Jimp.rgbaToInt(108, 160, 68, 255),
     ],
@@ -142,32 +142,32 @@ const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainTy
   },
   [TerrainType.FOREST]: {
     [TerrainType.FOREST]: [
-      Jimp.rgbaToInt(57, 117, 47, 255),
-      Jimp.rgbaToInt(57, 117, 47, 255),
-      Jimp.rgbaToInt(57, 117, 47, 255),
-      Jimp.rgbaToInt(57, 117, 47, 255),
-      Jimp.rgbaToInt(57, 117, 47, 255),
+      Jimp.rgbaToInt(120, 178, 76, 255),
+      Jimp.rgbaToInt(89, 135, 55, 255),
+      Jimp.rgbaToInt(99, 150, 61, 255),
+      Jimp.rgbaToInt(143, 194, 72, 255),
+      Jimp.rgbaToInt(108, 160, 68, 255),
     ],
     [TerrainType.OCEAN]: [
-      Jimp.rgbaToInt(57, 117, 47, 255),
-      Jimp.rgbaToInt(57, 117, 47, 255),
-      Jimp.rgbaToInt(57, 117, 47, 255),
-      Jimp.rgbaToInt(57, 117, 47, 255),
-      Jimp.rgbaToInt(57, 117, 47, 255),
+      Jimp.rgbaToInt(120, 178, 76, 255),
+      Jimp.rgbaToInt(247, 226, 107, 255), // beach
+      Jimp.rgbaToInt(190, 204, 93, 255),
+      Jimp.rgbaToInt(143, 194, 72, 255),
+      Jimp.rgbaToInt(108, 160, 68, 255),
     ],
     [TerrainType.GRASSLAND]: [
-      Jimp.rgbaToInt(57, 117, 47, 255),
-      Jimp.rgbaToInt(57, 117, 47, 255),
-      Jimp.rgbaToInt(57, 117, 47, 255),
-      Jimp.rgbaToInt(57, 117, 47, 255),
-      Jimp.rgbaToInt(57, 117, 47, 255),
+      Jimp.rgbaToInt(120, 178, 76, 255),
+      Jimp.rgbaToInt(120, 178, 76, 255),
+      Jimp.rgbaToInt(120, 178, 76, 255),
+      Jimp.rgbaToInt(143, 194, 72, 255),
+      Jimp.rgbaToInt(108, 160, 68, 255),
     ],
     [TerrainType.TAIGA]: [
-      Jimp.rgbaToInt(57, 117, 47, 255),
-      Jimp.rgbaToInt(57, 117, 47, 255),
-      Jimp.rgbaToInt(57, 117, 47, 255),
-      Jimp.rgbaToInt(57, 117, 47, 255),
-      Jimp.rgbaToInt(57, 117, 47, 255),
+      Jimp.rgbaToInt(120, 178, 76, 255),
+      Jimp.rgbaToInt(120, 178, 76, 255),
+      Jimp.rgbaToInt(120, 178, 76, 255),
+      Jimp.rgbaToInt(143, 194, 72, 255),
+      Jimp.rgbaToInt(108, 160, 68, 255),
     ],
   },
   [TerrainType.DESERT]: {
@@ -176,9 +176,34 @@ const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainTy
     [TerrainType.GRASSLAND]: [0xD9BF8CFF, 0xD9BF8CFF, 0xD9BF8CFF, 0xD9BF8CFF, 0xD9BF8CFF],
   },
   [TerrainType.TAIGA]: {
-    [TerrainType.TAIGA]: [0x006259FF, 0x006259FF, 0x006259FF, 0x006259FF, 0x006259FF],
-    [TerrainType.OCEAN]: [0x006259FF, 0x006259FF, 0x006259FF, 0x006259FF, 0x006259FF],
-    [TerrainType.FOREST]: [0x006259FF, 0x006259FF, 0x006259FF, 0x006259FF, 0x006259FF],
+    [TerrainType.TAIGA]: [
+      Jimp.rgbaToInt(121, 168, 86, 255),
+      Jimp.rgbaToInt(233, 216, 121, 255),
+      Jimp.rgbaToInt(172, 190, 102, 255),
+      Jimp.rgbaToInt(143, 194, 72, 255),
+      Jimp.rgbaToInt(108, 160, 68, 255),
+    ],
+    [TerrainType.OCEAN]: [
+      Jimp.rgbaToInt(121, 168, 86, 255),
+      Jimp.rgbaToInt(233, 216, 121, 255),
+      Jimp.rgbaToInt(172, 190, 102, 255),
+      Jimp.rgbaToInt(143, 194, 72, 255),
+      Jimp.rgbaToInt(108, 160, 68, 255),
+    ],
+    [TerrainType.FOREST]: [
+      Jimp.rgbaToInt(121, 168, 86, 255),
+      Jimp.rgbaToInt(109, 151, 77, 255),
+      Jimp.rgbaToInt(109, 151, 77, 255),
+      Jimp.rgbaToInt(143, 194, 72, 255),
+      Jimp.rgbaToInt(108, 160, 68, 255),
+    ],
+    [TerrainType.GRASSLAND]: [
+      Jimp.rgbaToInt(121, 168, 86, 255),
+      Jimp.rgbaToInt(109, 151, 77, 255),
+      Jimp.rgbaToInt(109, 151, 77, 255),
+      Jimp.rgbaToInt(143, 194, 72, 255),
+      Jimp.rgbaToInt(108, 160, 68, 255),
+    ],
     [TerrainType.GLACIAL]: [0x006259FF, 0x006259FF, 0x006259FF, 0x006259FF, 0x006259FF],
     [TerrainType.TUNDRA]: [0x006259FF, 0x006259FF, 0x006259FF, 0x006259FF, 0x006259FF],
   },
@@ -356,6 +381,60 @@ enum TemplateColor {
   TERRAIN_TYPE_ADJ_2 = Jimp.rgbaToInt(255, 255, 0, 255),
 }
 
+type AutogenObject = {
+  tileID: number;
+  size: number;
+  terrainTypes: TerrainType[];
+  used?: boolean;
+  x: number;
+  y: number;
+}
+
+async function getAutogenObjects() {
+  const xmlFilePath = getFilePath('src', 'assets', 'autogen-objects.xml');
+  const xmlFileRaw = fs.readFileSync(xmlFilePath, { encoding: 'utf-8' });
+  const xmlFile = await parseStringPromise(xmlFileRaw);
+
+  const columns = parseInt(xmlFile.tileset.$.columns, 10);
+  const tileWidth = parseInt(xmlFile.tileset.$.tilewidth, 10);
+  const tileHeight = parseInt(xmlFile.tileset.$.tileheight, 10);
+
+  const autogenObjects: AutogenObject[] = [];
+  const objectsForTerrainType: Map<TerrainType, AutogenObject[]> = new Map();
+
+  for (const rawTile of xmlFile.tileset.tile) {
+    const tileID = parseInt(rawTile.$.id, 10);
+    let autogenObject: AutogenObject = {
+      tileID,
+      size: 0,
+      terrainTypes: [],
+      x: (tileID % columns) * tileWidth,
+      y: (Math.floor(tileID / columns)) * tileHeight,
+    };
+    rawTile.properties.forEach(i => i.property.forEach(({ $ }) => {
+      if ($.name === 'terrainTypes') {
+        autogenObject[$.name] = ($.value as string).split(',').map(v => parseInt(v, 10) as TerrainType);
+      } else {
+        autogenObject[$.name] = propertyTypeProcess[$.type || 'str']($.value);
+      }
+    }));
+    if (!autogenObject.used) {
+      continue;
+    }
+    autogenObjects.push(autogenObject);
+    for (const terrainType of autogenObject.terrainTypes) {
+      if (objectsForTerrainType.has(terrainType)) {
+        objectsForTerrainType.get(terrainType).push(autogenObject);
+      } else {
+        objectsForTerrainType.set(terrainType, [autogenObject]);
+      }
+    }
+  }
+
+  console.log(`Loaded ${autogenObjects.length} autogen objects`);
+  return { autogenObjects, objectsForTerrainType };
+}
+
 async function buildTemplateTileset(
   template: Jimp,
   autogenTemplate: Jimp,
@@ -363,6 +442,13 @@ async function buildTemplateTileset(
   columns: number,
   rows: number,
 ) {
+  const autogenObjectsTileset = await Jimp.read(getFilePath('src', 'assets', 'autogen-objects.png'));
+  const { autogenObjects, objectsForTerrainType } = await getAutogenObjects();
+  const getRandomObject = (terrainType: TerrainType) => {
+    const objects = objectsForTerrainType.get(terrainType);
+    if (!objects) return null;
+    return objects[random(objects.length - 1)];
+  }
   const outTemplate = await newImage(columns * tileWidth, rows * tileHeight);
   const outTileset = await newImage(columns * tileWidth, rows * tileHeight);
   tiles.forEach((tile, index) => {
@@ -409,21 +495,43 @@ async function buildTemplateTileset(
     // console.log(colorGroupTerrain);
     outTileset.scan(tx, ty, tileWidth, tileHeight, (x, y) => {
       const color = outTileset.getPixelColor(x, y);
+
+      // replace the first 3 colors
       for (const colorGroup of autogenColorGroups) {
-        const colorSet = colorGroupTerrain[colorGroup];
-        autogenColors[colorGroup].forEach((matchColor, index) => {
+        const matchingTerrainTypes = colorGroupTerrain[colorGroup];
+        autogenColors[colorGroup].slice(0, 3).forEach((matchColor, index) => {
           if (color === matchColor) {
-            const newColorSet = autogenTerrainColors[colorSet[0]][colorSet[1] || colorSet[0]];
+            const newColorSet = autogenTerrainColors[matchingTerrainTypes[0]][matchingTerrainTypes[1] || matchingTerrainTypes[0]];
             if (newColorSet) {
               outTileset.setPixelColor(newColorSet[index], x, y);
             } else {
-              console.log(`Missing transition colors for ${terrainTypeTitles[colorSet[0]]} -> ${terrainTypeTitles[colorSet[1]]}`);
+              console.log(`Missing transition colors for ${terrainTypeTitles[matchingTerrainTypes[0]]} -> ${terrainTypeTitles[matchingTerrainTypes[1]]}`);
             }
             return;
           }
         });
       }
     });
+
+    // put objects where last two colors are
+    for (const colorGroup of autogenColorGroups) {
+      const matchingTerrainTypes = colorGroupTerrain[colorGroup];
+      autogenColors[colorGroup].slice(3).forEach((matchColor, index) => {
+        outTileset.scan(tx, ty, tileWidth, tileHeight, (x, y) => {
+          const color = outTileset.getPixelColor(x, y);
+          if (color === matchColor) {
+            const newColorSet = autogenTerrainColors[matchingTerrainTypes[0]][matchingTerrainTypes[1] || matchingTerrainTypes[0]];
+            // place object here
+            const object = getRandomObject(matchingTerrainTypes[0]);
+            if (object) {
+              outTileset.blit(autogenObjectsTileset, x - 7, y - 14, object.x, object.y, 15, 15);
+            } else {
+              outTileset.setPixelColor(newColorSet[index], x, y);
+            }
+          }
+        });
+      });
+    }
 
   });
 
