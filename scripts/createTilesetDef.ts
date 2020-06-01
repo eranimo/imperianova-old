@@ -142,38 +142,56 @@ const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainTy
   },
   [TerrainType.FOREST]: {
     [TerrainType.FOREST]: [
-      Jimp.rgbaToInt(120, 178, 76, 255),
+      Jimp.rgbaToInt(108, 155, 73, 255),
       Jimp.rgbaToInt(89, 135, 55, 255),
       Jimp.rgbaToInt(99, 150, 61, 255),
       Jimp.rgbaToInt(143, 194, 72, 255),
       Jimp.rgbaToInt(108, 160, 68, 255),
     ],
     [TerrainType.OCEAN]: [
-      Jimp.rgbaToInt(120, 178, 76, 255),
+      Jimp.rgbaToInt(108, 155, 73, 255),
       Jimp.rgbaToInt(247, 226, 107, 255), // beach
       Jimp.rgbaToInt(190, 204, 93, 255),
       Jimp.rgbaToInt(143, 194, 72, 255),
       Jimp.rgbaToInt(108, 160, 68, 255),
     ],
     [TerrainType.GRASSLAND]: [
-      Jimp.rgbaToInt(120, 178, 76, 255),
+      Jimp.rgbaToInt(108, 155, 73, 255),
       Jimp.rgbaToInt(120, 178, 76, 255),
       Jimp.rgbaToInt(120, 178, 76, 255),
       Jimp.rgbaToInt(143, 194, 72, 255),
       Jimp.rgbaToInt(108, 160, 68, 255),
     ],
     [TerrainType.TAIGA]: [
-      Jimp.rgbaToInt(120, 178, 76, 255),
-      Jimp.rgbaToInt(120, 178, 76, 255),
-      Jimp.rgbaToInt(120, 178, 76, 255),
+      Jimp.rgbaToInt(108, 155, 73, 255),
+      Jimp.rgbaToInt(108, 155, 73, 255),
+      Jimp.rgbaToInt(108, 155, 73, 255),
       Jimp.rgbaToInt(143, 194, 72, 255),
       Jimp.rgbaToInt(108, 160, 68, 255),
     ],
   },
   [TerrainType.DESERT]: {
-    [TerrainType.DESERT]: [0xD9BF8CFF, 0xD9BF8CFF, 0xD9BF8CFF, 0xD9BF8CFF, 0xD9BF8CFF],
-    [TerrainType.OCEAN]: [0xD9BF8CFF, 0xD9BF8CFF, 0xD9BF8CFF, 0xD9BF8CFF, 0xD9BF8CFF],
-    [TerrainType.GRASSLAND]: [0xD9BF8CFF, 0xD9BF8CFF, 0xD9BF8CFF, 0xD9BF8CFF, 0xD9BF8CFF],
+    [TerrainType.DESERT]: [
+      Jimp.rgbaToInt(233, 216, 121, 255),
+      Jimp.rgbaToInt(233, 216, 121, 255),
+      Jimp.rgbaToInt(233, 216, 121, 255),
+      Jimp.rgbaToInt(224, 208, 114, 255),
+      Jimp.rgbaToInt(224, 208, 114, 255),
+    ],
+    [TerrainType.OCEAN]: [
+      Jimp.rgbaToInt(233, 216, 121, 255),
+      Jimp.rgbaToInt(228, 207, 91, 255),
+      Jimp.rgbaToInt(231, 212, 107, 255),
+      Jimp.rgbaToInt(224, 208, 114, 255),
+      Jimp.rgbaToInt(224, 208, 114, 255),
+    ],
+    [TerrainType.GRASSLAND]: [
+      Jimp.rgbaToInt(233, 216, 121, 255),
+      Jimp.rgbaToInt(228, 207, 91, 255),
+      Jimp.rgbaToInt(231, 212, 107, 255),
+      Jimp.rgbaToInt(224, 208, 114, 255),
+      Jimp.rgbaToInt(224, 208, 114, 255),
+    ],
   },
   [TerrainType.TAIGA]: {
     [TerrainType.TAIGA]: [
@@ -192,8 +210,8 @@ const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainTy
     ],
     [TerrainType.FOREST]: [
       Jimp.rgbaToInt(121, 168, 86, 255),
-      Jimp.rgbaToInt(109, 151, 77, 255),
-      Jimp.rgbaToInt(109, 151, 77, 255),
+      Jimp.rgbaToInt(108, 155, 73, 255),
+      Jimp.rgbaToInt(111, 159, 75, 255),
       Jimp.rgbaToInt(143, 194, 72, 255),
       Jimp.rgbaToInt(108, 160, 68, 255),
     ],
@@ -204,17 +222,66 @@ const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainTy
       Jimp.rgbaToInt(143, 194, 72, 255),
       Jimp.rgbaToInt(108, 160, 68, 255),
     ],
-    [TerrainType.GLACIAL]: [0x006259FF, 0x006259FF, 0x006259FF, 0x006259FF, 0x006259FF],
-    [TerrainType.TUNDRA]: [0x006259FF, 0x006259FF, 0x006259FF, 0x006259FF, 0x006259FF],
+    [TerrainType.GLACIAL]: [
+      Jimp.rgbaToInt(121, 168, 86, 255),
+      Jimp.rgbaToInt(109, 151, 77, 255),
+      Jimp.rgbaToInt(109, 151, 77, 255),
+      Jimp.rgbaToInt(143, 194, 72, 255),
+      Jimp.rgbaToInt(108, 160, 68, 255),
+    ],
+    [TerrainType.TUNDRA]: [
+      Jimp.rgbaToInt(121, 168, 86, 255),
+      Jimp.rgbaToInt(133, 156, 91, 255),
+      Jimp.rgbaToInt(134, 163, 84, 255),
+      Jimp.rgbaToInt(143, 194, 72, 255),
+      Jimp.rgbaToInt(108, 160, 68, 255),
+    ],
   },
   [TerrainType.TUNDRA]: {
-    [TerrainType.TUNDRA]: [0x96D1C3FF, 0x96D1C3FF, 0x96D1C3FF, 0x96D1C3FF, 0x96D1C3FF],
-    [TerrainType.OCEAN]: [0x96D1C3FF, 0x96D1C3FF, 0x96D1C3FF, 0x96D1C3FF, 0x96D1C3FF],
-    [TerrainType.TAIGA]: [0x96D1C3FF, 0x96D1C3FF, 0x96D1C3FF, 0x96D1C3FF, 0x96D1C3FF],
+    [TerrainType.TUNDRA]: [
+      Jimp.rgbaToInt(132, 146, 101, 255),
+      Jimp.rgbaToInt(119, 128, 102, 255),
+      Jimp.rgbaToInt(130, 141, 105, 255),
+      Jimp.rgbaToInt(118, 138, 77, 255),
+      Jimp.rgbaToInt(118, 138, 77, 255),
+    ],
+    [TerrainType.GLACIAL]: [
+      Jimp.rgbaToInt(132, 146, 101, 255),
+      Jimp.rgbaToInt(119, 128, 102, 255),
+      Jimp.rgbaToInt(130, 141, 105, 255),
+      Jimp.rgbaToInt(118, 138, 77, 255),
+      Jimp.rgbaToInt(118, 138, 77, 255),
+    ],
+    [TerrainType.OCEAN]: [
+      Jimp.rgbaToInt(132, 146, 101, 255),
+      Jimp.rgbaToInt(130, 141, 105, 255),
+      Jimp.rgbaToInt(130, 141, 105, 255),
+      Jimp.rgbaToInt(118, 138, 77, 255),
+      Jimp.rgbaToInt(118, 138, 77, 255),
+    ],
+    [TerrainType.TAIGA]: [
+      Jimp.rgbaToInt(132, 146, 101, 255),
+      Jimp.rgbaToInt(130, 141, 105, 255),
+      Jimp.rgbaToInt(130, 141, 105, 255),
+      Jimp.rgbaToInt(118, 138, 77, 255),
+      Jimp.rgbaToInt(118, 138, 77, 255),
+    ],
   },
   [TerrainType.GLACIAL]: {
-    [TerrainType.GLACIAL]: [0xFAFAFAFF, 0xFAFAFAFF, 0xFAFAFAFF, 0xFAFAFAFF, 0xFAFAFAFF],
-    [TerrainType.OCEAN]: [0xFAFAFAFF, 0xFAFAFAFF, 0xFAFAFAFF, 0xFAFAFAFF, 0xFAFAFAFF],
+    [TerrainType.GLACIAL]: [
+      Jimp.rgbaToInt(242, 242, 242, 255),
+      Jimp.rgbaToInt(235, 239, 245, 255),
+      Jimp.rgbaToInt(237, 241, 246, 255),
+      Jimp.rgbaToInt(229, 237, 255, 255),
+      Jimp.rgbaToInt(229, 237, 255, 255),
+    ],
+    [TerrainType.OCEAN]: [
+      Jimp.rgbaToInt(242, 242, 242, 255),
+      Jimp.rgbaToInt(235, 239, 245, 255),
+      Jimp.rgbaToInt(237, 241, 246, 255),
+      Jimp.rgbaToInt(229, 237, 255, 255),
+      Jimp.rgbaToInt(229, 237, 255, 255),
+    ],
     [TerrainType.TAIGA]: [0xFAFAFAFF, 0xFAFAFAFF, 0xFAFAFAFF, 0xFAFAFAFF, 0xFAFAFAFF],
   },
 }
@@ -353,16 +420,6 @@ const getAutogenSettings = (
     colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
     colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
   }
-  // if (group === undefined) {
-  //   console.log({
-  //     terrainType,
-  //     terrainTypeCenter,
-  //     adj1TerrainType,
-  //     adj2TerrainType,
-  //     direction,
-  //   })
-  //   throw new Error('Invalid tileset configuration');
-  // }
   return {
     group,
     coord: {
