@@ -424,35 +424,35 @@
  <tile id="60">
   <properties>
    <property name="size" type="int" value="1"/>
-   <property name="terrainTypes" value="0"/>
+   <property name="terrainTypes" value="1"/>
    <property name="used" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="61">
   <properties>
    <property name="size" type="int" value="1"/>
-   <property name="terrainTypes" value="0"/>
+   <property name="terrainTypes" value="1"/>
    <property name="used" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="62">
   <properties>
    <property name="size" type="int" value="1"/>
-   <property name="terrainTypes" value="0"/>
+   <property name="terrainTypes" value="1"/>
    <property name="used" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="63">
   <properties>
    <property name="size" type="int" value="1"/>
-   <property name="terrainTypes" value="0"/>
+   <property name="terrainTypes" value="1"/>
    <property name="used" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="64">
   <properties>
    <property name="size" type="int" value="1"/>
-   <property name="terrainTypes" value="0"/>
+   <property name="terrainTypes" value="1"/>
    <property name="used" type="bool" value="false"/>
   </properties>
  </tile>

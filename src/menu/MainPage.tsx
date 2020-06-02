@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useCallback, useState } from 'react';
 import * as PIXI from "pixi.js";
-import { initGame } from '../mapviewer/MapViewer';
+import { MapViewer } from '../mapviewer/MapViewer';
 import { WorldMap } from '../mapviewer/WorldMap';
 import { Minimap } from '../mapviewer/Minimap';
 import { MapManager } from '../mapviewer/MapManager';
@@ -111,13 +111,22 @@ export const MainPageLoaded: React.FC<{
   });
   const manager = new MapManager(map);
   useEffect(() => {
-    const destroyApp = initGame(mapViewerRef.current, manager, resources);
+    const parser = new DOMParser();
+    let fontXMLRaw = require('raw-loader!../assets/eightbitdragon.fnt').default;
+    const pageFile = require('file-loader!../assets/eightbitdragon_0.png')
+    fontXMLRaw = fontXMLRaw.replace('eightbitdragon_0.png', pageFile);
+    const fontXML = parser.parseFromString(fontXMLRaw, 'text/xml');
+    const font = PIXI.BitmapText.registerFont(fontXML, {
+      [pageFile]: resources.fontPng.texture,
+    });
+
+    const mapViewer = new MapViewer(mapViewerRef.current, manager, resources, { eightBitDragon: font })
     const minimap = new Minimap(minimapRef.current, manager)
 
     return () => {
       minimap.destroy();
-      destroyApp();
-    }
+      mapViewer.destroy();
+    };
   }, []);
 
   return (

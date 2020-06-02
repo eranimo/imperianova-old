@@ -6,11 +6,11 @@ import { TerrainType, terrainColors, terrainTypeTitles } from './constants';
 import { Tileset } from "./Tileset";
 import { WorldMap } from "./WorldMap";
 import { TerrainTileset } from './TerrainTileset';
+import { WorldMapTiles } from './WorldMapTiles';
 
-
-const DRAW_TILE_IDS = true;
 
 export class HexTilemap extends PIXI.Container {
+  worldMapTiles: WorldMapTiles;
   tilesetMap: Map<number, Tileset>;
   closeLayer: PIXI.Container;
   farLayer: PIXI.Container;
@@ -18,6 +18,8 @@ export class HexTilemap extends PIXI.Container {
   selectionHex: Honeycomb.Hex<IHex>;
   tilesets: Map<string, Tileset>;
   terrainTileset: TerrainTileset;
+
+  hexGraphics: Map<Honeycomb.Hex<IHex>, PIXI.Graphics[]>;
 
   constructor(
     public worldMap: WorldMap,
@@ -30,6 +32,8 @@ export class HexTilemap extends PIXI.Container {
     this.farLayer = new PIXI.Container();
     this.farLayer.alpha = 0;
     this.addChild(this.closeLayer, this.farLayer);
+
+    this.worldMapTiles = new WorldMapTiles(this.worldMap);
 
     this.viewport.worldWidth = worldMap.hexgrid.pointWidth();
     this.viewport.worldHeight = worldMap.hexgrid.pointHeight();
@@ -65,10 +69,16 @@ export class HexTilemap extends PIXI.Container {
     this.addChild(this.selectionSprite);
     this.selectionSprite.alpha = 0;
 
+    this.hexGraphics = new Map();
     this.draw();
     this.setupEvents();
-  }
 
+    this.worldMapTiles.tileMaskUpdates$.subscribe(hexes => {
+      for (const hex of hexes) {
+        this.drawHex(hex);
+      }
+    });
+  }
 
   private setupEvents() {
     this.interactive = true;
@@ -82,7 +92,7 @@ export class HexTilemap extends PIXI.Container {
           position: this.worldMap.getPointFromPosition(hex.x, hex.y),
           terrainType: terrainType,
           terrainTitle: terrainTypeTitles[terrainType],
-          tileID: this.worldMap.tileMasks.data[hex.index],
+          tileID: this.worldMapTiles.tileMasks.data[hex.index],
         });
         console.log(this.worldMap.debugNeighborTerrain(hex.x, hex.y));
 
@@ -103,18 +113,58 @@ export class HexTilemap extends PIXI.Container {
     this.selectionSprite.position.set(point.x, point.y - HEX_ADJUST_Y);
   }
 
-
   public addTileset(index: number, tileset: Tileset) {
     this.tilesetMap.set(index, tileset);
   }
 
+  drawHex(hex: Honeycomb.Hex<IHex>) {
+    const [hexGraphics, atlasGraphics] = this.hexGraphics.get(hex)
+    const terrainType = this.worldMap.terrain.get(hex.x, hex.y);
+    const mask = this.worldMapTiles.tileMasks.get(hex.x, hex.y);
+    const texture = this.terrainTileset.getTextureFromTileMask(mask);
+    const SCALE = 50;
+    const point = hex.toPoint();
+    if (texture) {
+      const matrix = new PIXI.Matrix();
+      matrix.translate(point.x, point.y - HEX_ADJUST_Y);
+      hexGraphics.beginTextureFill({
+        texture,
+        matrix,
+        color: 0xFFFFFF,
+      });
+      hexGraphics.drawRect(
+        point.x,
+        point.y - HEX_ADJUST_Y,
+        32,
+        48
+      );
+      hexGraphics.endFill();
+    }
+
+    const corners = hex.corners().map(corner => corner.add(point));
+    const [firstCorner, ...otherCorners] = corners;
+    atlasGraphics.beginFill(terrainColors[terrainType]);
+    atlasGraphics.moveTo(firstCorner.x / SCALE, firstCorner.y / SCALE);
+    otherCorners.forEach(({ x, y }) => atlasGraphics.lineTo(x / SCALE, y / SCALE));
+    atlasGraphics.lineTo(firstCorner.x / SCALE, firstCorner.y / SCALE);
+    atlasGraphics.endFill();
+
+    if (!texture) {
+      const center = hex.center();
+      const tileID = this.worldMapTiles.tileMasks.get(hex.x, hex.y);
+      const text = new PIXI.BitmapText(tileID.toString(), {
+        font: { name: 'Eight Bit Dragon', size: 8 },
+        align: 'center'
+      });
+      text.x = point.x + center.x - (text.width / 2);
+      text.y = point.y + center.y - (text.height / 2);
+      this.addChild(text);
+    }
+  }
 
   private draw() {
     console.groupCollapsed('draw grid');
     console.time('draw');
-    const main = this.tilesets.get('main');
-    const coastline = this.tilesets.get('coastline');
-
     const mapHexes = this.worldMap.hexgrid.sort(sortHexes);
 
     let hexGraphics = new PIXI.Graphics();
@@ -133,9 +183,6 @@ export class HexTilemap extends PIXI.Container {
 
     let count = 0;
     mapHexes.forEach(hex => {
-      const terrainType = this.worldMap.terrain.get(hex.x, hex.y);
-      const mask = this.worldMap.tileMasks.get(hex.x, hex.y);
-      const texture = this.terrainTileset.getTextureFromTileMask(mask);
       count++;
       if (count % 10000 === 0) {
         hexGraphics = new PIXI.Graphics();
@@ -146,44 +193,8 @@ export class HexTilemap extends PIXI.Container {
         atlasGraphics.scale.set(SCALE);
         this.farLayer.addChild(atlasGraphics);
       }
-
-      const point = hex.toPoint();
-      if (texture) {
-        const matrix = new PIXI.Matrix();
-        matrix.translate(point.x, point.y - HEX_ADJUST_Y);
-        hexGraphics.beginTextureFill({
-          texture,
-          matrix,
-          color: 0xFFFFFF,
-        });
-        hexGraphics.drawRect(
-          point.x,
-          point.y - HEX_ADJUST_Y,
-          32,
-          48
-        );
-        hexGraphics.endFill();
-      }
-
-      const corners = hex.corners().map(corner => corner.add(point));
-      const [firstCorner, ...otherCorners] = corners;
-      atlasGraphics.beginFill(terrainColors[terrainType]);
-      atlasGraphics.moveTo(firstCorner.x / SCALE, firstCorner.y / SCALE);
-      otherCorners.forEach(({ x, y }) => atlasGraphics.lineTo(x / SCALE, y / SCALE));
-      atlasGraphics.lineTo(firstCorner.x / SCALE, firstCorner.y / SCALE);
-      atlasGraphics.endFill();
-
-      if (!texture) {
-        const center = hex.center();
-        const tileID = this.worldMap.tileMasks.get(hex.x, hex.y);
-        const text = new PIXI.BitmapText(tileID.toString(), {
-          font: { name: 'Eight Bit Dragon', size: 8 },
-          align: 'center'
-        });
-        text.x = point.x + center.x - (text.width / 2);
-        text.y = point.y + center.y - (text.height / 2);
-        this.addChild(text);
-      }
+      this.hexGraphics.set(hex, [hexGraphics, atlasGraphics]);
+      this.drawHex(hex);
     });
 
     console.timeEnd('draw');

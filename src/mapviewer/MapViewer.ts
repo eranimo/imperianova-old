@@ -43,15 +43,19 @@ export const Hex = Honeycomb.extendHex<IHex>({
 
 export const Grid = Honeycomb.defineGrid(Hex);
 
-class MapViewer {
+export class MapViewer {
   app: PIXI.Application;
   viewport: Viewport;
-  cull: any;
   movePoint: PIXI.Point;
   keyMap: Record<string, boolean>;
   mapFocused$: BehaviorSubject<boolean>;
 
-  constructor(protected element: HTMLElement, protected manager: MapManager) {
+  constructor(
+    protected element: HTMLElement,
+    protected manager: MapManager,
+    public resources: PIXI.IResourceDictionary,
+    public fonts: Record<string, any>
+  ) {
     PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
     this.app = new PIXI.Application({
       width: window.innerWidth,
@@ -85,6 +89,7 @@ class MapViewer {
       stats.end();
     }, PIXI.UPDATE_PRIORITY.LOW);
     this.setupViewport();
+    this.setupTilemap();
   }
 
   setupViewport() {
@@ -102,11 +107,7 @@ class MapViewer {
         viewport.pause = true;
       }
     });
-  
-    this.cull = new Cull.Simple({
-      dirtyTest: false,
-    });
-  
+
     // add the viewport to the stage
     this.app.stage.addChild(viewport);
     console.log('viewport', viewport);
@@ -141,8 +142,8 @@ class MapViewer {
     this.manager.moveEvents$.next(this.movePoint);
   }
 
-  start(resources: PIXI.IResourceDictionary, fonts: Record<string, any>) {
-    console.log('resources', resources);
+  setupTilemap() {
+    console.log('resources', this.resources);
 
     console.log('setup terrain');
     console.time('setup terrain');
@@ -161,7 +162,7 @@ class MapViewer {
 
     console.timeEnd('setup terrain');
 
-    const tilemap = new HexTilemap(this.manager.worldMap, this.viewport, resources, fonts);
+    const tilemap = new HexTilemap(this.manager.worldMap, this.viewport, this.resources, this.fonts);
 
     // update selected hex layer when selected hex changes
     this.manager.selectHex$.subscribe(hexCoordinate => {
@@ -178,32 +179,4 @@ class MapViewer {
     document.removeEventListener('keydown', this.handleKeyboard.bind(this), false);
     document.removeEventListener('keyup', this.handleKeyboard.bind(this), false);
   }
-}
-
-export function initGame(
-  element: HTMLDivElement,
-  manager: MapManager,
-  resources: PIXI.IResourceDictionary,
-) {
-  console.time('setup');
-  const mapViewer = new MapViewer(element, manager);
-  // load fone
-  const parser = new DOMParser();
-  let fontXMLRaw = require('raw-loader!../assets/eightbitdragon.fnt').default;
-  const pageFile = require('file-loader!../assets/eightbitdragon_0.png')
-  fontXMLRaw = fontXMLRaw.replace('eightbitdragon_0.png', pageFile);
-  const fontXML = parser.parseFromString(fontXMLRaw, 'text/xml');
-  const font = PIXI.BitmapText.registerFont(fontXML, {
-    [pageFile]: resources.fontPng.texture,
-  });
-
-  console.timeEnd('setup');
-  console.time('start');
-  mapViewer.start(resources, { eightBitDragon: font });
-  console.timeEnd('start');
-  return () => {
-    if (mapViewer) {
-      mapViewer.destroy();
-    }
-  };
 }

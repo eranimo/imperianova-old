@@ -3,23 +3,31 @@ import * as Honeycomb from 'honeycomb-grid';
 import ndarray from "ndarray";
 import SimplexNoise from 'simplex-noise';
 import Alea from 'alea';
-import { countBy, map, sortBy } from "lodash";
+import { map } from "lodash";
 import { IHex, Grid } from "./MapViewer";
 import { Direction, terrainTypeTitles, TerrainType, oddq_directions, directionTitles } from './constants';
-import { octaveNoise, getTilesetMask } from './utils';
+import { octaveNoise } from './utils';
+import { Subject } from 'rxjs';
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
+
+export type WorldMapHex = Honeycomb.Hex<IHex>;
+/**
+ * A wrapper class around Honeycomb.Grid
+ * Holds data about world
+ * 
+ * Subjects:
+ * - terrainUpdates$: list of hexes that have changed their terrain types
+ */
 export class WorldMap {
-  size: {
-    width: number;
-    height: number;
-  };
-  hexgrid: Honeycomb.Grid<Honeycomb.Hex<IHex>>;
+  size: PIXI.ISize;
+  hexgrid: Honeycomb.Grid<WorldMapHex>;
   terrain: ndarray;
   heightmap: ndarray;
-  tileMasks: ndarray;
   indexMap: Map<string, number>;
+  
+  public terrainUpdates$: Subject<WorldMapHex[]>;
 
   constructor(
     options: { size: number; }) {
@@ -40,49 +48,13 @@ export class WorldMap {
     const heightBuffer = new SharedArrayBuffer(arraySize);
     this.heightmap = ndarray(new Uint32Array(heightBuffer), arrayDim);
 
-    const tileIDBuffer = new SharedArrayBuffer(arraySize);
-    this.tileMasks = ndarray(new Uint32Array(tileIDBuffer), arrayDim);
     this.indexMap = new Map();
+    this.terrainUpdates$ = new Subject();
   }
 
-  get tileStats() {
-    const grouped = countBy(this.tileMasks.data);
-
-    let maskNeighbors = {};
-
-    Object.keys(grouped).forEach(tileID => {
-      const firstHex = this.hexgrid.find(hex => this.tileMasks.get(hex.x, hex.y) === parseInt(tileID));
-      if (!firstHex) {
-        maskNeighbors[tileID] = null;
-        return;
-      }
-      let data = {};
-      this.hexgrid.neighborsOf(firstHex).forEach((hex, nindex) => {
-        const direction = Direction[nindex];
-        if (hex === undefined) {
-          data[direction] = null;
-        }
-        else {
-          const terrainType = this.terrain.data[hex.index];
-          data[direction] = `${terrainType} - ${terrainTypeTitles[terrainType]}`;
-        }
-      });
-      maskNeighbors[tileID] = data;
-    });
-
-    return {
-      tileMaskCount: grouped,
-      distinctTileMasks: Object.keys(grouped).length,
-      mostCommonMasks: sortBy(
-        Object.entries(grouped).map(i => ({
-          mask: i[0],
-          count: i[1],
-          neighbors: maskNeighbors[i[0]],
-        })),
-        ({ count }) => count,
-      ).reverse(),
-      maskNeighbors,
-    };
+  setHexTerrain(hex: WorldMapHex, terrainType: TerrainType) {
+    this.terrain.set(hex.x, hex.y, terrainType);
+    this.terrainUpdates$.next([hex]);
   }
 
   getHex(x: number, y: number) {
@@ -101,7 +73,7 @@ export class WorldMap {
     return new PIXI.Point(p.x, p.y);
   }
 
-  getHexCoordinate(hex: Honeycomb.Hex<IHex>) {
+  getHexCoordinate(hex: WorldMapHex) {
     const long = ((hex.x / this.size.width) * 360) - 180;
     const lat = ((-hex.y / this.size.height) * 180) + 90;
     return { lat, long };
@@ -130,9 +102,25 @@ export class WorldMap {
         this.terrain.set(hex.x, hex.y, TerrainType.GRASSLAND);
       }
     });
-    this.hexgrid.forEach(hex => {
-      this.calculateHexTile(hex);
-    })
+  }
+
+  getHexNeighbors(hex: WorldMapHex): Record<Direction, WorldMapHex> {
+    const { x, y } = hex;
+    const se_hex = this.getHexNeighbor(x, y, Direction.SE);
+    const ne_hex = this.getHexNeighbor(x, y, Direction.NE);
+    const n_hex = this.getHexNeighbor(x, y, Direction.N);
+    const nw_hex = this.getHexNeighbor(x, y, Direction.NW);
+    const sw_hex = this.getHexNeighbor(x, y, Direction.SW);
+    const s_hex = this.getHexNeighbor(x, y, Direction.S);
+
+    return {
+      [Direction.SE]: this.getHex(se_hex[0], se_hex[1]),
+      [Direction.NE]: this.getHex(ne_hex[0], ne_hex[1]),
+      [Direction.N]: this.getHex(n_hex[0], n_hex[1]),
+      [Direction.NW]: this.getHex(nw_hex[0], nw_hex[1]),
+      [Direction.SW]: this.getHex(sw_hex[0], sw_hex[1]),
+      [Direction.S]: this.getHex(s_hex[0], s_hex[1]),
+    }
   }
 
   getHexNeighbor(x: number, y: number, direction: Direction) {
@@ -187,19 +175,5 @@ export class WorldMap {
       [directionTitles[Direction.SW]]: terrainTypeTitles[neighborTerrainTypes[Direction.SW]],
       [directionTitles[Direction.S]]:  terrainTypeTitles[neighborTerrainTypes[Direction.S]],
     }
-  }
-
-  calculateHexTile(hex: Honeycomb.Hex<IHex>) {
-    const { x, y } = hex;
-    const terrain = this.getTerrainForHex(x, y);
-    if (terrain === TerrainType.GRASSLAND) {
-      this.tileMasks.set(x, y, 2186);
-      return;
-    }
-    const neighborTerrainTypes = this.getHexNeighborTerrain(x, y);
-
-    const mask = getTilesetMask(terrain, neighborTerrainTypes);
-
-    this.tileMasks.set(x, y, mask);
   }
 }

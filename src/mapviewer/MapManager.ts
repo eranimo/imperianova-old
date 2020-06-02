@@ -18,6 +18,7 @@ export class MapManager {
     this.viewport$ = new BehaviorSubject(null);
     this.worldMap$ = new BehaviorSubject(worldMap);
     console.log('worldMap', worldMap);
+    (window as any).worldMap = worldMap;
     this.moveEvents$ = new Subject();
     this.selectHex$ = new BehaviorSubject(null);
   }
@@ -27,6 +28,7 @@ export class MapManager {
   }
 
   updateWorldMap(worldMap: WorldMap) {
+    (window as any).worldMap = worldMap;
     this.worldMap$.next(worldMap);
   }
 
