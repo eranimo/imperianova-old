@@ -162,7 +162,7 @@ export class MapViewer {
 
     console.timeEnd('setup terrain');
 
-    const tilemap = new HexTilemap(this.manager.worldMap, this.viewport, this.resources, this.fonts);
+    const tilemap = new HexTilemap(this.app, this.manager.worldMap, this.viewport, this.resources, this.fonts);
 
     // update selected hex layer when selected hex changes
     this.manager.selectHex$.subscribe(hexCoordinate => {

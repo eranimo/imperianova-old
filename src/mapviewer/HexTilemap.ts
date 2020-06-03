@@ -7,31 +7,31 @@ import { Tileset } from "./Tileset";
 import { WorldMap } from "./WorldMap";
 import { TerrainTileset } from './TerrainTileset';
 import { WorldMapTiles } from './WorldMapTiles';
-
+import 'pixi-tilemap';
 
 export class HexTilemap extends PIXI.Container {
   worldMapTiles: WorldMapTiles;
   tilesetMap: Map<number, Tileset>;
-  closeLayer: PIXI.Container;
   farLayer: PIXI.Container;
   selectionSprite: PIXI.Sprite;
   selectionHex: Honeycomb.Hex<IHex>;
   tilesets: Map<string, Tileset>;
   terrainTileset: TerrainTileset;
 
-  hexGraphics: Map<Honeycomb.Hex<IHex>, PIXI.Graphics[]>;
+  atlasGraphics: Map<Honeycomb.Hex<IHex>, PIXI.Graphics>;
+  tilemap: PIXI.tilemap.CompositeRectTileLayer;
 
   constructor(
+    public app: PIXI.Application,
     public worldMap: WorldMap,
     public viewport: Viewport,
     public resources: PIXI.IResourceDictionary,
     public fonts: Record<string, any>) {
     super();
     this.tilesetMap = new Map();
-    this.closeLayer = new PIXI.Container();
     this.farLayer = new PIXI.Container();
     this.farLayer.alpha = 0;
-    this.addChild(this.closeLayer, this.farLayer);
+    this.addChild(this.farLayer);
 
     this.worldMapTiles = new WorldMapTiles(this.worldMap);
 
@@ -40,11 +40,11 @@ export class HexTilemap extends PIXI.Container {
 
     this.viewport.on('zoomed', (...args) => {
       if (this.viewport.scale.x < 0.1) {
-        this.closeLayer.alpha = 0;
+        this.tilemap.alpha = 0;
         this.farLayer.alpha = 1;
       }
       else {
-        this.closeLayer.alpha = 1;
+        this.tilemap.alpha = 1;
         this.farLayer.alpha = 0;
       }
     });
@@ -65,18 +65,20 @@ export class HexTilemap extends PIXI.Container {
     this.tilesets.set('main', tileset);
     const selectionTexture = tileset.getTile(24);
     this.selectionHex = null;
+
+    this.atlasGraphics = new Map();
+    this.draw();
     this.selectionSprite = new PIXI.Sprite(selectionTexture);
+    this.selectionSprite.zIndex = 1;
     this.addChild(this.selectionSprite);
     this.selectionSprite.alpha = 0;
-
-    this.hexGraphics = new Map();
-    this.draw();
     this.setupEvents();
 
     this.worldMapTiles.tileMaskUpdates$.subscribe(hexes => {
-      for (const hex of hexes) {
-        this.drawHex(hex);
-      }
+      // for (const hex of hexes) {
+      //   this.drawHex(hex);
+      // }
+      this.drawAll();
     });
   }
 
@@ -118,27 +120,14 @@ export class HexTilemap extends PIXI.Container {
   }
 
   drawHex(hex: Honeycomb.Hex<IHex>) {
-    const [hexGraphics, atlasGraphics] = this.hexGraphics.get(hex)
+    const atlasGraphics = this.atlasGraphics.get(hex)
     const terrainType = this.worldMap.terrain.get(hex.x, hex.y);
     const mask = this.worldMapTiles.tileMasks.get(hex.x, hex.y);
     const texture = this.terrainTileset.getTextureFromTileMask(mask);
     const SCALE = 50;
     const point = hex.toPoint();
     if (texture) {
-      const matrix = new PIXI.Matrix();
-      matrix.translate(point.x, point.y - HEX_ADJUST_Y);
-      hexGraphics.beginTextureFill({
-        texture,
-        matrix,
-        color: 0xFFFFFF,
-      });
-      hexGraphics.drawRect(
-        point.x,
-        point.y - HEX_ADJUST_Y,
-        32,
-        48
-      );
-      hexGraphics.endFill();
+      this.tilemap.addFrame(texture, point.x, point.y - HEX_ADJUST_Y);
     }
 
     const corners = hex.corners().map(corner => corner.add(point));
@@ -162,13 +151,23 @@ export class HexTilemap extends PIXI.Container {
     }
   }
 
+  drawAll() {
+    console.time('draw all hexes');
+    this.worldMap.hexgrid.map(hex => {
+      const point = hex.toPoint();
+      const mask = this.worldMapTiles.tileMasks.get(hex.x, hex.y);
+      const texture = this.terrainTileset.getTextureFromTileMask(mask);
+      if (texture) {
+        this.tilemap.addFrame(texture, point.x, point.y - HEX_ADJUST_Y);
+      }
+    });
+    console.timeEnd('draw all hexes');
+  }
+
   private draw() {
     console.groupCollapsed('draw grid');
     console.time('draw');
     const mapHexes = this.worldMap.hexgrid.sort(sortHexes);
-
-    let hexGraphics = new PIXI.Graphics();
-    this.closeLayer.addChild(hexGraphics);
 
     let atlasGraphics = new PIXI.Graphics();
     const SCALE = 50;
@@ -181,23 +180,25 @@ export class HexTilemap extends PIXI.Container {
 
     console.log('worldMap', this.worldMap);
 
+    PIXI.tilemap.Constant.use32bitIndex = true;
+    this.tilemap = new PIXI.tilemap.CompositeRectTileLayer(0, [
+      new PIXI.Texture(this.terrainTileset.baseTexture),
+    ]);
+
     let count = 0;
     mapHexes.forEach(hex => {
       count++;
-      if (count % 10000 === 0) {
-        hexGraphics = new PIXI.Graphics();
-        this.closeLayer.addChild(hexGraphics);
-      }
       if (count % 1000 === 0) {
         atlasGraphics = new PIXI.Graphics();
         atlasGraphics.scale.set(SCALE);
         this.farLayer.addChild(atlasGraphics);
       }
-      this.hexGraphics.set(hex, [hexGraphics, atlasGraphics]);
+      this.atlasGraphics.set(hex, atlasGraphics);
       this.drawHex(hex);
     });
 
     console.timeEnd('draw');
     console.groupEnd();
+    this.addChild(this.tilemap);
   }
 }

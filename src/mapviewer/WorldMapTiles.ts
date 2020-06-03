@@ -29,11 +29,11 @@ export class WorldMapTiles {
     // subscribe to hex terrain updates and recalculate terrain masks
     this.worldMap.terrainUpdates$.subscribe(updatedHexes => {
       for (const hex of updatedHexes) {
-        let mask = this.calculateHexTile(hex);
+        this.calculateHexTile(hex);
         const updatedHexes = [hex];
         for (const nhex of Object.values(this.worldMap.getHexNeighbors(hex))) {
-          mask = this.calculateHexTile(nhex);
-          updatedHexes.push(hex);
+          this.calculateHexTile(nhex);
+          updatedHexes.push(nhex);
         }
         this.tileMaskUpdates$.next(updatedHexes);
       }

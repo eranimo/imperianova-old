@@ -1,5 +1,6 @@
 const path = require("path");
 var HtmlWebpackPlugin = require("html-webpack-plugin");
+var webpack = require("webpack");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 module.exports = {
@@ -64,6 +65,9 @@ module.exports = {
     pathinfo: false,
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      PIXI: 'pixi.js'
+    }),
     new HtmlWebpackPlugin({
       template: "./src/index.html",
     }),
