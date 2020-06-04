@@ -138,16 +138,25 @@ export class HexTilemap extends PIXI.Container {
 
     this.draw();
 
-    // this.cullChunks = new Cull.Simple({
-    //   dirtyTest: false
-    // });
-    // this.cullChunks.addList(this.children);
-    // PIXI.Ticker.shared.add(() => {
-    //   if (viewport.dirty) {
-    //     const cull = this.cullChunks.cull(this.viewport.getVisibleBounds())
-    //     viewport.dirty = false;
-    //   }
-    // });
+    this.cullChunks = new Cull.Simple({
+      dirtyTest: false
+    });
+    this.cullChunks.addList(this.chunksLayer.children);
+    (window as any).cull = this.cullChunks;
+    const getCullBounds = () => {
+      const bounds = this.viewport.getVisibleBounds()
+      bounds.x -= 500;
+      bounds.y -= 500;
+      bounds.width += 500;
+      bounds.height += 500;
+      return bounds;
+    }
+    PIXI.Ticker.shared.add(() => {
+      if (viewport.dirty) {
+        this.cullChunks.cull(getCullBounds());
+        viewport.dirty = false;
+      }
+    });
 
     // selection sprite
     this.selectionSprite = new PIXI.Sprite(selectionTexture);
@@ -256,15 +265,27 @@ export class HexTilemap extends PIXI.Container {
   }
 
   private drawChunk(chunkKey: string) {
+    const layer = this.chunkTileLayers.get(chunkKey);
     const hexes = this.chunkHexes.get(chunkKey);
+    const hexPosititions: [number, number][] = [];
+    let minX = Infinity;
+    let minY = Infinity;
     for (const hex of hexes) {
+      const [ x, y ] = this.worldMap.getHexPosition(hex.x, hex.y);
+      if (x < minX) minX = x;
+      if (y < minY) minY = y;
+      hexPosititions.push([x, y]);
+    }
+    layer.position.set(minX, minY);
+
+    hexes.forEach((hex, index) => {
       const mask = this.worldMapTiles.tileMasks.get(hex.x, hex.y);
       const texture = this.terrainTileset.getTextureFromTileMask(mask);
       if (texture) {
-        const [ x, y ] = this.worldMap.getHexPosition(hex.x, hex.y);
-        this.chunkTileLayers.get(chunkKey).addFrame(texture, x, y - HEX_ADJUST_Y);
+        const [ x, y ] = hexPosititions[index];
+        layer.addFrame(texture, x - minX, y - HEX_ADJUST_Y - minY);
       }
-    }
+    });
   }
 
   private draw() {
