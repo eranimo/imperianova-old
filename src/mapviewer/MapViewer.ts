@@ -2,7 +2,6 @@ import * as PIXI from "pixi.js";
 import { Viewport } from "pixi-viewport";
 import * as Honeycomb from 'honeycomb-grid'
 import Stats from 'stats.js';
-import Cull from 'pixi-cull';
 import { HexTilemap } from "./HexTilemap";
 import { WorldMap } from "./WorldMap";
 import { MapManager } from './MapManager';
@@ -21,16 +20,6 @@ export const HEX_ADJUST_Y = TEXTURE_HEIGHT - HEX_HEIGHT - HEX_OFFSET_Y;
 
 export interface IHex {
   index: number,
-}
-
-export function sortHexes(a: Honeycomb.Hex<IHex>, b: Honeycomb.Hex<IHex>) {
-  if (a.r < b.r) {
-    return -1;
-  }
-  if (a.r === b.r) {
-    return 0;
-  }
-  return 1;
 }
 
 export const Hex = Honeycomb.extendHex<IHex>({

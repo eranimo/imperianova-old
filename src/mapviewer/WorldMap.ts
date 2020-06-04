@@ -25,7 +25,8 @@ export class WorldMap {
   hexgrid: Honeycomb.Grid<WorldMapHex>;
   terrain: ndarray;
   heightmap: ndarray;
-  indexMap: Map<string, number>;
+  private indexMap: Map<string, number>;
+  private pointsMap: Map<string, [number, number]>;
   
   public terrainUpdates$: Subject<WorldMapHex[]>;
 
@@ -49,7 +50,12 @@ export class WorldMap {
     this.heightmap = ndarray(new Uint32Array(heightBuffer), arrayDim);
 
     this.indexMap = new Map();
+    this.pointsMap = new Map();
     this.terrainUpdates$ = new Subject();
+  }
+
+  getHexPosition(x: number, y: number) {
+    return this.pointsMap.get(`${x},${y}`);
   }
 
   setHexTerrain(hex: WorldMapHex, terrainType: TerrainType) {
@@ -85,6 +91,8 @@ export class WorldMap {
     const noise = new SimplexNoise(rng);
     this.hexgrid.forEach((hex, index) => {
       hex.index = index;
+      const point = hex.toPoint();
+      this.pointsMap.set(`${hex.x},${hex.y}`, [point.x, point.y]);
       this.indexMap.set(`${hex.x},${hex.y}`, index);
       const { lat, long } = this.getHexCoordinate(hex);
       const inc = ((lat + 90) / 180) * Math.PI;
