@@ -97,8 +97,8 @@ const oceanColors = [
   Jimp.rgbaToInt(39, 121, 201, 255), 
   Jimp.rgbaToInt(107, 182, 210, 255),
   Jimp.rgbaToInt(69, 145, 203, 255),
-  Jimp.rgbaToInt(39, 121, 201, 255), // same as 0
   Jimp.rgbaToInt(38, 115, 197, 255),
+  Jimp.rgbaToInt(39, 121, 201, 255),
 ];
 const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainType, number[]>>>> = {
   [TerrainType.OCEAN]: {
@@ -282,7 +282,13 @@ const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainTy
       Jimp.rgbaToInt(229, 237, 255, 255),
       Jimp.rgbaToInt(229, 237, 255, 255),
     ],
-    [TerrainType.TAIGA]: [0xFAFAFAFF, 0xFAFAFAFF, 0xFAFAFAFF, 0xFAFAFAFF, 0xFAFAFAFF],
+    [TerrainType.TAIGA]: [
+      Jimp.rgbaToInt(242, 242, 242, 255),
+      Jimp.rgbaToInt(235, 239, 245, 255),
+      Jimp.rgbaToInt(237, 241, 246, 255),
+      Jimp.rgbaToInt(229, 237, 255, 255),
+      Jimp.rgbaToInt(229, 237, 255, 255),
+    ],
   },
 }
 
@@ -370,10 +376,10 @@ const getAutogenSettings = (
     adj1TerrainType === terrainType
   ) {
     group = 7;
-    colorsTerrainMap[AutogenColorGroup.PRIMARY] = adj1TerrainType;
+    colorsTerrainMap[AutogenColorGroup.PRIMARY] = adj2TerrainType;
     colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
     colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = adj1TerrainType;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = adj2TerrainType;
   } else if (
     adj1TerrainType !== adj2TerrainType &&
     terrainType === terrainTypeCenter &&
@@ -583,6 +589,7 @@ async function buildTemplateTileset(
             if (object) {
               outTileset.blit(autogenObjectsTileset, x - 7, y - 14, object.x, object.y, 15, 15);
             } else {
+              // console.log(`Missing objects for ${terrainTypeTitles[matchingTerrainTypes[0]]} - ${terrainTypeTitles[matchingTerrainTypes[1] || matchingTerrainTypes[0]]}`)
               outTileset.setPixelColor(newColorSet[index], x, y);
             }
           }
@@ -610,7 +617,7 @@ async function buildTilesetDef(template: Jimp, autogenTemplate: Jimp) {
     neighbors: TerrainType[],
     shouldAddTile: (adj1: TerrainType, adj2: TerrainType) => boolean = () => true,
   ) => {
-    console.log(`Building tile type ${terrainTypeTitles[terrainTypeCenter]} (center) <--> ${terrainTypeTitles[terrainType]} (edge)\t[${neighbors.map(terrainType => terrainTypeTitles[terrainType]).join(', ')}]`)
+    console.log(`Building tile type ${terrainTypeTitles[terrainTypeCenter]}(center) <--> ${terrainTypeTitles[terrainType]} (edge)\t\t[${neighbors.map(terrainType => terrainTypeTitles[terrainType]).join(', ')}]`)
     for (const adj1 of neighbors) {
       for (const adj2 of neighbors) {
         if (!shouldAddTile(adj1, adj2)) continue;
@@ -684,32 +691,37 @@ async function buildTilesetDef(template: Jimp, autogenTemplate: Jimp) {
   }
 
   // add transition tiles
-  console.log('Adding transition base tiles');
+  console.log('\nAdding transition base tiles');
   for (const [terrainTypeCenter_, edgeTerrainTypes] of Object.entries(terrainTransitions)) {
     for (const edgeTerrainType of edgeTerrainTypes) {
       const terrainTypeCenter = parseInt(terrainTypeCenter_, 10) as unknown as TerrainType;
       addTileType(
         terrainTypeCenter,
         edgeTerrainType,
-        [edgeTerrainType, ...(terrainBackTransitions[edgeTerrainType] || [])],
+        [
+          ...(terrainTransitions[terrainTypeCenter] || []),
+          ...(terrainBackTransitions[edgeTerrainType] || [])
+        ],
       );
     }
   }
 
-  console.log('Adding transition edge tiles');
+  console.log('\nAdding transition edge tiles');
   for (const [terrainTypeCenter_, edgeTerrainTypes] of Object.entries(terrainTransitions)) {
     const terrainTypeCenter = parseInt(terrainTypeCenter_, 10) as unknown as TerrainType;
-    addTileType(
-      terrainTypeCenter,
-      terrainTypeCenter,
-      edgeTerrainTypes,
-      (adj1, adj2) => !(adj1 === terrainTypeCenter && adj2 === terrainTypeCenter)
-    );
+    for (const edgeTerrainType of edgeTerrainTypes) {
+      addTileType(
+        terrainTypeCenter,
+        terrainTypeCenter,
+        [edgeTerrainType, ...(terrainBackTransitions[edgeTerrainType] || [])],
+        (adj1, adj2) => !(adj1 === terrainTypeCenter && adj2 === terrainTypeCenter)
+      );
+    }
   }
 
   const tilesWidth = 12;
   const tilesHeight = Math.ceil(tileID / tilesWidth);
-  console.log(`Building template with ${tiles.length} sectional tiles`);
+  console.log(`\nBuilding template with ${tiles.length} sectional tiles`);
 
   const image = await buildTemplateTileset(template, autogenTemplate, tiles, tilesWidth, tilesHeight);
   

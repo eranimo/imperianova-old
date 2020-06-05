@@ -12,7 +12,7 @@ export class Tileset {
   tileTextures: Map<number, PIXI.Texture>;
 
   constructor(
-    private baseTexture: PIXI.BaseTexture,
+    public baseTexture: PIXI.BaseTexture,
     private options: TilesetOptions
   ) {
     this.tileTextures = new Map();

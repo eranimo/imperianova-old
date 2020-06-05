@@ -5,7 +5,7 @@ import Jimp from 'jimp';
 import { parseStringPromise, parseString } from 'xml2js';
 import ndarray from 'ndarray';
 import { getTilesetMask } from '../src/mapviewer/utils';
-import { TerrainType, Direction, directionShort, terrainTypeMax, terrainTypes, terrainTypeTitles, terrainTransitions } from '../src/mapviewer/constants';
+import { TerrainType, Direction, directionShort, terrainTypeMax, terrainTypes, terrainTypeTitles, terrainTransitions, terrainBackTransitions } from '../src/mapviewer/constants';
 import { sum } from 'lodash';
 import yargs from 'yargs';
 import { SectionalTile, TileVariant, renderOrder, adjacentDirections, newImage, getFilePath, propertyTypeProcess } from './shared';
@@ -91,9 +91,20 @@ async function loadFiles() {
   imagePNG = await Jimp.read(pngFilePath);
 }
 
+const formatDirectionTerrain = (
+  value: Record<Direction, TerrainType>,
+  options: Partial<Record<Direction, any[]>>
+) => {
+  const out = [];
+  for (const [direction, terrainType] of Object.entries(value)) {
+    out.push(`${directionShort[direction]}:\t`, `${terrainTypeTitles[terrainType]} (${options[direction].length})`.padEnd(15));
+  }
+  return out.join(' ');
+}
+
 function createTilesetVariants(
   terrainTypeCenter: TerrainType,
-  directionTerrain: Record<Direction, number>
+  directionTerrain: Record<Direction, TerrainType>
 ): TileVariant[] {
   // a list of all possible tiles for each variant that are possible for this combination of terrainTypes
   const directionTileOptions: Partial<Record<Direction, SectionalTile[]>> = {};
@@ -113,10 +124,6 @@ function createTilesetVariants(
     ));
     directionTileOptions[direction] = matchingTiles;
   });
-  // console.log(`Variants for ${terrainTypeTitles[terrainTypeCenter]}`, directionTerrain);
-  // Object.entries(directionTileOptions).forEach(([k, v]) => {
-  //   console.log(`\tdirection: ${directionShort[k]} - ${v.length} tiles`);
-  // });
 
   // all possible combination of tiles
   const sectionCombinations: TileVariant[] = [];
@@ -162,6 +169,10 @@ function createTilesetVariants(
       }
     }
   }
+  if (sectionCombinations.length > 0) {
+    console.log(`\t\t\tWith center ${terrainTypeTitles[terrainTypeCenter]}:`, formatDirectionTerrain(directionTerrain, directionTileOptions));
+    console.log(`\t\t\t\tCombinations: ${sectionCombinations.length}`)
+  }
   return sectionCombinations;
 }
 
@@ -189,9 +200,13 @@ async function createTilesetImage(
   return image.writeAsync(filepath);
 }
 
+const formatTerrainTypeList = (values: TerrainType[]) => values.map(t => terrainTypeTitles[t]).join(', ')
+
 function getVariantsForTerrainType(terrainType: TerrainType) {
   const variants: TileVariant[] = [];
   const neighbors = [terrainType, ...(terrainTransitions[terrainType] || [])];
+  console.log(`Building variants for ${terrainTypeTitles[terrainType]}`);
+  console.log('\tNeighbors:', formatTerrainTypeList(neighbors));
   for (let se of neighbors) {
     for (let ne of neighbors) {
       for (let n of neighbors) {
@@ -212,7 +227,7 @@ function getVariantsForTerrainType(terrainType: TerrainType) {
       }
     }
   }
-  console.log(`Found ${variants.length} variants for terrain type ${terrainTypeTitles[terrainType]}`);
+  console.log(`\tCreated ${variants.length} variants for terrain type ${terrainTypeTitles[terrainType]}`);
   return variants;
 }
 

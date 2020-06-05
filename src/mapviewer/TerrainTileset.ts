@@ -65,7 +65,6 @@ export class TerrainTileset {
         }
       }
     }
-    console.log('ocean', this.tileMask.get(1093));
   }
 
   static fromJSON(

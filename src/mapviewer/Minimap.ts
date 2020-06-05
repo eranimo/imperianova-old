@@ -98,7 +98,7 @@ export class Minimap {
 
     worldMap.hexgrid.forEach(hex => {
       const terrainType = worldMap.terrain.get(hex.x, hex.y);
-      const point = hex.toPoint();
+      const point = worldMap.getHexPosition(hex.x, hex.y);
       const corners = hex.corners().map(corner => corner.add(point))
       const [firstCorner, ...otherCorners] = corners;
       background.fillStyle = terrainMinimapColors[terrainType];

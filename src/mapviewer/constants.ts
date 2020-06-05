@@ -24,21 +24,20 @@ export const terrainTypeMax = 7;
 // a map of center terrain types to edge terrain types
 // representing which terrains have transitions
 export const terrainTransitions: Partial<Record<TerrainType, TerrainType[]>> = {
-  [TerrainType.GRASSLAND]: [TerrainType.FOREST, TerrainType.DESERT],
-  [TerrainType.OCEAN]: [TerrainType.GRASSLAND, TerrainType.FOREST, TerrainType.DESERT, TerrainType.TAIGA, TerrainType.TUNDRA, TerrainType.GLACIAL],
-  [TerrainType.FOREST]: [TerrainType.TAIGA],
-  [TerrainType.TAIGA]: [TerrainType.TUNDRA, TerrainType.GLACIAL],
+  [TerrainType.GRASSLAND]: [TerrainType.DESERT, TerrainType.FOREST],
+  [TerrainType.OCEAN]: [TerrainType.DESERT, TerrainType.GRASSLAND, /*TerrainType.FOREST, /*TerrainType.TAIGA, TerrainType.TUNDRA, TerrainType.GLACIAL*/],
+  // [TerrainType.FOREST]: [TerrainType.TAIGA],
+  // [TerrainType.TAIGA]: [TerrainType.TUNDRA, TerrainType.GLACIAL],
 };
 
 // edge -> center
-export const terrainBackTransitions = {
-  [TerrainType.FOREST]: [TerrainType.GRASSLAND],
+export const terrainBackTransitions: Partial<Record<TerrainType, TerrainType[]>> = {
+  // [TerrainType.FOREST]: [TerrainType.OCEAN, TerrainType.GRASSLAND],
   [TerrainType.GRASSLAND]: [TerrainType.OCEAN],
-  [TerrainType.FOREST]: [TerrainType.OCEAN, TerrainType.GRASSLAND],
   [TerrainType.DESERT]: [TerrainType.OCEAN, TerrainType.GRASSLAND],
-  [TerrainType.TAIGA]: [TerrainType.OCEAN, TerrainType.FOREST],
-  [TerrainType.TUNDRA]: [TerrainType.OCEAN, TerrainType.TAIGA],
-  [TerrainType.GLACIAL]: [TerrainType.OCEAN, TerrainType.TAIGA],
+  // [TerrainType.TAIGA]: [TerrainType.OCEAN, TerrainType.FOREST],
+  // [TerrainType.TUNDRA]: [TerrainType.OCEAN, TerrainType.TAIGA],
+  // [TerrainType.GLACIAL]: [TerrainType.OCEAN, TerrainType.TAIGA],
 }
 
 export const terrainColors: Record<TerrainType, number> = {
@@ -66,7 +65,7 @@ export const terrainMinimapColors: Record<TerrainType, string> = {
 export const terrainTypeTitles: Record<TerrainType, string> = {
   [TerrainType.MAP_EDGE]: 'MAP EDGE',
   [TerrainType.OCEAN]: 'Ocean',
-  [TerrainType.GRASSLAND]: 'Land',
+  [TerrainType.GRASSLAND]: 'Grassland',
   [TerrainType.FOREST]: 'Forest',
   [TerrainType.DESERT]: 'Desert',
   [TerrainType.TAIGA]: 'Taiga',

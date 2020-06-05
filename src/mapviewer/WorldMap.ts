@@ -104,7 +104,9 @@ export class WorldMap {
       const value = (raw + 1) / 2;
       const height = value * 255;
       this.heightmap.set(hex.x, hex.y, height);
-      if (height < 140) {
+      if (height > 160) {
+        this.terrain.set(hex.x, hex.y, TerrainType.DESERT);
+      } else if (height < 140) {
         this.terrain.set(hex.x, hex.y, TerrainType.OCEAN);
       } else {
         this.terrain.set(hex.x, hex.y, TerrainType.GRASSLAND);
