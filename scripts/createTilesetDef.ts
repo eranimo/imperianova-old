@@ -25,6 +25,12 @@ const argv = yargs.options({
     alias: 'e',
     default: 'xml',
   },
+  padding: {
+    typer: 'number',
+    description: 'Padding in tileset image',
+    alias: 'p',
+    default: 15,
+  },
 }).argv;
 
 const xmlBuilder = new Builder();
@@ -526,12 +532,12 @@ async function buildTemplateTileset(
     if (!objects) return null;
     return objects[random(objects.length - 1)];
   }
-  const outTemplate = await newImage(columns * tileWidth, rows * tileHeight);
-  const outTileset = await newImage(columns * tileWidth, rows * tileHeight);
+  const outTemplate = await newImage(columns * (tileWidth + argv.padding), rows * (tileHeight + argv.padding));
+  const outTileset = await newImage(columns * (tileWidth + argv.padding), rows * (tileHeight + argv.padding));
   tiles.forEach((tile, index) => {
     const templateTile = templateDirectionCoords[tile.direction]
-    const tx = (index % columns) * tileWidth;
-    const ty = (Math.floor(index / columns)) * tileHeight;
+    const tx = (index % columns) * (tileWidth + argv.padding);
+    const ty = (Math.floor(index / columns)) * (tileHeight + argv.padding);
     outTemplate.blit(template, tx, ty, templateTile.x, templateTile.y, tileWidth, tileHeight);
     outTemplate.scan(tx, ty, tileWidth, tileHeight, (x, y) => {
       const color = outTemplate.getPixelColor(x, y);
@@ -759,8 +765,8 @@ async function buildTilesetDef(template: Jimp, autogenTemplate: Jimp) {
       image: {
         $: {
           source: `${argv.tilesetDefName}-template.png`,
-          width: tilesWidth * tileWidth,
-          height: tilesHeight * tileHeight,
+          width: tilesWidth * (tileWidth + argv.padding),
+          height: tilesHeight * (tileHeight + argv.padding),
         },
       },
       tile: tilesXML,

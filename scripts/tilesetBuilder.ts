@@ -36,7 +36,13 @@ const argv = yargs.options({
     description: 'Number of columns in tileset',
     alias: 'c',
     default: 25,
-  }
+  },
+  padding: {
+    typer: 'number',
+    description: 'Padding in tileset image',
+    alias: 'p',
+    default: 15,
+  },
 }).argv;
 
 const tiles: SectionalTile[] = [];
@@ -195,17 +201,17 @@ async function createTilesetImage(
   filepath: string,
 ) {
   const count = tileVariants.length;
-  const tilesetWidth = columnCount * tileWidth;
-  const tilesetHeight = tileHeight * Math.ceil(count / columnCount);
+  const tilesetWidth = columnCount * (tileWidth + argv.padding);
+  const tilesetHeight = Math.ceil(count / columnCount) * (tileHeight + argv.padding);
   console.log(`Creating tileset image with ${tileVariants.length} tiles (image size: ${tilesetWidth}x${tilesetHeight})`);
   const image = await newImage(tilesetWidth, tilesetHeight);
   tileVariants.forEach((tileVariant, index) => {
-    const tx = (index % columnCount) * tileWidth;
-    const ty = (Math.floor(index / columnCount)) * tileHeight;
+    const tx = (index % columnCount) * (tileWidth + argv.padding);
+    const ty = (Math.floor(index / columnCount)) * (tileHeight + argv.padding);
     renderOrder.forEach(direction => {
       const tileID = tileVariant.sideTileIDs[direction];
-      const x = (tileID % columns) * tileWidth;
-      const y = (Math.floor(tileID / columns)) * tileHeight;
+      const x = (tileID % columns) * (tileWidth + argv.padding);
+      const y = (Math.floor(tileID / columns)) * (tileHeight + argv.padding);
 
       image.blit(imagePNG, tx, ty, x, y, tileWidth, tileHeight);
     });
@@ -263,6 +269,7 @@ async function createTileset() {
 
   fs.writeFileSync(outJSONPath, JSON.stringify({
     columns: argv.columns,
+    padding: argv.padding,
     tileSize: {
       width: tileWidth,
       height: tileHeight,

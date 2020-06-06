@@ -1,5 +1,6 @@
 {
   "columns": 25,
+  "padding": 15,
   "tileSize": {
     "width": 32,
     "height": 48

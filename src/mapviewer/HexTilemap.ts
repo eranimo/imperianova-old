@@ -268,7 +268,7 @@ export class HexTilemap extends PIXI.Container {
   }
 
   private drawChunk(chunkKey: string) {
-    const [terrainLayer, gridLayer] = this.chunkTileLayers.get(chunkKey);
+    const [terrainLayer] = this.chunkTileLayers.get(chunkKey);
     const hexes = this.chunkHexes.get(chunkKey);
     const hexPosititions: [number, number][] = [];
     let minX = Infinity;
@@ -280,7 +280,6 @@ export class HexTilemap extends PIXI.Container {
       hexPosititions.push([x, y]);
     }
     terrainLayer.position.set(minX, minY);
-    gridLayer.position.set(minX, minY);
 
     hexes.forEach((hex, index) => {
       const mask = this.worldMapTiles.tileMasks.get(hex.x, hex.y);
@@ -290,11 +289,6 @@ export class HexTilemap extends PIXI.Container {
         terrainLayer.addFrame(texture, x - minX, y - HEX_ADJUST_Y - minY);
       }
     });
-
-    // hexes.forEach((hex, index) => {
-    //   const [ x, y ] = hexPosititions[index];
-    //   gridLayer.addFrame(this.gridTexture, x - minX, y - HEX_ADJUST_Y - minY);
-    // });
   }
 
   private draw() {
@@ -340,9 +334,8 @@ export class HexTilemap extends PIXI.Container {
     ];
     for (const chunkKey of this.chunkHexes.keys()) {
       const terrainLayer = new PIXI.tilemap.CompositeRectTileLayer(0, bitmaps);
-      const gridLayer = new PIXI.tilemap.CompositeRectTileLayer(this.chunkHexes.size, bitmaps);
-      this.chunkTileLayers.set(chunkKey, [terrainLayer, gridLayer]);
-      this.chunksLayer.addChild(terrainLayer, gridLayer);
+      this.chunkTileLayers.set(chunkKey, [terrainLayer]);
+      this.chunksLayer.addChild(terrainLayer);
       this.drawChunk(chunkKey);
     }
     console.timeEnd('draw chunks');

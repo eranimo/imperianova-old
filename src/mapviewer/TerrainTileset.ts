@@ -18,6 +18,7 @@ export type TerrainTilesetOptions = {
     width: number,
     height: number,
   };
+  padding: number,
   tiles: TerrainTile[];
 }
 
@@ -46,14 +47,14 @@ export class TerrainTileset {
     public options: TerrainTilesetOptions,
   ) {
 
-    const { width, height } = this.options.tileSize;
+    const { padding, tileSize: { width, height } } = this.options;
     this.tileTextures = new Map();
     this.tileMask = new Map();
     for (const tile of options.tiles) {
       if (tile.used) {
         const texture = new PIXI.Texture(this.baseTexture, new PIXI.Rectangle(
-          (tile.id % this.options.columns) * width,
-          (Math.floor(tile.id / this.options.columns)) * height,
+          (tile.id % this.options.columns) * (width + padding),
+          (Math.floor(tile.id / this.options.columns)) * (height + padding),
           width,
           height
         ));
@@ -82,6 +83,7 @@ export class TerrainTileset {
     const tileset = document.querySelector('tileset');
     let options = {
       columns: parseInt(tileset.getAttribute('columns'), 10),
+      padding: parseInt(tileset.getAttribute('padding'), 10),
       tileSize: {
         width: parseInt(tileset.getAttribute('tilewidth'), 10),
         height: parseInt(tileset.getAttribute('tileheight'), 10),
