@@ -84,30 +84,6 @@ export class WorldMapTiles {
     const terrainType = this.worldMap.getTerrainForHex(x, y);
     const neighborTerrainTypes = this.worldMap.getHexNeighborTerrain(x, y);
 
-    // back transitions act like base tiles
-    if (terrainType in terrainBackTransitions) {
-      const terrainTransitions = terrainBackTransitions[terrainType] as TerrainType[];
-      const neighborsToChange = {};
-      Object.entries(neighborTerrainTypes).forEach(([dir, t]) => {
-        const check = terrainTransitions.includes(t);
-        if (check) {
-          neighborsToChange[dir] = t;
-        }
-        return check;
-      });
-      const newNeighborTerrainTypes = {
-        [Direction.SE]: neighborsToChange[Direction.SE] ? terrainType : neighborTerrainTypes[Direction.SE],
-        [Direction.NE]: neighborsToChange[Direction.NE] ? terrainType : neighborTerrainTypes[Direction.NE],
-        [Direction.N]: neighborsToChange[Direction.N] ? terrainType : neighborTerrainTypes[Direction.N],
-        [Direction.NW]: neighborsToChange[Direction.NW] ? terrainType : neighborTerrainTypes[Direction.NW],
-        [Direction.SW]: neighborsToChange[Direction.SW] ? terrainType : neighborTerrainTypes[Direction.SW],
-        [Direction.S]: neighborsToChange[Direction.S] ? terrainType : neighborTerrainTypes[Direction.S],
-      };
-      const mask = getTilesetMask(terrainType, newNeighborTerrainTypes);
-      this.tileMasks.set(x, y, mask);
-      return;
-    }
-
     const mask = getTilesetMask(terrainType, neighborTerrainTypes);
 
     this.tileMasks.set(x, y, mask);

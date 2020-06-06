@@ -278,6 +278,7 @@ export class HexTilemap extends PIXI.Container {
       const terrainType = this.worldMap.getTerrainForHex(hex.x, hex.y);
       if (terrainType === TerrainType.MAP_EDGE) return;
       const textures = this.terrainTileset.getTile(
+        this.worldMapTiles.tileMasks.get(hex.x, hex.y),
         terrainType,
         this.worldMap.getHexNeighborTerrain(hex.x, hex.y),
       );

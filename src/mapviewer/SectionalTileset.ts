@@ -1,12 +1,12 @@
 import * as PIXI from "pixi.js";
-import { Direction, directionShort, TerrainType, adjacentDirections, renderOrder, terrainTypeTitles, terrainBackTransitions } from './constants';
+import { Direction, directionShort, TerrainType, adjacentDirections, renderOrder, terrainTypeTitles, terrainBackTransitions, terrainTypeMax } from './constants';
 import { mapValues, random, groupBy, mapKeys } from "lodash";
 import {MultiDictionary } from 'typescript-collections';
 
 
 export type SectionalTilesetTile = {
   tileID: number;
-  tileHash: string;
+  tileMask: number;
   direction: Direction;
   terrainType: TerrainType;
   terrainTypeCenter: TerrainType;
@@ -43,16 +43,18 @@ type XMLTileProperties = {
 }
 
 export class SectionalTileset {
-  tileTextures: Map<number, PIXI.Texture>;
-  tileHashToID: MultiDictionary<string, number>;
+  sectionalTileTextures: Map<number, PIXI.Texture>;
+  sectionalTileMaskToTileIDs: MultiDictionary<number, number>;
+  hexTileSectionalTileCache: Map<number, PIXI.Texture[]>;
 
   constructor(
     public baseTexture: PIXI.BaseTexture,
     public options: SectionalTilesetOptions,
   ) {
     const { padding, tileSize: { width, height } } = this.options;
-    this.tileTextures = new Map();
-    this.tileHashToID = new MultiDictionary();
+    this.sectionalTileTextures = new Map();
+    this.hexTileSectionalTileCache = new Map();
+    this.sectionalTileMaskToTileIDs = new MultiDictionary();
 
     for (const tile of options.sectionalTiles) {
       const texture = new PIXI.Texture(this.baseTexture, new PIXI.Rectangle(
@@ -61,8 +63,8 @@ export class SectionalTileset {
         width,
         height
       ));
-      this.tileHashToID.setValue(tile.tileHash, tile.tileID);
-      this.tileTextures.set(tile.tileID, texture);
+      this.sectionalTileMaskToTileIDs.setValue(tile.tileMask, tile.tileID);
+      this.sectionalTileTextures.set(tile.tileID, texture);
     }
 
     (window as any).SectionalTileset = this;
@@ -101,7 +103,7 @@ export class SectionalTileset {
       const adj2TerrainType = properties[`terrainType${directionShort[adj2Dir]}`];
       options.sectionalTiles.push({
         tileID: parseInt(tile.getAttribute('id'), 10),
-        tileHash: SectionalTileset.getTileHash(terrainType, terrainTypeCenter, Direction[direction], adj1TerrainType, adj2TerrainType),
+        tileMask: SectionalTileset.getTileHash(terrainType, terrainTypeCenter, Direction[direction], adj1TerrainType, adj2TerrainType),
         terrainType,
         terrainTypeCenter,
         direction: Direction[direction],
@@ -119,7 +121,13 @@ export class SectionalTileset {
     adj1TerrainType: TerrainType,
     adj2TerrainType: TerrainType,
   ) {
-    return [terrainType, terrainTypeCenter, direction, adj1TerrainType, adj2TerrainType].join(',')
+    return (
+      ((terrainTypeMax ** 0) * terrainType) +
+      ((terrainTypeMax ** 1) * terrainTypeCenter) +
+      ((renderOrder.length ** 2) * direction) +
+      ((terrainTypeMax ** 3) * adj1TerrainType) +
+      ((terrainTypeMax ** 4) * adj2TerrainType)
+    );
   }
 
   getDebugTiles() {
@@ -137,9 +145,14 @@ export class SectionalTileset {
   }
 
   getTile(
+    mask: number,
     terrainTypeCenter: TerrainType,
     neighborTerrainTypes: Record<Direction, TerrainType>,
   ): PIXI.Texture[] {
+    if (this.hexTileSectionalTileCache.has(mask)) {
+      return this.hexTileSectionalTileCache.get(mask);
+    }
+
     let newNeighborTerrainTypes = neighborTerrainTypes;
     if (terrainTypeCenter in terrainBackTransitions) {
       const terrainTransitions = terrainBackTransitions[terrainTypeCenter] as TerrainType[];
@@ -161,19 +174,22 @@ export class SectionalTileset {
       };
     }
 
-    return renderOrder.map(dir => {
+    const textures = renderOrder.map(dir => {
       const [adjDir1, adjDir2] = adjacentDirections[dir];
       const terrainType = newNeighborTerrainTypes[dir];
       const adj1TerrainType = newNeighborTerrainTypes[adjDir1];
       const adj2TerrainType = newNeighborTerrainTypes[adjDir2];
       const hash = SectionalTileset.getTileHash(terrainType, terrainTypeCenter, dir, adj1TerrainType, adj2TerrainType);
-      const possibleTiles = this.tileHashToID.getValue(hash);
+      const possibleTiles = this.sectionalTileMaskToTileIDs.getValue(hash);
       const chosenTile = possibleTiles[random(possibleTiles.length - 1)];
-      if (chosenTile === undefined || !this.tileTextures.has(chosenTile)) {
+      if (chosenTile === undefined || !this.sectionalTileTextures.has(chosenTile)) {
         // console.error(`Could not find tile: dir: ${directionShort[dir]}, terrainType: ${terrainTypeTitles[terrainType]}, terrainTypeCenter: ${terrainTypeTitles[terrainTypeCenter]}, adj1TerrainType: ${terrainTypeTitles[adj1TerrainType]}, adj2TerrainType: ${terrainTypeTitles[adj2TerrainType]}`)
         return null;
       }
-      return this.tileTextures.get(chosenTile);
+      return this.sectionalTileTextures.get(chosenTile);
     });
+    this.hexTileSectionalTileCache.set(mask, textures);
+
+    return textures;
   }
 }
