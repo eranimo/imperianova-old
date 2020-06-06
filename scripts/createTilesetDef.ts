@@ -4,8 +4,8 @@ import path from 'path';
 import fs from 'fs';
 import { parseStringPromise, Builder } from 'xml2js';
 import yargs, { number, boolean } from 'yargs';
-import { TerrainType, terrainTypeMax, directionShort, Direction, terrainColors, terrainMinimapColors, terrainTransitions, terrainTypeTitles, terrainBackTransitions } from '../src/mapviewer/constants';
-import { renderOrder, adjacentDirections, newImage, SectionalTile, getFilePath, indexOrder, propertyTypeProcess } from './shared';
+import { TerrainType, terrainTypeMax, directionShort, Direction, terrainColors, terrainMinimapColors, terrainTransitions, terrainTypeTitles, terrainBackTransitions, adjacentDirections, renderOrder } from '../src/mapviewer/constants';
+import { newImage, SectionalTile, getFilePath, indexOrder, propertyTypeProcess } from './shared';
 import Jimp from 'jimp';
 import { forEach, random } from 'lodash';
 
@@ -588,7 +588,7 @@ async function buildTemplateTileset(
             if (newColorSet) {
               outTileset.setPixelColor(newColorSet[index], x, y);
             } else {
-              console.log(`Missing transition colors for ${terrainTypeTitles[matchingTerrainTypes[0]]} -> ${terrainTypeTitles[matchingTerrainTypes[1]]}`);
+              throw new Error(`Missing transition colors for ${terrainTypeTitles[matchingTerrainTypes[0]]} -> ${terrainTypeTitles[matchingTerrainTypes[1]]} in group ${group} - terrainType: ${terrainTypeTitles[tile.terrainType]}\t terrainTypeCenter: ${terrainTypeTitles[tile.terrainTypeCenter]}\t adj1: ${terrainTypeTitles[adj1]} \t adj2: ${terrainTypeTitles[adj2]}`);
             }
             return;
           }
@@ -619,8 +619,8 @@ async function buildTemplateTileset(
 
   });
 
-  const outTemplatePath = path.resolve(path.join(argv.outputPath, `${argv.tilesetDefName}.png`));
-  const outTilesetPath = path.resolve(path.join(argv.outputPath, `${argv.tilesetDefName}-autogen.png`));
+  const outTemplatePath = path.resolve(path.join(argv.outputPath, `${argv.tilesetDefName}-template.sectional.png`));
+  const outTilesetPath = path.resolve(path.join(argv.outputPath, `${argv.tilesetDefName}.sectional.png`));
   outTemplate.writeAsync(outTemplatePath);
   outTileset.writeAsync(outTilesetPath);
 }
@@ -630,6 +630,8 @@ async function buildTilesetDef(template: Jimp, autogenTemplate: Jimp) {
   const tiles: SectionalTile[] = [];
 
   let tileID = 0;
+  
+  let tileCache = new Map();
 
   const addTileType = (
     terrainTypeCenter: TerrainType,
@@ -640,8 +642,14 @@ async function buildTilesetDef(template: Jimp, autogenTemplate: Jimp) {
     console.log(`\tBuilding tile type ${terrainTypeTitles[terrainTypeCenter]} (center) <--> ${terrainTypeTitles[terrainType]} (edge)\t\t[${neighbors.map(terrainType => terrainTypeTitles[terrainType]).join(', ')}]`)
     for (const adj1 of neighbors) {
       for (const adj2 of neighbors) {
-        if (!shouldAddTile(adj1, adj2)) continue;
-        console.log(`\t\t${terrainTypeTitles[adj1]} - ${terrainTypeTitles[adj2]}`)
+        if (!shouldAddTile(adj1, adj2)) {
+          console.log(`\t\tHIDING ${terrainTypeTitles[adj1]} - ${terrainTypeTitles[adj2]}`)
+          continue;
+        }
+        const cacheKey = `${terrainTypeCenter},${terrainType},${adj1},${adj2}`;
+        if (tileCache.has(cacheKey)) continue;
+        tileCache.set(cacheKey, true);
+        console.log(`\t\t(${cacheKey}) ${terrainTypeTitles[adj1]} - ${terrainTypeTitles[adj2]}`)
         indexOrder.forEach(direction => {
           const adj1Terrain = `terrainType${directionShort[adjacentDirections[direction][0]]}`;
           const adj2Terrain = `terrainType${directionShort[adjacentDirections[direction][1]]}`;
@@ -725,6 +733,10 @@ async function buildTilesetDef(template: Jimp, autogenTemplate: Jimp) {
           ...(terrainTransitions[terrainTypeCenter] || []),
           ...(terrainBackTransitions[edgeTerrainType] || [])
         ])),
+        // (adj1, adj2) => (
+        //   // (terrainTransitions[adj1] && terrainTransitions[adj1].includes(adj2)) ||
+        //   // (terrainBackTransitions[adj2] && terrainBackTransitions[adj2].includes(adj1))
+        // )
       );
     }
   }
@@ -736,9 +748,48 @@ async function buildTilesetDef(template: Jimp, autogenTemplate: Jimp) {
       terrainTypeCenter,
       terrainTypeCenter,
       [terrainTypeCenter, ...edgeTerrainTypes],
-      (adj1, adj2) => !(adj1 === terrainTypeCenter && adj2 === terrainTypeCenter)
+      (adj1, adj2) => (
+        (
+          // do not generate a base tile
+          !(adj1 === terrainTypeCenter && adj2 === terrainTypeCenter)
+        )
+        &&
+        (
+          // only build tile combinations that have transitions
+          adj1 !== adj2
+            ? (
+              (terrainTransitions[adj1] && terrainTransitions[adj1].includes(adj2)) ||
+              (terrainTransitions[adj2] && terrainTransitions[adj2].includes(adj1))
+            )
+            : true
+        )
+      )
     );
   }
+
+  // console.log('\nAdding bridge transition tiles');
+  // for (const [terrainTypeCenter_, edgeTerrainTypes] of Object.entries(terrainTransitions)) {
+  //   const terrainTypeCenter = parseInt(terrainTypeCenter_, 10) as unknown as TerrainType;
+  //   const adjTerrainList = terrainBackTransitions[terrainTypeCenter] || [];
+  //   for (const adjacentTerrain of adjTerrainList) {
+  //     for (const otherTerrain of terrainTypes.slice(1)) {
+  //       if (
+  //         otherTerrain !== terrainTypeCenter &&
+  //         !edgeTerrainTypes.includes(otherTerrain)
+  //       ) {
+  //         addTileType(
+  //           terrainTypeCenter,
+  //           terrainTypeCenter,
+  //           [adjacentTerrain, otherTerrain],
+  //           (adj1, adj2) => adj1 !== adj2 && (
+  //             (terrainTransitions[adj2] && terrainTransitions[adj2].includes(adj1)) ||
+  //             (terrainBackTransitions[adj1] && terrainBackTransitions[adj1].includes(adj2))
+  //           )
+  //         );
+  //       }
+  //     }
+  //   }
+  // }
 
   const tilesWidth = 12;
   const tilesHeight = Math.ceil(tileID / tilesWidth);
@@ -756,6 +807,7 @@ async function buildTilesetDef(template: Jimp, autogenTemplate: Jimp) {
         tileheight: 48,
         tilecount: tilesXML.length,
         columns: tilesWidth,
+        spacing: argv.padding,
       },
       tileoffset: {
         $: {
@@ -765,7 +817,7 @@ async function buildTilesetDef(template: Jimp, autogenTemplate: Jimp) {
       },
       image: {
         $: {
-          source: `${argv.tilesetDefName}-template.png`,
+          source: `${argv.tilesetDefName}.sectional.png`,
           width: tilesWidth * (tileWidth + argv.padding),
           height: tilesHeight * (tileHeight + argv.padding),
         },
@@ -774,7 +826,7 @@ async function buildTilesetDef(template: Jimp, autogenTemplate: Jimp) {
     }
   });
 
-  const outputFilePath = path.resolve(path.join(argv.outputPath, argv.tilesetDefName + '.' + argv.outputExtension));
+  const outputFilePath = path.resolve(path.join(argv.outputPath, argv.tilesetDefName + '.sectional.' + argv.outputExtension));
   console.log('Outputing', outputFilePath);
   fs.writeFileSync(outputFilePath, xml);
 }

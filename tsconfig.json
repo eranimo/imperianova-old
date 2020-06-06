@@ -25,6 +25,7 @@
     "experimentalDecorators": true,
     "downlevelIteration": true
   },
+  "include": ["src", "scripts"],
   "exclude": [
     "node_modules",
     "dist"

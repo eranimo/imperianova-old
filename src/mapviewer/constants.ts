@@ -25,9 +25,9 @@ export const terrainTypeMax = 7;
 // representing which terrains have transitions
 export const terrainTransitions: Partial<Record<TerrainType, TerrainType[]>> = {
   [TerrainType.GRASSLAND]: [TerrainType.DESERT, TerrainType.FOREST],
-  [TerrainType.OCEAN]: [TerrainType.DESERT, TerrainType.GRASSLAND, TerrainType.FOREST, /*TerrainType.TAIGA, TerrainType.TUNDRA, TerrainType.GLACIAL*/],
+  [TerrainType.OCEAN]: [TerrainType.DESERT, TerrainType.GRASSLAND, TerrainType.FOREST, TerrainType.TAIGA, TerrainType.TUNDRA, TerrainType.GLACIAL],
   [TerrainType.FOREST]: [TerrainType.DESERT, TerrainType.TAIGA],
-  // [TerrainType.TAIGA]: [TerrainType.TUNDRA, TerrainType.GLACIAL],
+  [TerrainType.TAIGA]: [TerrainType.TUNDRA, TerrainType.GLACIAL],
 };
 
 // edge -> center
@@ -35,9 +35,9 @@ export const terrainBackTransitions: Partial<Record<TerrainType, TerrainType[]>>
   [TerrainType.FOREST]: [TerrainType.OCEAN, TerrainType.GRASSLAND],
   [TerrainType.GRASSLAND]: [TerrainType.OCEAN],
   [TerrainType.DESERT]: [TerrainType.OCEAN, TerrainType.GRASSLAND, TerrainType.FOREST],
-  // [TerrainType.TAIGA]: [TerrainType.OCEAN, TerrainType.FOREST],
-  // [TerrainType.TUNDRA]: [TerrainType.OCEAN, TerrainType.TAIGA],
-  // [TerrainType.GLACIAL]: [TerrainType.OCEAN, TerrainType.TAIGA],
+  [TerrainType.TAIGA]: [TerrainType.OCEAN, TerrainType.FOREST],
+  [TerrainType.TUNDRA]: [TerrainType.OCEAN, TerrainType.TAIGA],
+  [TerrainType.GLACIAL]: [TerrainType.OCEAN, TerrainType.TAIGA],
 }
 
 export const terrainColors: Record<TerrainType, number> = {
@@ -82,7 +82,6 @@ export enum Direction {
   S = 5
 }
 
-
 export const directionShort = {
   [Direction.SE]: 'SE',
   [Direction.NE]: 'NE',
@@ -100,6 +99,25 @@ export const directionTitles = {
   [Direction.SW]: 'South West',
   [Direction.S]: 'South',
 }
+
+
+export const adjacentDirections = {
+  [Direction.SE]: [Direction.NE, Direction.S],
+  [Direction.NE]: [Direction.N, Direction.SE],
+  [Direction.N]: [Direction.NW, Direction.NE],
+  [Direction.NW]: [Direction.SW, Direction.N],
+  [Direction.SW]: [Direction.S, Direction.NW],
+  [Direction.S]: [Direction.SE, Direction.SW],
+};
+
+export const renderOrder = [
+  Direction.N,
+  Direction.NW,
+  Direction.NE,
+  Direction.SW,
+  Direction.SE,
+  Direction.S,
+];
 
 export const oddq_directions = [
   [

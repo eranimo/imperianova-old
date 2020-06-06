@@ -260,7 +260,7 @@ function removeDuplicateVariants(variants: TileVariant[]): TileVariant[] {
 }
 
 async function createTileset() {
-  const variants = terrainTypes.slice(1).reduce((prev, terrainType) => [...prev, ...getVariantsForTerrainType(terrainType)], []);
+  const variants = removeDuplicateVariants(terrainTypes.slice(1).reduce((prev, terrainType) => [...prev, ...getVariantsForTerrainType(terrainType)], []));
   const outImagePath = getFilePath(argv.outputPath, argv.tilesetName + '.tileset.png');
   const outJSONPath = getFilePath(argv.outputPath, argv.tilesetName + '.tileset.json');
 

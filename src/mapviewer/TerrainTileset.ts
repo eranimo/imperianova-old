@@ -2,7 +2,6 @@ import * as PIXI from "pixi.js";
 import { Direction, directionShort, TerrainType } from './constants';
 import { getTilesetMask } from './utils';
 
-const foo = import('file-loader!../assets/template.xml');
 
 export type TerrainTile = {
   id: number;

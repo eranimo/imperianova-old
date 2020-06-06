@@ -9,6 +9,7 @@ import { TerrainTileset } from './TerrainTileset';
 import { WorldMapTiles } from './WorldMapTiles';
 import 'pixi-tilemap';
 import Cull from 'pixi-cull';
+import { SectionalTileset } from './SectionalTileset';
 
 
 const CHUNK_WIDTH = 10;
@@ -22,14 +23,6 @@ export function sortHexes(a: WorldMapHex, b: WorldMapHex) {
     return 0;
   }
   return 1;
-}
-
-const CHUNK_SIZE = 9;
-
-class ChunkLayer extends PIXI.tilemap.CompositeRectTileLayer {
-  constructor(public cx: number, public cy: number, textures: PIXI.Texture[], zIndex: number) {
-    super(zIndex, textures);
-  }
 }
 
 const getChunkForCoordinate = (x: number, y: number) => {
@@ -67,7 +60,7 @@ export class HexTilemap extends PIXI.Container {
   selectionSprite: PIXI.Sprite;
   selectionHex: Honeycomb.Hex<IHex>;
   tilesets: Map<string, Tileset>;
-  terrainTileset: TerrainTileset;
+  terrainTileset: SectionalTileset;
 
   overlayGraphics: Map<Honeycomb.Hex<IHex>, PIXI.Graphics>;
   chunkTileLayers: Map<string, PIXI.tilemap.CompositeRectTileLayer[]>;
@@ -104,9 +97,9 @@ export class HexTilemap extends PIXI.Container {
         width: 32,
       },
     });
-    this.terrainTileset = TerrainTileset.fromJSON(
+    this.terrainTileset = SectionalTileset.fromXML(
       this.resources.terrainPNG.texture.baseTexture,
-      this.resources.terrainJSON.data,
+      this.resources.terrainXML.data,
     );
     console.log('terrainTileset', this.terrainTileset);
     this.tilesets = new Map();
@@ -282,11 +275,19 @@ export class HexTilemap extends PIXI.Container {
     terrainLayer.position.set(minX, minY);
 
     hexes.forEach((hex, index) => {
-      const mask = this.worldMapTiles.tileMasks.get(hex.x, hex.y);
-      const texture = this.terrainTileset.getTextureFromTileMask(mask);
-      if (texture) {
+      const terrainType = this.worldMap.getTerrainForHex(hex.x, hex.y);
+      if (terrainType === TerrainType.MAP_EDGE) return;
+      const textures = this.terrainTileset.getTile(
+        terrainType,
+        this.worldMap.getHexNeighborTerrain(hex.x, hex.y),
+      );
+      if (textures) {
         const [ x, y ] = hexPosititions[index];
-        terrainLayer.addFrame(texture, x - minX, y - HEX_ADJUST_Y - minY);
+        textures.forEach(texture => {
+          if (texture) {
+            terrainLayer.addFrame(texture, x - minX, y - HEX_ADJUST_Y - minY);
+          }
+        });
       }
     });
   }

@@ -187,8 +187,8 @@ export const MainPage: React.FC = () => {
   useEffect(() => {
     const loader = new PIXI.Loader();
     loader.add('uiPNG', require('../assets/ui.png'));
-    loader.add('terrainPNG', require('../assets/tilesets/terrain.tileset.png'));
-    loader.add('terrainJSON', require('../assets/tilesets/terrain.tileset.json'));
+    loader.add('terrainPNG', require('../assets/tilesets/terrain.sectional.png'));
+    loader.add('terrainXML', require('file-loader!../assets/tilesets/terrain.sectional.xml'));
     loader.add('fontPng', require('../assets/eightbitdragon_0.png'));
     loader.onError.add(error => console.error(error));
     loader.load(({ resources }) => {

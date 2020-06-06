@@ -25,24 +25,6 @@ export type TileVariant = {
   mask: number;
 };
 
-export const adjacentDirections = {
-  [Direction.SE]: [Direction.NE, Direction.S],
-  [Direction.NE]: [Direction.N, Direction.SE],
-  [Direction.N]: [Direction.NW, Direction.NE],
-  [Direction.NW]: [Direction.SW, Direction.N],
-  [Direction.SW]: [Direction.S, Direction.NW],
-  [Direction.S]: [Direction.SE, Direction.SW],
-};
-
-export const renderOrder = [
-  Direction.N,
-  Direction.NW,
-  Direction.NE,
-  Direction.SW,
-  Direction.SE,
-  Direction.S,
-];
-
 export const indexOrder = [
   Direction.SE,
   Direction.NE,
