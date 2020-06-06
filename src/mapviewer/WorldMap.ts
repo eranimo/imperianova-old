@@ -3,7 +3,7 @@ import * as Honeycomb from 'honeycomb-grid';
 import ndarray from "ndarray";
 import SimplexNoise from 'simplex-noise';
 import Alea from 'alea';
-import { map } from "lodash";
+import { map, clamp } from "lodash";
 import { IHex, Grid } from "./MapViewer";
 import { Direction, terrainTypeTitles, TerrainType, oddq_directions, directionTitles } from './constants';
 import { octaveNoise } from './utils';
@@ -145,10 +145,17 @@ export class WorldMap {
   }
 
   getTerrainForHex(x: number, y: number) {
-    const index = this.indexMap.get(`${x},${y}`);
-    return this.terrain.data[index] === undefined
-      ? TerrainType.MAP_EDGE
-      : this.terrain.data[index];
+    if (y === -1 || y === this.size.height) {
+      const half = Math.round(this.size.width / 2);
+      const nx = clamp(((half + (half - x)) - 1), 0, this.size.width - 1);
+      const ny = y === -1 ? 0 : this.size.height - 1;
+      return this.terrain.data[this.indexMap.get(`${nx},${ny}`)];
+    } else if (x === -1) {
+      return this.terrain.data[this.indexMap.get(`${this.size.width - 1},${y}`)];
+    } else if (x === this.size.width) {
+      return this.terrain.data[this.indexMap.get(`${0},${y}`)];
+    }
+    return this.terrain.data[this.indexMap.get(`${x},${y}`)];
   }
 
   getHexNeighborTerrain(x: number, y: number): Record<Direction, TerrainType> {
@@ -182,13 +189,30 @@ export class WorldMap {
 
   debugNeighborTerrain(x: number, y: number) {
     const neighborTerrainTypes = this.getHexNeighborTerrain(x, y);
+    const se_hex = this.getHexNeighbor(x, y, Direction.SE);
+    const ne_hex = this.getHexNeighbor(x, y, Direction.NE);
+    const n_hex = this.getHexNeighbor(x, y, Direction.N);
+    const nw_hex = this.getHexNeighbor(x, y, Direction.NW);
+    const sw_hex = this.getHexNeighbor(x, y, Direction.SW);
+    const s_hex = this.getHexNeighbor(x, y, Direction.S);
+
     return {
-      [directionTitles[Direction.SE]]: terrainTypeTitles[neighborTerrainTypes[Direction.SE]],
-      [directionTitles[Direction.NE]]: terrainTypeTitles[neighborTerrainTypes[Direction.NE]],
-      [directionTitles[Direction.N]]:  terrainTypeTitles[neighborTerrainTypes[Direction.N]],
-      [directionTitles[Direction.NW]]: terrainTypeTitles[neighborTerrainTypes[Direction.NW]],
-      [directionTitles[Direction.SW]]: terrainTypeTitles[neighborTerrainTypes[Direction.SW]],
-      [directionTitles[Direction.S]]:  terrainTypeTitles[neighborTerrainTypes[Direction.S]],
+      neighborCoords: {
+        [directionTitles[Direction.SE]]: se_hex,
+        [directionTitles[Direction.NE]]: ne_hex,
+        [directionTitles[Direction.N]]: n_hex,
+        [directionTitles[Direction.NW]]: nw_hex,
+        [directionTitles[Direction.SW]]: sw_hex,
+        [directionTitles[Direction.S]]: s_hex,
+      },
+      neighborTerrainTypes: {
+        [directionTitles[Direction.SE]]: terrainTypeTitles[neighborTerrainTypes[Direction.SE]],
+        [directionTitles[Direction.NE]]: terrainTypeTitles[neighborTerrainTypes[Direction.NE]],
+        [directionTitles[Direction.N]]:  terrainTypeTitles[neighborTerrainTypes[Direction.N]],
+        [directionTitles[Direction.NW]]: terrainTypeTitles[neighborTerrainTypes[Direction.NW]],
+        [directionTitles[Direction.SW]]: terrainTypeTitles[neighborTerrainTypes[Direction.SW]],
+        [directionTitles[Direction.S]]:  terrainTypeTitles[neighborTerrainTypes[Direction.S]],
+      },
     }
   }
 }
