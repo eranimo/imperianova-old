@@ -148,6 +148,13 @@ const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainTy
       Jimp.rgbaToInt(143, 194, 72, 255),
       Jimp.rgbaToInt(108, 160, 68, 255),
     ],
+    [TerrainType.DESERT]: [
+      Jimp.rgbaToInt(108, 155, 73, 255),
+      Jimp.rgbaToInt(190, 204, 93, 255),
+      Jimp.rgbaToInt(147, 181, 47, 255),
+      Jimp.rgbaToInt(143, 194, 72, 255),
+      Jimp.rgbaToInt(108, 160, 68, 255),
+    ],
     [TerrainType.OCEAN]: [
       Jimp.rgbaToInt(108, 155, 73, 255),
       Jimp.rgbaToInt(247, 226, 107, 255), // beach
@@ -186,6 +193,13 @@ const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainTy
       Jimp.rgbaToInt(224, 208, 114, 255),
     ],
     [TerrainType.GRASSLAND]: [
+      Jimp.rgbaToInt(233, 216, 121, 255),
+      Jimp.rgbaToInt(228, 207, 91, 255),
+      Jimp.rgbaToInt(231, 212, 107, 255),
+      Jimp.rgbaToInt(224, 208, 114, 255),
+      Jimp.rgbaToInt(224, 208, 114, 255),
+    ],
+    [TerrainType.FOREST]: [
       Jimp.rgbaToInt(233, 216, 121, 255),
       Jimp.rgbaToInt(228, 207, 91, 255),
       Jimp.rgbaToInt(231, 212, 107, 255),
@@ -590,7 +604,7 @@ async function buildTemplateTileset(
               outTileset.blit(autogenObjectsTileset, x - 7, y - 14, object.x, object.y, 15, 15);
             } else {
               // console.log(`Missing objects for ${terrainTypeTitles[matchingTerrainTypes[0]]} - ${terrainTypeTitles[matchingTerrainTypes[1] || matchingTerrainTypes[0]]}`)
-              outTileset.setPixelColor(newColorSet[index], x, y);
+              outTileset.setPixelColor(newColorSet[index + 3], x, y);
             }
           }
         });
@@ -698,10 +712,10 @@ async function buildTilesetDef(template: Jimp, autogenTemplate: Jimp) {
       addTileType(
         terrainTypeCenter,
         edgeTerrainType,
-        [
+        Array.from(new Set([
           ...(terrainTransitions[terrainTypeCenter] || []),
           ...(terrainBackTransitions[edgeTerrainType] || [])
-        ],
+        ])),
       );
     }
   }

@@ -88,7 +88,6 @@ export class WorldMapTiles {
     if (terrainType in terrainBackTransitions) {
       const terrainTransitions = terrainBackTransitions[terrainType] as TerrainType[];
       const neighborsToChange = {};
-
       Object.entries(neighborTerrainTypes).forEach(([dir, t]) => {
         const check = terrainTransitions.includes(t);
         if (check) {

@@ -102,6 +102,17 @@ const formatDirectionTerrain = (
   return out.join(' ');
 }
 
+function getVariantID(sideTileIDs: Record<Direction, number>): string {
+  return [
+    sideTileIDs[Direction.SE],
+    sideTileIDs[Direction.NE],
+    sideTileIDs[Direction.N],
+    sideTileIDs[Direction.NW],
+    sideTileIDs[Direction.SW],
+    sideTileIDs[Direction.S]
+  ].join(',');
+}
+
 function createTilesetVariants(
   terrainTypeCenter: TerrainType,
   directionTerrain: Record<Direction, TerrainType>
@@ -146,22 +157,24 @@ function createTilesetVariants(
                 [Direction.NW]: nw_tile.terrainType,
                 [Direction.SW]: sw_tile.terrainType,
                 [Direction.S]: s__tile.terrainType,
-              }
+              };
+              const sideTileIDs = {
+                [Direction.SE]: se_tile.tileID,
+                [Direction.NE]: ne_tile.tileID,
+                [Direction.N]: n__tile.tileID,
+                [Direction.NW]: nw_tile.tileID,
+                [Direction.SW]: sw_tile.tileID,
+                [Direction.S]: s__tile.tileID,
+              };
               sectionCombinations.push({
                 terrainTypeCenter,
                 neighborTerrainTypes: neighborTerrain,
+                variantID: getVariantID(sideTileIDs),
                 mask: getTilesetMask(
                   terrainTypeCenter,
                   neighborTerrain,
                 ),
-                sideTileIDs: {
-                  [Direction.SE]: se_tile.tileID,
-                  [Direction.NE]: ne_tile.tileID,
-                  [Direction.N]: n__tile.tileID,
-                  [Direction.NW]: nw_tile.tileID,
-                  [Direction.SW]: sw_tile.tileID,
-                  [Direction.S]: s__tile.tileID,
-                }
+                sideTileIDs
               });
             }
           }
@@ -169,10 +182,10 @@ function createTilesetVariants(
       }
     }
   }
-  if (sectionCombinations.length > 0) {
-    console.log(`\t\t\tWith center ${terrainTypeTitles[terrainTypeCenter]}:`, formatDirectionTerrain(directionTerrain, directionTileOptions));
-    console.log(`\t\t\t\tCombinations: ${sectionCombinations.length}`)
-  }
+  // if (sectionCombinations.length > 0) {
+  //   console.log(`\t\t\tWith center ${terrainTypeTitles[terrainTypeCenter]}:`, formatDirectionTerrain(directionTerrain, directionTileOptions));
+  //   console.log(`\t\t\t\tCombinations: ${sectionCombinations.length}`)
+  // }
   return sectionCombinations;
 }
 
@@ -227,12 +240,21 @@ function getVariantsForTerrainType(terrainType: TerrainType) {
       }
     }
   }
+  // console.log(variants.map(i => [i.variantID, i.mask]));
   console.log(`\tCreated ${variants.length} variants for terrain type ${terrainTypeTitles[terrainType]}`);
   return variants;
 }
 
+function removeDuplicateVariants(variants: TileVariant[]): TileVariant[] {
+  const uniqueVariants = new Map();
+  for (const variant of variants) {
+    uniqueVariants.set(variant.mask, variant);
+  }
+  return Array.from(uniqueVariants.values());
+}
+
 async function createTileset() {
-  const variants = terrainTypes.slice(1).reduce((prev, terrainType) => [...prev, ...getVariantsForTerrainType(terrainType)], []);
+  const variants = removeDuplicateVariants(terrainTypes.slice(1).reduce((prev, terrainType) => [...prev, ...getVariantsForTerrainType(terrainType)], []));
   const outImagePath = getFilePath(argv.outputPath, argv.tilesetName + '.tileset.png');
   const outJSONPath = getFilePath(argv.outputPath, argv.tilesetName + '.tileset.json');
 
@@ -249,8 +271,10 @@ async function createTileset() {
       id: index,
       used: true,
       terrainType: tile.terrainTypeCenter,
-      neighborTerrainTypes: tile.neighborTerrainTypes,
+      neighborTerrainTypes: Object.values(tile.neighborTerrainTypes),
       mask: tile.mask,
+      variantID: tile.variantID,
+      sideTileIDs: tile.sideTileIDs,
     }))
   }, null, 2))
   console.log(`Output tileset json: ${outJSONPath}`);

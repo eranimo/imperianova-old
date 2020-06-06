@@ -21,6 +21,7 @@ export type TileVariant = {
   terrainTypeCenter: TerrainType;
   neighborTerrainTypes: Record<Direction, TerrainType>;
   sideTileIDs: Record<Direction, number>;
+  variantID: string;
   mask: number;
 };
 

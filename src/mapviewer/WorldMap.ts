@@ -104,12 +104,17 @@ export class WorldMap {
       const value = (raw + 1) / 2;
       const height = value * 255;
       this.heightmap.set(hex.x, hex.y, height);
-      if (height > 160) {
-        this.terrain.set(hex.x, hex.y, TerrainType.DESERT);
-      } else if (height < 140) {
+      if (height < 140) {
         this.terrain.set(hex.x, hex.y, TerrainType.OCEAN);
-      } else {
+      } else if (height < 150) {
+        const isForested = (octaveNoise(noise.noise3D.bind(noise), nx, ny, nz, 7, 0.5) + 1) / 2;
+        this.terrain.set(hex.x, hex.y, isForested < 0.5 ? TerrainType.GRASSLAND : TerrainType.FOREST);
+      } else if (height < 170) {
         this.terrain.set(hex.x, hex.y, TerrainType.GRASSLAND);
+      } else if (height < 180) {
+        this.terrain.set(hex.x, hex.y, TerrainType.DESERT);
+      } else {
+        this.terrain.set(hex.x, hex.y, TerrainType.DESERT);
       }
     });
   }
