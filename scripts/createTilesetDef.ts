@@ -637,10 +637,11 @@ async function buildTilesetDef(template: Jimp, autogenTemplate: Jimp) {
     neighbors: TerrainType[],
     shouldAddTile: (adj1: TerrainType, adj2: TerrainType) => boolean = () => true,
   ) => {
-    console.log(`Building tile type ${terrainTypeTitles[terrainTypeCenter]}(center) <--> ${terrainTypeTitles[terrainType]} (edge)\t\t[${neighbors.map(terrainType => terrainTypeTitles[terrainType]).join(', ')}]`)
+    console.log(`\tBuilding tile type ${terrainTypeTitles[terrainTypeCenter]} (center) <--> ${terrainTypeTitles[terrainType]} (edge)\t\t[${neighbors.map(terrainType => terrainTypeTitles[terrainType]).join(', ')}]`)
     for (const adj1 of neighbors) {
       for (const adj2 of neighbors) {
         if (!shouldAddTile(adj1, adj2)) continue;
+        console.log(`\t\t${terrainTypeTitles[adj1]} - ${terrainTypeTitles[adj2]}`)
         indexOrder.forEach(direction => {
           const adj1Terrain = `terrainType${directionShort[adjacentDirections[direction][0]]}`;
           const adj2Terrain = `terrainType${directionShort[adjacentDirections[direction][1]]}`;
@@ -719,6 +720,8 @@ async function buildTilesetDef(template: Jimp, autogenTemplate: Jimp) {
         terrainTypeCenter,
         edgeTerrainType,
         Array.from(new Set([
+          terrainTypeCenter,
+          edgeTerrainType,
           ...(terrainTransitions[terrainTypeCenter] || []),
           ...(terrainBackTransitions[edgeTerrainType] || [])
         ])),
@@ -729,14 +732,12 @@ async function buildTilesetDef(template: Jimp, autogenTemplate: Jimp) {
   console.log('\nAdding transition edge tiles');
   for (const [terrainTypeCenter_, edgeTerrainTypes] of Object.entries(terrainTransitions)) {
     const terrainTypeCenter = parseInt(terrainTypeCenter_, 10) as unknown as TerrainType;
-    for (const edgeTerrainType of edgeTerrainTypes) {
-      addTileType(
-        terrainTypeCenter,
-        terrainTypeCenter,
-        [edgeTerrainType, ...(terrainBackTransitions[edgeTerrainType] || [])],
-        (adj1, adj2) => !(adj1 === terrainTypeCenter && adj2 === terrainTypeCenter)
-      );
-    }
+    addTileType(
+      terrainTypeCenter,
+      terrainTypeCenter,
+      [terrainTypeCenter, ...edgeTerrainTypes],
+      (adj1, adj2) => !(adj1 === terrainTypeCenter && adj2 === terrainTypeCenter)
+    );
   }
 
   const tilesWidth = 12;
