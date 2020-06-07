@@ -272,7 +272,7 @@ export class HexTilemap extends PIXI.Container {
       if (y < minY) minY = y;
       hexPosititions.push([x, y]);
     }
-    terrainLayer.position.set(minX, minY);
+    terrainLayer.position.set(Math.round(minX), Math.round(minY));
 
     hexes.forEach((hex, index) => {
       const terrainType = this.worldMap.getTerrainForHex(hex.x, hex.y);
@@ -286,7 +286,11 @@ export class HexTilemap extends PIXI.Container {
         const [ x, y ] = hexPosititions[index];
         textures.forEach(texture => {
           if (texture) {
-            terrainLayer.addFrame(texture, x - minX, y - HEX_ADJUST_Y - minY);
+            terrainLayer.addFrame(
+              texture,
+              Math.round(x - minX),
+              Math.round(y - HEX_ADJUST_Y - minY)
+            );
           }
         });
       }

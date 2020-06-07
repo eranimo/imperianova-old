@@ -7,7 +7,8 @@ import yargs, { number, boolean } from 'yargs';
 import { TerrainType, terrainTypeMax, directionShort, Direction, terrainColors, terrainMinimapColors, terrainTransitions, terrainTypeTitles, terrainBackTransitions, adjacentDirections, renderOrder } from '../src/mapviewer/constants';
 import { newImage, SectionalTile, getFilePath, indexOrder, propertyTypeProcess } from './shared';
 import Jimp from 'jimp';
-import { forEach, random } from 'lodash';
+import { union, random } from 'lodash';
+import { MultiDictionary } from 'typescript-collections';
 
 
 yargs.command('* <tilesetDefName>', 'Builds tileset definition xml file');
@@ -364,6 +365,9 @@ const getAutogenSettings = (
   } else if (
     terrainTypeCenter !== terrainType &&
     terrainType === adj1TerrainType
+    // &&
+    // adj1TerrainType !== adj2TerrainType &&
+    // adj2TerrainType === terrainTypeCenter
   ) {
     group = 4;
     colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
@@ -417,34 +421,87 @@ const getAutogenSettings = (
     colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY] = adj1TerrainType;
   } else if (
     terrainType !== terrainTypeCenter &&
+    adj1TerrainType === adj2TerrainType &&
     adj1TerrainType !== terrainType &&
-    adj2TerrainType !== terrainType
+    adj1TerrainType !== terrainTypeCenter &&
+    adj2TerrainType !== terrainType &&
+    adj2TerrainType !== terrainTypeCenter
   ) {
-    group = 2;
+    group = 9;
     colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
     colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
+    colorsTerrainMap[AutogenColorGroup.SECONDARY] = adj2TerrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER_SECONDARY] = terrainTypeCenter;
     colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
     colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
+    colorsTerrainMapAdj[AutogenColorGroup.SECONDARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY] = adj2TerrainType;
   } else if (
     adj2TerrainType === terrainType &&
     adj1TerrainType !== terrainTypeCenter &&
     adj1TerrainType !== adj2TerrainType
   ) {
-    group = 3;
+    group = 10;
     colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
     colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
+    colorsTerrainMap[AutogenColorGroup.SECONDARY] = adj1TerrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER_SECONDARY] = terrainTypeCenter;
     colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
     colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
+    colorsTerrainMapAdj[AutogenColorGroup.SECONDARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY] = adj1TerrainType;
   } else if (
     adj1TerrainType === terrainType &&
     adj2TerrainType !== terrainTypeCenter &&
     adj2TerrainType !== adj1TerrainType
   ) {
-    group = 4;
+    group = 11;
     colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
     colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
+    colorsTerrainMap[AutogenColorGroup.SECONDARY] = adj2TerrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER_SECONDARY] = terrainTypeCenter;
     colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
     colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
+    colorsTerrainMapAdj[AutogenColorGroup.SECONDARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY] = adj2TerrainType;
+  } else if (
+    terrainType !== terrainTypeCenter &&
+    adj1TerrainType === terrainTypeCenter &&
+    adj1TerrainType !== adj2TerrainType &&
+    adj2TerrainType !== terrainTypeCenter
+  ) {
+    group = 12;
+    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
+    colorsTerrainMap[AutogenColorGroup.SECONDARY] = adj2TerrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER_SECONDARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
+    colorsTerrainMapAdj[AutogenColorGroup.SECONDARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY] = adj2TerrainType;
+  } else if (
+    terrainType !== terrainTypeCenter &&
+    adj2TerrainType === terrainTypeCenter &&
+    adj2TerrainType !== adj1TerrainType &&
+    adj1TerrainType !== terrainTypeCenter
+  ) {
+    group = 13;
+    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
+    colorsTerrainMap[AutogenColorGroup.SECONDARY] = adj1TerrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER_SECONDARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
+    colorsTerrainMapAdj[AutogenColorGroup.SECONDARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY] = adj1TerrainType;
+  }
+  else {
+    console.error('terrainType:', terrainTypeTitles[terrainType]);
+    console.error('terrainTypeCenter:', terrainTypeTitles[terrainTypeCenter]);
+    console.error('adj1TerrainType:', terrainTypeTitles[adj1TerrainType]);
+    console.error('adj2TerrainType:', terrainTypeTitles[adj2TerrainType]);
+    console.error('direction:', directionShort[direction]);
+    throw new Error(`Could not find autogen group`);
   }
   return {
     group,
@@ -534,6 +591,8 @@ async function buildTemplateTileset(
   }
   const outTemplate = await newImage(columns * (tileWidth + argv.padding), rows * (tileHeight + argv.padding));
   const outTileset = await newImage(columns * (tileWidth + argv.padding), rows * (tileHeight + argv.padding));
+  let tilesByGroup = new MultiDictionary<number, SectionalTile>();
+  console.log(`Drawing ${tiles.length} tiles`);
   tiles.forEach((tile, index) => {
     const templateTile = templateDirectionCoords[tile.direction]
     const tx = (index % columns) * (tileWidth + argv.padding);
@@ -565,9 +624,7 @@ async function buildTemplateTileset(
       group, coord, colorsTerrainMap, colorsTerrainMapAdj,
     } = getAutogenSettings(tile.terrainType, tile.terrainTypeCenter, adj1, adj2, tile.direction);
     // console.log(tile.tileID, group, colorsTerrainMap, colorsTerrainMapAdj);
-    if (group === undefined) {
-      return;
-    }
+    tilesByGroup.setValue(group, tile);
     outTileset.blit(autogenTemplate, tx, ty, coord.x, coord.y, tileWidth, tileHeight);
     const colorGroupTerrain = {
       [AutogenColorGroup.PRIMARY]: [colorsTerrainMap[AutogenColorGroup.PRIMARY], colorsTerrainMapAdj[AutogenColorGroup.PRIMARY]],
@@ -584,7 +641,14 @@ async function buildTemplateTileset(
         const matchingTerrainTypes = colorGroupTerrain[colorGroup];
         autogenColors[colorGroup].slice(0, 3).forEach((matchColor, index) => {
           if (color === matchColor) {
-            const newColorSet = autogenTerrainColors[matchingTerrainTypes[0]][matchingTerrainTypes[1] || matchingTerrainTypes[0]];
+            let newColorSet: number[];
+            try {
+              newColorSet = autogenTerrainColors[matchingTerrainTypes[0]][matchingTerrainTypes[1] || matchingTerrainTypes[0]];
+            } catch (err) {
+              console.error('colorGroupTerrain', colorGroupTerrain);
+              console.error('colorGroup', colorGroup);
+              throw new Error(`Cannot find color to replace`);
+            }
             if (newColorSet) {
               outTileset.setPixelColor(newColorSet[index], x, y);
             } else {
@@ -616,8 +680,12 @@ async function buildTemplateTileset(
         });
       });
     }
-
   });
+
+  console.log('Tiles per group');
+  for (const groupID of tilesByGroup.keys()) {
+    console.log(` - Group #${groupID}: ${tilesByGroup.getValue(groupID).length} tiles`);
+  }
 
   const outTemplatePath = path.resolve(path.join(argv.outputPath, `${argv.tilesetDefName}-template.sectional.png`));
   const outTilesetPath = path.resolve(path.join(argv.outputPath, `${argv.tilesetDefName}.sectional.png`));
@@ -713,83 +781,103 @@ async function buildTilesetDef(template: Jimp, autogenTemplate: Jimp) {
     }
   }
 
-  // add base tiles
-  console.log('Adding base tiles');
+  console.log('Adding Group 0');
   for (let t = 1; t <= terrainTypeMax; t++) {
     addTileType(t, t, [t]);
   }
 
-  // add transition tiles
-  console.log('\nAdding transition base tiles');
+  console.log('\nAdding Group 1, 2, 3, 4');
   for (const [terrainTypeCenter_, edgeTerrainTypes] of Object.entries(terrainTransitions)) {
+    const terrainTypeCenter = parseInt(terrainTypeCenter_, 10) as unknown as TerrainType;
     for (const edgeTerrainType of edgeTerrainTypes) {
-      const terrainTypeCenter = parseInt(terrainTypeCenter_, 10) as unknown as TerrainType;
       addTileType(
         terrainTypeCenter,
         edgeTerrainType,
-        Array.from(new Set([
-          terrainTypeCenter,
-          edgeTerrainType,
-          ...(terrainTransitions[terrainTypeCenter] || []),
-          ...(terrainBackTransitions[edgeTerrainType] || [])
-        ])),
-        // (adj1, adj2) => (
-        //   // (terrainTransitions[adj1] && terrainTransitions[adj1].includes(adj2)) ||
-        //   // (terrainBackTransitions[adj2] && terrainBackTransitions[adj2].includes(adj1))
-        // )
+        [edgeTerrainType, terrainTypeCenter],
       );
     }
   }
 
-  console.log('\nAdding transition edge tiles');
+  console.log('\nAdding Group 5, 6, 7');
+  for (const [terrainTypeCenter_, edgeTerrainTypes] of Object.entries(terrainTransitions)) {
+    const terrainTypeCenter = parseInt(terrainTypeCenter_, 10) as unknown as TerrainType;
+    for (const edgeTerrainType of edgeTerrainTypes) {
+      addTileType(
+        terrainTypeCenter,
+        terrainTypeCenter,
+        [terrainTypeCenter, edgeTerrainType]
+      );
+    }
+  }
+
+  console.log('\nAdding Group 8');
   for (const [terrainTypeCenter_, edgeTerrainTypes] of Object.entries(terrainTransitions)) {
     const terrainTypeCenter = parseInt(terrainTypeCenter_, 10) as unknown as TerrainType;
     addTileType(
       terrainTypeCenter,
       terrainTypeCenter,
-      [terrainTypeCenter, ...edgeTerrainTypes],
-      (adj1, adj2) => (
-        (
-          // do not generate a base tile
-          !(adj1 === terrainTypeCenter && adj2 === terrainTypeCenter)
-        )
-        &&
-        (
-          // only build tile combinations that have transitions
-          adj1 !== adj2
-            ? (
-              (terrainTransitions[adj1] && terrainTransitions[adj1].includes(adj2)) ||
-              (terrainTransitions[adj2] && terrainTransitions[adj2].includes(adj1))
-            )
-            : true
-        )
-      )
+      edgeTerrainTypes,
+      (adj1, adj2) => adj1 !== adj2
     );
   }
 
-  // console.log('\nAdding bridge transition tiles');
-  // for (const [terrainTypeCenter_, edgeTerrainTypes] of Object.entries(terrainTransitions)) {
-  //   const terrainTypeCenter = parseInt(terrainTypeCenter_, 10) as unknown as TerrainType;
-  //   const adjTerrainList = terrainBackTransitions[terrainTypeCenter] || [];
-  //   for (const adjacentTerrain of adjTerrainList) {
-  //     for (const otherTerrain of terrainTypes.slice(1)) {
-  //       if (
-  //         otherTerrain !== terrainTypeCenter &&
-  //         !edgeTerrainTypes.includes(otherTerrain)
-  //       ) {
-  //         addTileType(
-  //           terrainTypeCenter,
-  //           terrainTypeCenter,
-  //           [adjacentTerrain, otherTerrain],
-  //           (adj1, adj2) => adj1 !== adj2 && (
-  //             (terrainTransitions[adj2] && terrainTransitions[adj2].includes(adj1)) ||
-  //             (terrainBackTransitions[adj1] && terrainBackTransitions[adj1].includes(adj2))
-  //           )
-  //         );
-  //       }
-  //     }
-  //   }
-  // }
+  console.log('\nAdding Group 9');
+  for (const [terrainTypeCenter_, edgeTerrainTypes] of Object.entries(terrainTransitions)) {
+    const terrainTypeCenter = parseInt(terrainTypeCenter_, 10) as unknown as TerrainType;
+    for (const edgeTerrainType of edgeTerrainTypes) {
+      if (terrainTransitions[edgeTerrainType]) {
+        addTileType(
+          terrainTypeCenter,
+          edgeTerrainType,
+          terrainTransitions[edgeTerrainType].filter(i => edgeTerrainTypes.includes(i)),
+          (adj1, adj2) => adj1 === adj2
+        );
+      }
+    }
+  }
+
+  console.log('\nAdding Group 10, 11');
+  for (const [terrainTypeCenter_, edgeTerrainTypes] of Object.entries(terrainTransitions)) {
+    const terrainTypeCenter = parseInt(terrainTypeCenter_, 10) as unknown as TerrainType;
+    for (const edgeTerrainType of edgeTerrainTypes) {
+      if (terrainTransitions[edgeTerrainType]) {
+        addTileType(
+          terrainTypeCenter,
+          edgeTerrainType,
+          [
+            edgeTerrainType,
+            ...terrainTransitions[edgeTerrainType].filter(i => edgeTerrainTypes.includes(i)),
+            ...(terrainBackTransitions[edgeTerrainType] || []),
+          ],
+          (adj1, adj2) => (
+            adj1 !== adj2 &&
+            (adj1 === edgeTerrainType || adj2 === edgeTerrainType) &&
+            adj1 !== terrainTypeCenter && adj2 !== terrainTypeCenter
+          )
+        );
+      }
+    }
+  }
+
+  console.log('\nAdding Group 12, 13');
+  for (const [terrainTypeCenter_, edgeTerrainTypes] of Object.entries(terrainTransitions)) {
+    const terrainTypeCenter = parseInt(terrainTypeCenter_, 10) as unknown as TerrainType;
+    for (const edgeTerrainType of edgeTerrainTypes) {
+      addTileType(
+        terrainTypeCenter,
+        edgeTerrainType,
+        [terrainTypeCenter, ...edgeTerrainTypes.filter(i => i !== edgeTerrainType)],
+        (adj1, adj2) => (
+          (
+            adj1 === terrainTypeCenter ||
+            adj2 === terrainTypeCenter
+          ) && (
+            adj1 !== adj2
+          )
+        )
+      );
+    }
+  }
 
   const tilesWidth = 12;
   const tilesHeight = Math.ceil(tileID / tilesWidth);

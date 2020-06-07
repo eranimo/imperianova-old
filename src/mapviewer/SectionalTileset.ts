@@ -58,8 +58,8 @@ export class SectionalTileset {
 
     for (const tile of options.sectionalTiles) {
       const texture = new PIXI.Texture(this.baseTexture, new PIXI.Rectangle(
-        (tile.tileID % this.options.columns) * (width + padding),
-        (Math.floor(tile.tileID / this.options.columns)) * (height + padding),
+        Math.round((tile.tileID % this.options.columns) * (width + padding)),
+        Math.round((Math.floor(tile.tileID / this.options.columns)) * (height + padding)),
         width,
         height
       ));
@@ -183,7 +183,7 @@ export class SectionalTileset {
       const possibleTiles = this.sectionalTileMaskToTileIDs.getValue(hash);
       const chosenTile = possibleTiles[random(possibleTiles.length - 1)];
       if (chosenTile === undefined || !this.sectionalTileTextures.has(chosenTile)) {
-        // console.error(`Could not find tile: dir: ${directionShort[dir]}, terrainType: ${terrainTypeTitles[terrainType]}, terrainTypeCenter: ${terrainTypeTitles[terrainTypeCenter]}, adj1TerrainType: ${terrainTypeTitles[adj1TerrainType]}, adj2TerrainType: ${terrainTypeTitles[adj2TerrainType]}`)
+        console.error(`Could not find tile: dir: ${directionShort[dir]}, terrainType: ${terrainTypeTitles[terrainType]}, terrainTypeCenter: ${terrainTypeTitles[terrainTypeCenter]}, adj1TerrainType: ${terrainTypeTitles[adj1TerrainType]}, adj2TerrainType: ${terrainTypeTitles[adj2TerrainType]}`)
         return null;
       }
       return this.sectionalTileTextures.get(chosenTile);

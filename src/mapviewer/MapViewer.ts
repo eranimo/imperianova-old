@@ -6,6 +6,7 @@ import { HexTilemap } from "./HexTilemap";
 import { WorldMap } from "./WorldMap";
 import { MapManager } from './MapManager';
 import { BehaviorSubject } from "rxjs";
+import { round } from "lodash";
 
 // 32 pixels wide
 // 28 pixels tall
@@ -46,6 +47,7 @@ export class MapViewer {
     public fonts: Record<string, any>
   ) {
     PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+    PIXI.settings.PRECISION_FRAGMENT = PIXI.PRECISION.HIGH;
     this.app = new PIXI.Application({
       width: window.innerWidth,
       height: window.innerHeight,
