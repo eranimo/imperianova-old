@@ -348,7 +348,6 @@ const getAutogenSettings = (
     terrainTypeCenter === adj2TerrainType
   ) {
     group = 0;
-    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
   } else if (
     // terrainTypeCenter = adj1 = adj2 / terrainType
     adj1TerrainType === adj2TerrainType &&
@@ -356,30 +355,18 @@ const getAutogenSettings = (
     terrainType !== terrainTypeCenter
   ) {
     group = 1;
-    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
-    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
   } else if (
     adj1TerrainType === adj2TerrainType &&
     adj1TerrainType === terrainTypeCenter &&
     terrainType !== terrainTypeCenter
   ) {
     group = 2;
-    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
-    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
   } else if (
     terrainTypeCenter === adj1TerrainType &&
     terrainTypeCenter !== terrainType && 
     terrainType === adj2TerrainType
   ) {
     group = 3;
-    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
-    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
   } else if (
     terrainTypeCenter !== terrainType &&
     terrainType === adj1TerrainType
@@ -388,40 +375,24 @@ const getAutogenSettings = (
     adj2TerrainType === terrainTypeCenter
   ) {
     group = 4;
-    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
-    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
   } else if (
     adj1TerrainType === adj2TerrainType &&
     adj1TerrainType !== terrainType &&
     terrainType === terrainTypeCenter
   ) {
     group = 5;
-    colorsTerrainMap[AutogenColorGroup.PRIMARY] = adj1TerrainType;
-    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = adj1TerrainType;
   } else if (
     adj1TerrainType !== terrainType &&
     terrainType === terrainTypeCenter &&
     terrainType === adj2TerrainType
   ) {
     group = 6;
-    colorsTerrainMap[AutogenColorGroup.PRIMARY] = adj1TerrainType;
-    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = adj1TerrainType;
   } else if (
     adj2TerrainType !== adj1TerrainType &&
     terrainType === terrainTypeCenter &&
     adj1TerrainType === terrainType
   ) {
     group = 7;
-    colorsTerrainMap[AutogenColorGroup.PRIMARY] = adj2TerrainType;
-    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = adj2TerrainType;
   } else if (
     adj1TerrainType !== adj2TerrainType &&
     terrainType === terrainTypeCenter &&
@@ -429,14 +400,6 @@ const getAutogenSettings = (
     adj2TerrainType !== terrainType
   ) {
     group = 8;
-    colorsTerrainMap[AutogenColorGroup.PRIMARY] = adj2TerrainType;
-    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
-    colorsTerrainMap[AutogenColorGroup.SECONDARY] = adj1TerrainType;
-    colorsTerrainMap[AutogenColorGroup.CENTER_SECONDARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = adj2TerrainType;
-    colorsTerrainMapAdj[AutogenColorGroup.SECONDARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY] = adj1TerrainType;
   } else if (
     terrainType !== terrainTypeCenter &&
     adj1TerrainType === adj2TerrainType &&
@@ -445,43 +408,28 @@ const getAutogenSettings = (
     adj2TerrainType !== terrainType &&
     adj2TerrainType !== terrainTypeCenter
   ) {
-    group = 9;
-    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
-    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
-    colorsTerrainMap[AutogenColorGroup.SECONDARY] = adj2TerrainType;
-    colorsTerrainMap[AutogenColorGroup.CENTER_SECONDARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
-    colorsTerrainMapAdj[AutogenColorGroup.SECONDARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY] = adj2TerrainType;
+    group = 9; // like 2
+    if (terrainBackTransitions[terrainType].includes(adj1TerrainType)) {
+      group = 2;
+    }
   } else if (
     adj2TerrainType === terrainType &&
     adj1TerrainType !== terrainTypeCenter &&
     adj1TerrainType !== adj2TerrainType
   ) {
-    group = 10;
-    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
-    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
-    colorsTerrainMap[AutogenColorGroup.SECONDARY] = adj1TerrainType;
-    colorsTerrainMap[AutogenColorGroup.CENTER_SECONDARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
-    colorsTerrainMapAdj[AutogenColorGroup.SECONDARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY] = adj1TerrainType;
+    group = 10; // like 3
+    if (terrainBackTransitions[terrainType].includes(adj1TerrainType)) {
+      group = 3;
+    }
   } else if (
     adj1TerrainType === terrainType &&
     adj2TerrainType !== terrainTypeCenter &&
     adj2TerrainType !== adj1TerrainType
   ) {
-    group = 11;
-    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
-    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
-    colorsTerrainMap[AutogenColorGroup.SECONDARY] = adj2TerrainType;
-    colorsTerrainMap[AutogenColorGroup.CENTER_SECONDARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
-    colorsTerrainMapAdj[AutogenColorGroup.SECONDARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY] = adj2TerrainType;
+    group = 11; // like 4
+    if (terrainBackTransitions[terrainType].includes(adj2TerrainType)) {
+      group = 4;
+    }
   } else if (
     terrainType !== terrainTypeCenter &&
     adj1TerrainType === terrainTypeCenter &&
@@ -489,14 +437,9 @@ const getAutogenSettings = (
     adj2TerrainType !== terrainTypeCenter
   ) {
     group = 12;
-    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
-    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
-    colorsTerrainMap[AutogenColorGroup.SECONDARY] = adj2TerrainType;
-    colorsTerrainMap[AutogenColorGroup.CENTER_SECONDARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
-    colorsTerrainMapAdj[AutogenColorGroup.SECONDARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY] = adj2TerrainType;
+    if (terrainBackTransitions[terrainType].includes(adj2TerrainType)) {
+      group = 4;
+    }
   } else if (
     terrainType !== terrainTypeCenter &&
     adj2TerrainType === terrainTypeCenter &&
@@ -504,14 +447,9 @@ const getAutogenSettings = (
     adj1TerrainType !== terrainTypeCenter
   ) {
     group = 13;
-    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
-    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
-    colorsTerrainMap[AutogenColorGroup.SECONDARY] = adj1TerrainType;
-    colorsTerrainMap[AutogenColorGroup.CENTER_SECONDARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
-    colorsTerrainMapAdj[AutogenColorGroup.SECONDARY] = terrainTypeCenter;
-    colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY] = adj1TerrainType;
+    if (terrainBackTransitions[terrainType].includes(adj1TerrainType)) {
+      group = 3;
+    }
   } else if (
     terrainType !== terrainTypeCenter &&
     adj1TerrainType !== adj2TerrainType &&
@@ -521,6 +459,109 @@ const getAutogenSettings = (
     adj2TerrainType !== terrainTypeCenter
   ) {
     group = 14;
+    const isTransitionAdj1 = terrainBackTransitions[terrainType].includes(adj1TerrainType);
+    const isTransitionAdj2 = terrainBackTransitions[terrainType].includes(adj2TerrainType);
+    if (isTransitionAdj1 && isTransitionAdj2) {
+      group = 2;
+    } else if (isTransitionAdj1) {
+      group = 11;
+    } else if (isTransitionAdj2) {
+      group = 10;
+    }
+  }
+
+  if (group === 0) {
+    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
+  } else if (group === 1) {
+    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
+  } else if (group === 2) {
+    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
+  } else if (group === 3) {
+    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
+  } else if (group === 4) {
+    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
+  } else if (group === 5) {
+    colorsTerrainMap[AutogenColorGroup.PRIMARY] = adj1TerrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = adj1TerrainType;
+  } else if (group === 6) {
+    colorsTerrainMap[AutogenColorGroup.PRIMARY] = adj1TerrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = adj1TerrainType;
+  } else if (group === 7) {
+    colorsTerrainMap[AutogenColorGroup.PRIMARY] = adj2TerrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = adj2TerrainType;
+  } else if (group === 8) {
+    colorsTerrainMap[AutogenColorGroup.PRIMARY] = adj2TerrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
+    colorsTerrainMap[AutogenColorGroup.SECONDARY] = adj1TerrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER_SECONDARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = adj2TerrainType;
+    colorsTerrainMapAdj[AutogenColorGroup.SECONDARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY] = adj1TerrainType;
+  } else if (group === 9) {
+    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
+    colorsTerrainMap[AutogenColorGroup.SECONDARY] = adj2TerrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER_SECONDARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
+    colorsTerrainMapAdj[AutogenColorGroup.SECONDARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY] = adj2TerrainType;
+  } else if (group === 10) {
+    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
+    colorsTerrainMap[AutogenColorGroup.SECONDARY] = adj1TerrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER_SECONDARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
+    colorsTerrainMapAdj[AutogenColorGroup.SECONDARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY] = adj1TerrainType;
+  } else if (group === 11) {
+    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
+    colorsTerrainMap[AutogenColorGroup.SECONDARY] = adj2TerrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER_SECONDARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
+    colorsTerrainMapAdj[AutogenColorGroup.SECONDARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY] = adj2TerrainType;
+  } else if (group === 12) {
+    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
+    colorsTerrainMap[AutogenColorGroup.SECONDARY] = adj2TerrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER_SECONDARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
+    colorsTerrainMapAdj[AutogenColorGroup.SECONDARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY] = adj2TerrainType;
+  } else if (group === 13) {
+    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
+    colorsTerrainMap[AutogenColorGroup.SECONDARY] = adj1TerrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER_SECONDARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
+    colorsTerrainMapAdj[AutogenColorGroup.SECONDARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY] = adj1TerrainType;
+  } else if (group === 14) {
     colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
     colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
     colorsTerrainMap[AutogenColorGroup.SECONDARY] = adj1TerrainType;
@@ -534,6 +575,7 @@ const getAutogenSettings = (
     colorsTerrainMapAdj[AutogenColorGroup.TERTIARY] = terrainTypeCenter;
     colorsTerrainMapAdj[AutogenColorGroup.CENTER_TERTIARY] = adj2TerrainType;
   }
+  
   else {
     console.error('terrainType:', terrainTypeTitles[terrainType]);
     console.error('terrainTypeCenter:', terrainTypeTitles[terrainTypeCenter]);
@@ -931,15 +973,15 @@ async function buildTilesetDef(template: Jimp, autogenTemplate: Jimp) {
       addTileType(
         terrainTypeCenter,
         edgeTerrainType,
-        [
+        union([
           ...edgeTerrainTypes.filter(i => (
             terrainTransitions[edgeTerrainType]
               ? terrainTransitions[edgeTerrainType].includes(i)
               : true
           )),
-          // ...(terrainBackTransitions[edgeTerrainType] || []),
+          ...(terrainBackTransitions[edgeTerrainType] || []),
           // ...(terrainBackTransitions[terrainTypeCenter] || [])
-        ],
+        ]),
         (adj1, adj2) => (
           adj1 !== adj2 &&
           adj1 !== terrainTypeCenter &&
