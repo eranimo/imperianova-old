@@ -109,9 +109,9 @@ export class WorldMap {
       } else if (height < 150) {
         const isForested = (octaveNoise(noise.noise3D.bind(noise), nx, ny, nz, 7, 0.5) + 1) / 2;
         this.terrain.set(hex.x, hex.y, isForested < 0.5 ? TerrainType.GRASSLAND : TerrainType.FOREST);
-      } else if (height < 170) {
+      } else if (height < 155) {
         this.terrain.set(hex.x, hex.y, TerrainType.GRASSLAND);
-      } else if (height < 180) {
+      } else if (height < 160) {
         this.terrain.set(hex.x, hex.y, TerrainType.DESERT);
       } else {
         this.terrain.set(hex.x, hex.y, TerrainType.DESERT);

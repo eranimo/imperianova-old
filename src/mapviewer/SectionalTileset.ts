@@ -46,6 +46,8 @@ export class SectionalTileset {
   sectionalTileTextures: Map<number, PIXI.Texture>;
   sectionalTileMaskToTileIDs: MultiDictionary<number, number>;
   hexTileSectionalTileCache: Map<number, PIXI.Texture[]>;
+  hexTileErrors: Map<number, string>;
+  
 
   constructor(
     public baseTexture: PIXI.BaseTexture,
@@ -55,6 +57,7 @@ export class SectionalTileset {
     this.sectionalTileTextures = new Map();
     this.hexTileSectionalTileCache = new Map();
     this.sectionalTileMaskToTileIDs = new MultiDictionary();
+    this.hexTileErrors = new Map();
 
     for (const tile of options.sectionalTiles) {
       const texture = new PIXI.Texture(this.baseTexture, new PIXI.Rectangle(
@@ -183,7 +186,8 @@ export class SectionalTileset {
       const possibleTiles = this.sectionalTileMaskToTileIDs.getValue(hash);
       const chosenTile = possibleTiles[random(possibleTiles.length - 1)];
       if (chosenTile === undefined || !this.sectionalTileTextures.has(chosenTile)) {
-        console.error(`Could not find tile: dir: ${directionShort[dir]}, terrainType: ${terrainTypeTitles[terrainType]}, terrainTypeCenter: ${terrainTypeTitles[terrainTypeCenter]}, adj1TerrainType: ${terrainTypeTitles[adj1TerrainType]}, adj2TerrainType: ${terrainTypeTitles[adj2TerrainType]}`)
+        const err = `Could not find tile: dir: ${directionShort[dir]}, terrainType: ${terrainTypeTitles[terrainType]}, terrainTypeCenter: ${terrainTypeTitles[terrainTypeCenter]}, adj1TerrainType: ${terrainTypeTitles[adj1TerrainType]}, adj2TerrainType: ${terrainTypeTitles[adj2TerrainType]}) \n${JSON.stringify(newNeighborTerrainTypes, null, 2)}`;
+        this.hexTileErrors.set(mask, err);
         return null;
       }
       return this.sectionalTileTextures.get(chosenTile);

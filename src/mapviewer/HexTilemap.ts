@@ -208,6 +208,11 @@ export class HexTilemap extends PIXI.Container {
           tileID: this.worldMapTiles.tileMasks.data[hex.index],
         });
         console.log(this.worldMap.debugNeighborTerrain(hex.x, hex.y));
+        const mask = this.worldMapTiles.tileMasks.get(hex.x, hex.y);
+        console.log(
+          this.terrainTileset.hexTileSectionalTileCache.get(mask),
+          this.terrainTileset.hexTileErrors.get(mask),
+        )
 
         this.updateSelection(hex);
       }

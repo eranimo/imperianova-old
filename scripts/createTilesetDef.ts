@@ -53,12 +53,16 @@ enum AutogenColorGroup {
   CENTER,
   SECONDARY,
   CENTER_SECONDARY,
-}
+  TERTIARY,
+  CENTER_TERTIARY,
+};
 const autogenColorGroups = [
   AutogenColorGroup.PRIMARY,
   AutogenColorGroup.CENTER,
   AutogenColorGroup.SECONDARY,
   AutogenColorGroup.CENTER_SECONDARY,
+  AutogenColorGroup.TERTIARY,
+  AutogenColorGroup.CENTER_TERTIARY,
 ];
 
 const autogenColors = {
@@ -89,6 +93,20 @@ const autogenColors = {
     Jimp.rgbaToInt(179, 217, 140, 255),
     Jimp.rgbaToInt(205, 230, 178, 255),
     Jimp.rgbaToInt(230, 243, 217, 255),
+  ],
+  [AutogenColorGroup.TERTIARY]: [
+    Jimp.rgbaToInt(191, 64, 189, 255),
+    Jimp.rgbaToInt(204, 102, 203, 255),
+    Jimp.rgbaToInt(217, 140, 216, 255),
+    Jimp.rgbaToInt(230, 178, 229, 255),
+    Jimp.rgbaToInt(243, 217, 243, 255),
+  ],
+  [AutogenColorGroup.CENTER_TERTIARY]: [
+    Jimp.rgbaToInt(64, 191, 186, 255),
+    Jimp.rgbaToInt(102, 204, 200, 255),
+    Jimp.rgbaToInt(140, 217, 214, 255),
+    Jimp.rgbaToInt(178, 230, 228, 255),
+    Jimp.rgbaToInt(217, 243, 243, 255),
   ]
 }
 
@@ -365,9 +383,9 @@ const getAutogenSettings = (
   } else if (
     terrainTypeCenter !== terrainType &&
     terrainType === adj1TerrainType
-    // &&
-    // adj1TerrainType !== adj2TerrainType &&
-    // adj2TerrainType === terrainTypeCenter
+    &&
+    adj1TerrainType !== adj2TerrainType &&
+    adj2TerrainType === terrainTypeCenter
   ) {
     group = 4;
     colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
@@ -494,6 +512,27 @@ const getAutogenSettings = (
     colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
     colorsTerrainMapAdj[AutogenColorGroup.SECONDARY] = terrainTypeCenter;
     colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY] = adj1TerrainType;
+  } else if (
+    terrainType !== terrainTypeCenter &&
+    adj1TerrainType !== adj2TerrainType &&
+    adj1TerrainType !== terrainType &&
+    adj1TerrainType !== terrainTypeCenter &&
+    adj2TerrainType !== terrainType &&
+    adj2TerrainType !== terrainTypeCenter
+  ) {
+    group = 14;
+    colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER] = terrainTypeCenter;
+    colorsTerrainMap[AutogenColorGroup.SECONDARY] = adj1TerrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER_SECONDARY] = terrainTypeCenter;
+    colorsTerrainMap[AutogenColorGroup.TERTIARY] = adj2TerrainType;
+    colorsTerrainMap[AutogenColorGroup.CENTER_TERTIARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.PRIMARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER] = terrainType;
+    colorsTerrainMapAdj[AutogenColorGroup.SECONDARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY] = adj1TerrainType;
+    colorsTerrainMapAdj[AutogenColorGroup.TERTIARY] = terrainTypeCenter;
+    colorsTerrainMapAdj[AutogenColorGroup.CENTER_TERTIARY] = adj2TerrainType;
   }
   else {
     console.error('terrainType:', terrainTypeTitles[terrainType]);
@@ -624,6 +663,10 @@ async function buildTemplateTileset(
       group, coord, colorsTerrainMap, colorsTerrainMapAdj,
     } = getAutogenSettings(tile.terrainType, tile.terrainTypeCenter, adj1, adj2, tile.direction);
     // console.log(tile.tileID, group, colorsTerrainMap, colorsTerrainMapAdj);
+    if (group === undefined) {
+      console.log(`Skipping terrainType: ${terrainTypeTitles[tile.terrainType]}, terrainTypeCenter: ${terrainTypeTitles[tile.terrainTypeCenter]}, adj1: ${terrainTypeTitles[adj1]}, adj2: ${terrainTypeTitles[adj2]}`);
+      return;
+    };
     tilesByGroup.setValue(group, tile);
     outTileset.blit(autogenTemplate, tx, ty, coord.x, coord.y, tileWidth, tileHeight);
     const colorGroupTerrain = {
@@ -631,6 +674,8 @@ async function buildTemplateTileset(
       [AutogenColorGroup.CENTER]: [colorsTerrainMap[AutogenColorGroup.CENTER], colorsTerrainMapAdj[AutogenColorGroup.CENTER]],
       [AutogenColorGroup.SECONDARY]: [colorsTerrainMap[AutogenColorGroup.SECONDARY], colorsTerrainMapAdj[AutogenColorGroup.SECONDARY]],
       [AutogenColorGroup.CENTER_SECONDARY]: [colorsTerrainMap[AutogenColorGroup.CENTER_SECONDARY], colorsTerrainMapAdj[AutogenColorGroup.CENTER_SECONDARY]],
+      [AutogenColorGroup.TERTIARY]: [colorsTerrainMap[AutogenColorGroup.TERTIARY], colorsTerrainMapAdj[AutogenColorGroup.TERTIARY]],
+      [AutogenColorGroup.CENTER_TERTIARY]: [colorsTerrainMap[AutogenColorGroup.CENTER_TERTIARY], colorsTerrainMapAdj[AutogenColorGroup.CENTER_TERTIARY]],
     }
     // console.log(colorGroupTerrain);
     outTileset.scan(tx, ty, tileWidth, tileHeight, (x, y) => {
@@ -786,7 +831,7 @@ async function buildTilesetDef(template: Jimp, autogenTemplate: Jimp) {
     addTileType(t, t, [t]);
   }
 
-  console.log('\nAdding Group 1, 2, 3, 4');
+  console.log('\nAdding Group 1, 2');
   for (const [terrainTypeCenter_, edgeTerrainTypes] of Object.entries(terrainTransitions)) {
     const terrainTypeCenter = parseInt(terrainTypeCenter_, 10) as unknown as TerrainType;
     for (const edgeTerrainType of edgeTerrainTypes) {
@@ -825,37 +870,37 @@ async function buildTilesetDef(template: Jimp, autogenTemplate: Jimp) {
   for (const [terrainTypeCenter_, edgeTerrainTypes] of Object.entries(terrainTransitions)) {
     const terrainTypeCenter = parseInt(terrainTypeCenter_, 10) as unknown as TerrainType;
     for (const edgeTerrainType of edgeTerrainTypes) {
-      if (terrainTransitions[edgeTerrainType]) {
-        addTileType(
-          terrainTypeCenter,
-          edgeTerrainType,
-          terrainTransitions[edgeTerrainType].filter(i => edgeTerrainTypes.includes(i)),
-          (adj1, adj2) => adj1 === adj2
-        );
-      }
+      addTileType(
+        terrainTypeCenter,
+        edgeTerrainType,
+        [
+          ...edgeTerrainTypes,
+          // ...(terrainBackTransitions[edgeTerrainType] || [])
+        ],
+        (adj1, adj2) => (
+          adj1 !== terrainTypeCenter &&
+          adj1 !== edgeTerrainType &&
+          adj2 !== terrainTypeCenter &&
+          adj2 !== edgeTerrainType &&
+          adj1 === adj2
+        )
+      );
     }
   }
 
-  console.log('\nAdding Group 10, 11');
+  console.log('\nAdding Group 3, 4, 10, 11');
   for (const [terrainTypeCenter_, edgeTerrainTypes] of Object.entries(terrainTransitions)) {
     const terrainTypeCenter = parseInt(terrainTypeCenter_, 10) as unknown as TerrainType;
     for (const edgeTerrainType of edgeTerrainTypes) {
-      if (terrainTransitions[edgeTerrainType]) {
-        addTileType(
-          terrainTypeCenter,
-          edgeTerrainType,
-          [
-            edgeTerrainType,
-            ...terrainTransitions[edgeTerrainType].filter(i => edgeTerrainTypes.includes(i)),
-            ...(terrainBackTransitions[edgeTerrainType] || []),
-          ],
-          (adj1, adj2) => (
-            adj1 !== adj2 &&
-            (adj1 === edgeTerrainType || adj2 === edgeTerrainType) &&
-            adj1 !== terrainTypeCenter && adj2 !== terrainTypeCenter
-          )
-        );
-      }
+      addTileType(
+        terrainTypeCenter,
+        edgeTerrainType,
+        edgeTerrainTypes,
+        (adj1, adj2) => (
+          adj1 !== adj2 &&
+          (adj1 === edgeTerrainType || adj2 === edgeTerrainType)
+        )
+      );
     }
   }
 
@@ -874,6 +919,33 @@ async function buildTilesetDef(template: Jimp, autogenTemplate: Jimp) {
           ) && (
             adj1 !== adj2
           )
+        )
+      );
+    }
+  }
+
+  console.log('\nAdding Group 14');
+  for (const [terrainTypeCenter_, edgeTerrainTypes] of Object.entries(terrainTransitions)) {
+    const terrainTypeCenter = parseInt(terrainTypeCenter_, 10) as unknown as TerrainType;
+    for (const edgeTerrainType of edgeTerrainTypes) {
+      addTileType(
+        terrainTypeCenter,
+        edgeTerrainType,
+        [
+          ...edgeTerrainTypes.filter(i => (
+            terrainTransitions[edgeTerrainType]
+              ? terrainTransitions[edgeTerrainType].includes(i)
+              : true
+          )),
+          // ...(terrainBackTransitions[edgeTerrainType] || []),
+          // ...(terrainBackTransitions[terrainTypeCenter] || [])
+        ],
+        (adj1, adj2) => (
+          adj1 !== adj2 &&
+          adj1 !== terrainTypeCenter &&
+          adj1 !== edgeTerrainType &&
+          adj2 !== terrainTypeCenter &&
+          adj2 !== edgeTerrainType
         )
       );
     }

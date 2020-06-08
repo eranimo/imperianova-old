@@ -10,5 +10,8 @@
     "experimentalDecorators": true,
     "downlevelIteration": true,
     "allowSyntheticDefaultImports": true
-  }
+  },
+  "exclude": [
+    "node_modules"
+  ]
 }

@@ -23,6 +23,7 @@ export const terrainTypeMax = 7;
 
 // a map of center terrain types to edge terrain types
 // representing which terrains have transitions
+// center -> edge
 export const terrainTransitions: Partial<Record<TerrainType, TerrainType[]>> = {
   [TerrainType.GRASSLAND]: [TerrainType.DESERT, TerrainType.FOREST],
   [TerrainType.OCEAN]: [TerrainType.DESERT, TerrainType.GRASSLAND, TerrainType.FOREST, TerrainType.TAIGA, TerrainType.TUNDRA, TerrainType.GLACIAL],
@@ -31,13 +32,16 @@ export const terrainTransitions: Partial<Record<TerrainType, TerrainType[]>> = {
 };
 
 // edge -> center
-export const terrainBackTransitions: Partial<Record<TerrainType, TerrainType[]>> = {
-  [TerrainType.FOREST]: [TerrainType.OCEAN, TerrainType.GRASSLAND],
-  [TerrainType.GRASSLAND]: [TerrainType.OCEAN],
-  [TerrainType.DESERT]: [TerrainType.OCEAN, TerrainType.GRASSLAND, TerrainType.FOREST],
-  [TerrainType.TAIGA]: [TerrainType.OCEAN, TerrainType.FOREST],
-  [TerrainType.TUNDRA]: [TerrainType.OCEAN, TerrainType.TAIGA],
-  [TerrainType.GLACIAL]: [TerrainType.OCEAN, TerrainType.TAIGA],
+export const terrainBackTransitions: Partial<Record<TerrainType, TerrainType[]>> = {};
+for (const [terrainType_, terrainTypes] of Object.entries(terrainTransitions)) {
+  const terrainType = parseInt(terrainType_, 10) as TerrainType;
+  for (const edgeTerrainType of terrainTypes) {
+    if (terrainBackTransitions[edgeTerrainType] === undefined) {
+      terrainBackTransitions[edgeTerrainType] = [terrainType];
+    } else {
+      terrainBackTransitions[edgeTerrainType].push(terrainType);
+    }
+  }
 }
 
 export const terrainColors: Record<TerrainType, number> = {
