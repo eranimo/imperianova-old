@@ -157,6 +157,13 @@ const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainTy
       Jimp.rgbaToInt(143, 194, 72, 255),
       Jimp.rgbaToInt(108, 160, 68, 255),
     ],
+    [TerrainType.TAIGA]: [
+      Jimp.rgbaToInt(120, 178, 76, 255),
+      Jimp.rgbaToInt(120, 178, 76, 255),
+      Jimp.rgbaToInt(120, 178, 76, 255),
+      Jimp.rgbaToInt(143, 194, 72, 255),
+      Jimp.rgbaToInt(108, 160, 68, 255),
+    ],
     [TerrainType.DESERT]: [
       Jimp.rgbaToInt(120, 178, 76, 255),
       Jimp.rgbaToInt(190, 204, 93, 255),
@@ -195,6 +202,13 @@ const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainTy
       Jimp.rgbaToInt(108, 160, 68, 255),
     ],
     [TerrainType.TAIGA]: [
+      Jimp.rgbaToInt(108, 155, 73, 255),
+      Jimp.rgbaToInt(108, 155, 73, 255),
+      Jimp.rgbaToInt(108, 155, 73, 255),
+      Jimp.rgbaToInt(143, 194, 72, 255),
+      Jimp.rgbaToInt(108, 160, 68, 255),
+    ],
+    [TerrainType.TUNDRA]: [
       Jimp.rgbaToInt(108, 155, 73, 255),
       Jimp.rgbaToInt(108, 155, 73, 255),
       Jimp.rgbaToInt(108, 155, 73, 255),
@@ -291,6 +305,13 @@ const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainTy
       Jimp.rgbaToInt(118, 138, 77, 255),
       Jimp.rgbaToInt(118, 138, 77, 255),
     ],
+    [TerrainType.GLACIAL]: [
+      Jimp.rgbaToInt(132, 146, 101, 255),
+      Jimp.rgbaToInt(119, 128, 102, 255),
+      Jimp.rgbaToInt(130, 141, 105, 255),
+      Jimp.rgbaToInt(118, 138, 77, 255),
+      Jimp.rgbaToInt(118, 138, 77, 255),
+    ],
     [TerrainType.OCEAN]: [
       Jimp.rgbaToInt(132, 146, 101, 255),
       Jimp.rgbaToInt(130, 141, 105, 255),
@@ -322,6 +343,13 @@ const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainTy
       Jimp.rgbaToInt(229, 237, 255, 255),
     ],
     [TerrainType.TAIGA]: [
+      Jimp.rgbaToInt(242, 242, 242, 255),
+      Jimp.rgbaToInt(235, 239, 245, 255),
+      Jimp.rgbaToInt(237, 241, 246, 255),
+      Jimp.rgbaToInt(229, 237, 255, 255),
+      Jimp.rgbaToInt(229, 237, 255, 255),
+    ],
+    [TerrainType.TUNDRA]: [
       Jimp.rgbaToInt(242, 242, 242, 255),
       Jimp.rgbaToInt(235, 239, 245, 255),
       Jimp.rgbaToInt(237, 241, 246, 255),
@@ -993,7 +1021,7 @@ async function buildTilesetDef(template: Jimp, autogenTemplate: Jimp) {
     }
   }
 
-  const tilesWidth = 12;
+  const tilesWidth = 24;
   const tilesHeight = Math.ceil(tileID / tilesWidth);
   console.log(`\nBuilding template with ${tiles.length} sectional tiles`);
 

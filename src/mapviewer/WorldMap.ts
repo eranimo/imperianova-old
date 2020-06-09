@@ -104,17 +104,47 @@ export class WorldMap {
       const value = (raw + 1) / 2;
       const height = value * 255;
       this.heightmap.set(hex.x, hex.y, height);
-      if (height < 140) {
-        this.terrain.set(hex.x, hex.y, TerrainType.OCEAN);
-      } else if (height < 150) {
-        const isForested = (octaveNoise(noise.noise3D.bind(noise), nx, ny, nz, 7, 0.5) + 1) / 2;
-        this.terrain.set(hex.x, hex.y, isForested < 0.5 ? TerrainType.GRASSLAND : TerrainType.FOREST);
-      } else if (height < 155) {
-        this.terrain.set(hex.x, hex.y, TerrainType.GRASSLAND);
-      } else if (height < 160) {
-        this.terrain.set(hex.x, hex.y, TerrainType.DESERT);
+      if (Math.abs(lat) > 75) {
+        const isGlacial = (octaveNoise(noise.noise3D.bind(noise), nx, ny, nz, 7, 2) + 1) / 2;
+        const chance = (Math.abs(lat) - 75) / (90 - 75);
+        if (isGlacial < chance) {
+          this.terrain.set(hex.x, hex.y, TerrainType.GLACIAL);
+          return;
+        }
+      }
+      const deg = (octaveNoise(noise.noise3D.bind(noise), nx, ny, nz, 7, 2) + 1) / 2;
+      if (Math.abs(lat) > 50 + (deg * 20)) {
+        if (height < 140) {
+          this.terrain.set(hex.x, hex.y, TerrainType.OCEAN);
+        } else if (height < 165) {
+          const isTaiga = (octaveNoise(noise.noise3D.bind(noise), nx, ny, nz, 7, 0.5) + 1) / 2;
+          this.terrain.set(hex.x, hex.y, isTaiga < 0.55 ? TerrainType.TUNDRA : TerrainType.TAIGA);
+        } else {
+          this.terrain.set(hex.x, hex.y, TerrainType.TUNDRA);
+        }
+      } else if (Math.abs(lat) > 40 + (deg * 20)) {
+        if (height < 140) {
+          this.terrain.set(hex.x, hex.y, TerrainType.OCEAN);
+        } else {
+          this.terrain.set(hex.x, hex.y, TerrainType.TAIGA);
+        }
+      } else if (Math.abs(lat) > 30 +(deg * 20)) {
+        if (height < 140) {
+          this.terrain.set(hex.x, hex.y, TerrainType.OCEAN);
+        } else {
+          this.terrain.set(hex.x, hex.y, TerrainType.FOREST);
+        }
       } else {
-        this.terrain.set(hex.x, hex.y, TerrainType.DESERT);
+        if (height < 140) {
+          this.terrain.set(hex.x, hex.y, TerrainType.OCEAN);
+        } else if (height < 150) {
+          const isForested = (octaveNoise(noise.noise3D.bind(noise), nx, ny, nz, 7, 0.5) + 1) / 2;
+          this.terrain.set(hex.x, hex.y, isForested < 0.5 ? TerrainType.GRASSLAND : TerrainType.FOREST);
+        } else if (height < 175) {
+          this.terrain.set(hex.x, hex.y, TerrainType.GRASSLAND);
+        } else {
+          this.terrain.set(hex.x, hex.y, TerrainType.DESERT);
+        }
       }
     });
   }

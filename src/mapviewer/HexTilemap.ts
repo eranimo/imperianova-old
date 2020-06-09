@@ -211,6 +211,7 @@ export class HexTilemap extends PIXI.Container {
         const mask = this.worldMapTiles.tileMasks.get(hex.x, hex.y);
         console.log(
           this.terrainTileset.hexTileSectionalTileCache.get(mask),
+          this.terrainTileset.hexTileDebugInfo.get(mask),
           this.terrainTileset.hexTileErrors.get(mask),
         )
 

@@ -47,6 +47,7 @@ export class SectionalTileset {
   sectionalTileMaskToTileIDs: MultiDictionary<number, number>;
   hexTileSectionalTileCache: Map<number, PIXI.Texture[]>;
   hexTileErrors: Map<number, string>;
+  hexTileDebugInfo: Map<number, any>;
   
 
   constructor(
@@ -58,6 +59,7 @@ export class SectionalTileset {
     this.hexTileSectionalTileCache = new Map();
     this.sectionalTileMaskToTileIDs = new MultiDictionary();
     this.hexTileErrors = new Map();
+    this.hexTileDebugInfo = new Map();
 
     for (const tile of options.sectionalTiles) {
       const texture = new PIXI.Texture(this.baseTexture, new PIXI.Rectangle(
@@ -125,11 +127,11 @@ export class SectionalTileset {
     adj2TerrainType: TerrainType,
   ) {
     return (
-      ((terrainTypeMax ** 0) * terrainType) +
-      ((terrainTypeMax ** 1) * terrainTypeCenter) +
-      ((renderOrder.length ** 2) * direction) +
-      ((terrainTypeMax ** 3) * adj1TerrainType) +
-      ((terrainTypeMax ** 4) * adj2TerrainType)
+      ((terrainTypeMax ** 1) * terrainType) +
+      ((terrainTypeMax ** 2) * terrainTypeCenter) +
+      ((renderOrder.length ** 3) * direction) +
+      ((terrainTypeMax ** 4) * adj1TerrainType) +
+      ((terrainTypeMax ** 5) * adj2TerrainType)
     );
   }
 
@@ -177,6 +179,7 @@ export class SectionalTileset {
       };
     }
 
+    const debugInfo = {};
     const textures = renderOrder.map(dir => {
       const [adjDir1, adjDir2] = adjacentDirections[dir];
       const terrainType = newNeighborTerrainTypes[dir];
@@ -190,7 +193,14 @@ export class SectionalTileset {
         this.hexTileErrors.set(mask, err);
         return null;
       }
+      debugInfo[dir] = { hash, possibleTiles, terrainType, adj1TerrainType, adj2TerrainType, chosenTile };
       return this.sectionalTileTextures.get(chosenTile);
+    });
+    this.hexTileDebugInfo.set(mask, {
+      mask,
+      debugInfo,
+      terrainTypeCenter,
+      neighborTerrainTypes,
     });
     this.hexTileSectionalTileCache.set(mask, textures);
 

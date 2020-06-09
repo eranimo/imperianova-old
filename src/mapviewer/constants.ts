@@ -25,11 +25,12 @@ export const terrainTypeMax = 7;
 // representing which terrains have transitions
 // center -> edge
 export const terrainTransitions: Partial<Record<TerrainType, TerrainType[]>> = {
-  [TerrainType.GRASSLAND]: [TerrainType.DESERT, TerrainType.FOREST],
+  [TerrainType.GRASSLAND]: [TerrainType.DESERT, TerrainType.FOREST, TerrainType.TAIGA],
   [TerrainType.OCEAN]: [TerrainType.DESERT, TerrainType.GRASSLAND, TerrainType.FOREST, TerrainType.TAIGA, TerrainType.TUNDRA, TerrainType.GLACIAL],
   [TerrainType.FOREST]: [TerrainType.TAIGA],
   [TerrainType.DESERT]: [TerrainType.FOREST],
-  [TerrainType.TAIGA]: [TerrainType.TUNDRA, TerrainType.GLACIAL],
+  [TerrainType.TUNDRA]: [TerrainType.GLACIAL, TerrainType.TAIGA],
+  [TerrainType.TAIGA]: [TerrainType.GLACIAL],
 };
 
 // edge -> center
