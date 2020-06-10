@@ -2,14 +2,15 @@ import * as PIXI from "pixi.js";
 import { Viewport } from "pixi-viewport";
 import * as Honeycomb from 'honeycomb-grid';
 import { IHex, Hex, HEX_ADJUST_Y } from "./MapViewer";
-import { TerrainType, terrainColors, terrainTypeTitles, terrainTypes } from './constants';
+import { TerrainType, terrainColors, terrainTypeTitles, terrainTypes, Direction } from './constants';
 import { Tileset } from "./Tileset";
-import { WorldMap, WorldMapHex } from './WorldMap';
+import { WorldMap, WorldMapHex, Edge } from './WorldMap';
 import { TerrainTileset } from './TerrainTileset';
 import { WorldMapTiles } from './WorldMapTiles';
 import 'pixi-tilemap';
 import Cull from 'pixi-cull';
 import { SectionalTileset } from './SectionalTileset';
+import { MultiDictionary } from "typescript-collections";
 
 
 const CHUNK_WIDTH = 10;
@@ -70,6 +71,7 @@ export class HexTilemap extends PIXI.Container {
   overlayTexture: PIXI.RenderTexture;
   selectionTexture: PIXI.Texture;
   gridTexture: PIXI.Texture;
+  hexRiverEdges: MultiDictionary<WorldMapHex, Edge>;
 
   constructor(
     public app: PIXI.Application,
@@ -79,9 +81,15 @@ export class HexTilemap extends PIXI.Container {
     public fonts: Record<string, any>) {
     super();
     this.tilesetMap = new Map();
+    this.hexRiverEdges = new MultiDictionary();
+    for (const riverEdges of worldMap.rivers) {
+      for (const edge of riverEdges) {
+        this.hexRiverEdges.setValue(edge.h1, edge);
+      }
+    }
     this.overlayLayer = new PIXI.Container();
     this.chunksLayer = new PIXI.Container();
-    this.overlayLayer.alpha = 0.5;
+    this.overlayLayer.alpha = 0.75;
     this.addChild(this.chunksLayer);
     this.addChild(this.overlayLayer);
 
@@ -201,6 +209,7 @@ export class HexTilemap extends PIXI.Container {
         const terrainType = this.worldMap.terrain.data[hex.index];
         console.log({
           hex,
+          height: this.worldMap.heightmap.get(hex.x, hex.y),
           coordinate: this.worldMap.getHexCoordinate(hex),
           position: this.worldMap.getPointFromPosition(hex.x, hex.y),
           terrainType: terrainType,
@@ -245,11 +254,20 @@ export class HexTilemap extends PIXI.Container {
     const corners = hex.corners().map(corner => corner.add(point[0], point[1]));
     const [firstCorner, ...otherCorners] = corners;
     overlayGraphics.lineStyle(1 / 30, 0x000);
-    // overlayGraphics.beginFill(terrainColors[terrainType]);
-    // overlayGraphics.moveTo(firstCorner.x / SCALE, firstCorner.y / SCALE);
-    // otherCorners.forEach(({ x, y }) => overlayGraphics.lineTo(x / SCALE, y / SCALE));
-    // overlayGraphics.lineTo(firstCorner.x / SCALE, firstCorner.y / SCALE);
-    // overlayGraphics.endFill();
+    overlayGraphics.beginFill(terrainColors[terrainType]);
+    overlayGraphics.moveTo(firstCorner.x / SCALE, firstCorner.y / SCALE);
+    otherCorners.forEach(({ x, y }) => overlayGraphics.lineTo(x / SCALE, y / SCALE));
+    overlayGraphics.lineTo(firstCorner.x / SCALE, firstCorner.y / SCALE);
+    overlayGraphics.endFill();
+
+    if (this.hexRiverEdges.containsKey(hex)) {
+      overlayGraphics.lineStyle(3 / 30, 0x0000FF);
+      for (const riverEdge of this.hexRiverEdges.getValue(hex)) {
+        // console.log('draw', riverEdge.p1);
+        overlayGraphics.moveTo(riverEdge.p1.x / SCALE, riverEdge.p1.y / SCALE); 
+        overlayGraphics.lineTo(riverEdge.p2.x / SCALE, riverEdge.p2.y / SCALE); 
+      }
+    }
 
     // const mask = this.worldMapTiles.tileMasks.get(hex.x, hex.y);
     // const texture = this.terrainTileset.getTextureFromTileMask(mask);
@@ -281,7 +299,7 @@ export class HexTilemap extends PIXI.Container {
     terrainLayer.position.set(Math.round(minX), Math.round(minY));
 
     hexes.forEach((hex, index) => {
-      const terrainType = this.worldMap.getTerrainForHex(hex.x, hex.y);
+      const terrainType = this.worldMap.getTerrainForCoord(hex.x, hex.y);
       if (terrainType === TerrainType.MAP_EDGE) return;
       const textures = this.terrainTileset.getTile(
         this.worldMapTiles.tileMasks.get(hex.x, hex.y),

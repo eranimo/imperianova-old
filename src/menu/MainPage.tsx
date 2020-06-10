@@ -107,7 +107,9 @@ export const MainPageLoaded: React.FC<{
   const minimapRef = useRef(null);
 
   const map = new WorldMap({
-    size: WORLD_SIZE
+    size: WORLD_SIZE,
+    sealevel: 145,
+    seed: 'fuck',
   });
   const manager = new MapManager(map);
   useEffect(() => {

@@ -81,7 +81,7 @@ export class WorldMapTiles {
 
   calculateHexTile(hex: Honeycomb.Hex<IHex>) {
     const { x, y } = hex;
-    const terrainType = this.worldMap.getTerrainForHex(x, y);
+    const terrainType = this.worldMap.getTerrainForCoord(x, y);
     const neighborTerrainTypes = this.worldMap.getHexNeighborTerrain(x, y);
 
     const mask = getTilesetMask(terrainType, neighborTerrainTypes);

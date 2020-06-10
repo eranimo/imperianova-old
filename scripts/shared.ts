@@ -25,15 +25,6 @@ export type TileVariant = {
   mask: number;
 };
 
-export const indexOrder = [
-  Direction.SE,
-  Direction.NE,
-  Direction.N,
-  Direction.NW,
-  Direction.SW,
-  Direction.S,
-]
-
 export async function newImage(width: number, height: number): Promise<Jimp> {
   return new Promise((resolve, reject) => {
     new Jimp(width, height, (err, image) => {

@@ -116,6 +116,24 @@ export const adjacentDirections = {
   [Direction.S]: [Direction.SE, Direction.SW],
 };
 
+export const oppositeDirections: Record<Direction, Direction> = {
+  [Direction.SE]: Direction.NW,
+  [Direction.NE]: Direction.SW,
+  [Direction.N]: Direction.S,
+  [Direction.NW]: Direction.SE,
+  [Direction.SW]: Direction.NE,
+  [Direction.S]: Direction.N,
+}
+
+export const indexOrder = [
+  Direction.SE,
+  Direction.NE,
+  Direction.N,
+  Direction.NW,
+  Direction.SW,
+  Direction.S,
+]
+
 export const renderOrder = [
   Direction.N,
   Direction.NW,

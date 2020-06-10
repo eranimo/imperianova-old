@@ -3,14 +3,34 @@ import * as Honeycomb from 'honeycomb-grid';
 import ndarray from "ndarray";
 import SimplexNoise from 'simplex-noise';
 import Alea from 'alea';
-import { map, clamp } from "lodash";
+import { map, clamp, last } from "lodash";
 import { IHex, Grid } from "./MapViewer";
-import { Direction, terrainTypeTitles, TerrainType, oddq_directions, directionTitles } from './constants';
-import { octaveNoise } from './utils';
+import { Direction, terrainTypeTitles, TerrainType, oddq_directions, directionTitles, renderOrder, indexOrder, oppositeDirections, adjacentDirections } from './constants';
+import { octaveNoise, logGroupTime } from './utils';
 import { Subject } from 'rxjs';
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
+export interface IWorldOptions {
+  size: number;
+  sealevel: number;
+  seed: string;
+}
+
+export type Edge = {
+  id: number;
+  direction: Direction;
+  h1: WorldMapHex;
+  h2: WorldMapHex;
+  p1: Honeycomb.Point,
+  p2: Honeycomb.Point,
+  o1: WorldMapHex;
+  o2: WorldMapHex;
+  p1_edges?: [Edge, Edge];
+  p2_edges?: [Edge, Edge];
+  upstream?: number;
+  height?: number;
+}
 
 export type WorldMapHex = Honeycomb.Hex<IHex>;
 /**
@@ -22,6 +42,8 @@ export type WorldMapHex = Honeycomb.Hex<IHex>;
  */
 export class WorldMap {
   size: PIXI.ISize;
+  seed: string;
+
   hexgrid: Honeycomb.Grid<WorldMapHex>;
   terrain: ndarray;
   heightmap: ndarray;
@@ -29,25 +51,28 @@ export class WorldMap {
   private pointsMap: Map<string, [number, number]>;
   
   public terrainUpdates$: Subject<WorldMapHex[]>;
+  rivers: Edge[][];
 
   constructor(
-    options: { size: number; }) {
+    options: IWorldOptions
+  ) {
     this.size = {
       width: options.size * 2,
       height: options.size,
     };
+    this.seed = options.seed;
     this.hexgrid = Grid.rectangle({
       width: this.size.width,
       height: this.size.height
     });
     this.hexgrid;
-    const arraySize = Uint32Array.BYTES_PER_ELEMENT * this.size.width * this.size.height;
+    const arraySize = this.size.width * this.size.height;
     const arrayDim = [this.size.width, this.size.height];
-    const terrainBuffer = new SharedArrayBuffer(arraySize);
+    const terrainBuffer = new SharedArrayBuffer(Uint32Array.BYTES_PER_ELEMENT * arraySize);
     this.terrain = ndarray(new Uint32Array(terrainBuffer), arrayDim);
 
-    const heightBuffer = new SharedArrayBuffer(arraySize);
-    this.heightmap = ndarray(new Uint32Array(heightBuffer), arrayDim);
+    const heightBuffer = new SharedArrayBuffer(Float32Array.BYTES_PER_ELEMENT * arraySize);
+    this.heightmap = ndarray(new Float32Array(heightBuffer), arrayDim);
 
     this.indexMap = new Map();
     this.pointsMap = new Map();
@@ -64,7 +89,8 @@ export class WorldMap {
   }
 
   getHex(x: number, y: number) {
-    return this.hexgrid.get({ x, y});
+    return this.hexgrid[this.indexMap.get(`${x},${y}`)] || null;
+    // return this.hexgrid.get({ x, y });
   }
 
   getHexFromPoint(point: PIXI.Point) {
@@ -85,9 +111,15 @@ export class WorldMap {
     return { lat, long };
   }
 
+  @logGroupTime('generate')
+  generate() {
+    this.generateTerrain();
+    this.generateRivers();
+  }
+
+  @logGroupTime('generateTerrain')
   generateTerrain() {
-    const seed = Math.random();
-    const rng = Alea(seed);
+    const rng = Alea(this.seed);
     const noise = new SimplexNoise(rng);
     this.hexgrid.forEach((hex, index) => {
       hex.index = index;
@@ -149,6 +181,173 @@ export class WorldMap {
     });
   }
 
+  @logGroupTime('generateRivers')
+  generateRivers() {
+    // build a list of hex edges, calculate slope
+    let hexEdges: Edge[] = [];
+    let hexIDs: Map<number, Edge> = new Map();
+    let hexEdgesMap: Map<WorldMapHex, Record<Direction, Edge | null>> = new Map();
+    const getEmptyEdgeMap = (): Record<Direction, Edge> => ({
+      [Direction.SE]: null,
+      [Direction.NE]: null,
+      [Direction.N]: null,
+      [Direction.NW]: null,
+      [Direction.SW]: null,
+      [Direction.S]: null,
+    });
+    this.hexgrid.forEach((hex, index) => {
+      const neighbors = this.getHexNeighbors(hex);
+      const edges = hexEdgesMap.get(hex) || getEmptyEdgeMap();
+      const corners = hex.corners().map(p => p.add(this.getHexPosition(hex.x, hex.y)));
+      // console.log(corners);
+      const directionEdgeCoords: Record<Direction, Honeycomb.Point[]> = {
+        [Direction.SE]: [corners[0], corners[1]],
+        [Direction.NE]: [corners[5], corners[0]],
+        [Direction.N]: [corners[4], corners[5]],
+        [Direction.NW]: [corners[3], corners[4]],
+        [Direction.SW]: [corners[2], corners[3]],
+        [Direction.S]: [corners[1], corners[2]],
+      }
+      for (const dir of indexOrder) {
+        if (neighbors[dir]) {
+          if (!hexEdgesMap.has(neighbors[dir])) {
+            hexEdgesMap.set(neighbors[dir], getEmptyEdgeMap());
+          }
+          const [adj1Dir, adj2Dir ] = adjacentDirections[dir];
+          const id = hex.index * neighbors[dir].index;
+          if (hexIDs.has(id)) {
+            edges[dir] = hexEdgesMap.get(neighbors[dir])[oppositeDirections[dir]];
+          } else {
+            const edge: Edge = {
+              direction: dir,
+              id,
+              h1: hex,
+              h2: neighbors[dir],
+              p1: directionEdgeCoords[dir][0],
+              p2: directionEdgeCoords[dir][1],
+              o1: neighbors[adj1Dir],
+              o2: neighbors[adj2Dir],
+            }
+            edges[dir] = edge;
+            hexEdges.push(edge);
+            hexEdgesMap.get(neighbors[dir])[oppositeDirections[dir]] = edge;
+          }
+          
+        }
+      }
+      hexEdgesMap.set(hex, edges);
+    });
+
+    // find adjacent edges for each edge
+    this.hexgrid.forEach((hex, index) => {
+      const edges = hexEdgesMap.get(hex);
+      for (const dir of indexOrder) {
+        if (edges[dir]) {
+          const edge = edges[dir];
+          const [adj1, adj2] = adjacentDirections[dir];
+          const opposite_hex = edge.h2;
+          const opposite_dir = oppositeDirections[dir];
+          const opposite_dir_adj = adjacentDirections[opposite_dir];
+          const o1_edge = hexEdgesMap.get(opposite_hex)[opposite_dir_adj[0]];
+          const o2_edge = hexEdgesMap.get(opposite_hex)[opposite_dir_adj[1]];
+          edge.p1_edges = [edges[adj1], o1_edge];
+          edge.p2_edges = [edges[adj2], o2_edge];
+        }
+      }
+      hexEdgesMap.set(hex, edges);
+    });
+    console.log('hexEdges', hexEdges);
+    console.log('hexEdgesMap', hexEdgesMap);
+
+    // calculate upstream edge and heights
+    const getEdgeHeight = (edge: Edge) => Math.max((this.heightmap.get(edge.h1.x, edge.h1.y) + this.heightmap.get(edge.h2.x, edge.h2.y)) / 2);
+    for (const edge of hexEdges) {
+      if (
+        edge.o1 && edge.o2
+      ) {
+        edge.upstream = this.heightmap.get(edge.o1.x, edge.o1.y) < this.heightmap.get(edge.o2.x, edge.p2.y)
+          ? 2
+          : 1;
+        edge.height = getEdgeHeight(edge);
+      }
+    }
+
+    const coastlineEdges: Edge[] = [];
+
+    // find coastline
+    for (const edge of hexEdges) {
+      if (
+        edge.o1 && edge.o2 &&
+        this.getTerrainForCoord(edge.h1.x, edge.h1.y) !== TerrainType.OCEAN &&
+        this.getTerrainForCoord(edge.h2.x, edge.h2.y) !== TerrainType.OCEAN &&
+        this.getTerrainForCoord(edge.h1.x, edge.h1.y) !== TerrainType.GLACIAL &&
+        this.getTerrainForCoord(edge.h2.x, edge.h2.y) !== TerrainType.GLACIAL &&
+        (
+          (this.getTerrainForCoord(edge.o1.x, edge.o1.y) === TerrainType.OCEAN &&
+          this.getTerrainForCoord(edge.o2.x, edge.o2.y) !== TerrainType.OCEAN) ||
+          (this.getTerrainForCoord(edge.o1.x, edge.o1.y) !== TerrainType.OCEAN &&
+          this.getTerrainForCoord(edge.o2.x, edge.o2.y) === TerrainType.OCEAN)
+        )
+      ) {
+        coastlineEdges.push(edge);
+      }
+    }
+
+    console.log('coastlineEdges', coastlineEdges);
+
+    // build rivers
+    const edgeHasRiver: Map<Edge, boolean> = new Map();
+
+    const buildRiver = (currentEdge: Edge, lastEdges: Edge[] = []): Edge[] => {
+      let highestEdge: Edge = null;
+      let highestEdgeHeight = -Infinity;
+      const edges = [
+        ...(currentEdge.p1_edges || []),
+        ...(currentEdge.p2_edges || []),
+      ];
+      if (
+        edges.length === 0 ||
+        edgeHasRiver.has(currentEdge) ||
+        (
+          lastEdges.length > 0
+          ? (
+            this.getTerrainForCoord(currentEdge.o1.x, currentEdge.o1.y) === TerrainType.OCEAN ||
+            this.getTerrainForCoord(currentEdge.o2.x, currentEdge.o2.y) === TerrainType.OCEAN
+          )
+          : false
+        )
+      ) {
+        return lastEdges;
+      }
+      for (const edge of edges) {
+        if (edge && edge.height > highestEdgeHeight) {
+          highestEdge = edge;
+          highestEdgeHeight = edge.height;
+        }
+      }
+      if (highestEdgeHeight > currentEdge.height) {
+        edgeHasRiver.set(currentEdge, true);
+        if (edgeHasRiver.get(highestEdge)) {
+          return lastEdges;
+        }
+        return [
+          ...lastEdges,
+          ...buildRiver(highestEdge, [...lastEdges, currentEdge]),
+        ];
+      }
+      return lastEdges;
+    }
+
+    const rng = Alea(this.seed);
+
+    this.rivers = coastlineEdges.map(e => {
+      if (rng() < 0.1) {
+        return buildRiver(e);
+      }
+    }).filter(i => i);
+    console.log('rivers', this.rivers);
+  }
+
   getHexNeighbors(hex: WorldMapHex): Record<Direction, WorldMapHex> {
     const { x, y } = hex;
     const se_hex = this.getHexNeighbor(x, y, Direction.SE);
@@ -159,22 +358,28 @@ export class WorldMap {
     const s_hex = this.getHexNeighbor(x, y, Direction.S);
 
     return {
-      [Direction.SE]: this.getHex(se_hex[0], se_hex[1]),
-      [Direction.NE]: this.getHex(ne_hex[0], ne_hex[1]),
-      [Direction.N]: this.getHex(n_hex[0], n_hex[1]),
-      [Direction.NW]: this.getHex(nw_hex[0], nw_hex[1]),
-      [Direction.SW]: this.getHex(sw_hex[0], sw_hex[1]),
-      [Direction.S]: this.getHex(s_hex[0], s_hex[1]),
+      [Direction.SE]: se_hex,
+      [Direction.NE]: ne_hex,
+      [Direction.N]: n_hex,
+      [Direction.NW]: nw_hex,
+      [Direction.SW]: sw_hex,
+      [Direction.S]: s_hex,
     }
   }
 
   getHexNeighbor(x: number, y: number, direction: Direction) {
-    const parity = x & 1;
-    const dir = oddq_directions[parity][direction];
-    return [x + dir[0], y + dir[1]];
+    const coord = this.getHexNeighborCoord(x, y, direction);
+    return this.getHex(coord[0], coord[1]);
   }
 
-  getTerrainForHex(x: number, y: number) {
+  getHexNeighborCoord(x: number, y: number, direction: Direction) {
+    const parity = x & 1;
+    const dir = oddq_directions[parity][direction];
+    const coord = [x + dir[0], y + dir[1]];
+    return coord;
+  }
+
+  getTerrainForCoord(x: number, y: number) {
     if (y === -1 || y === this.size.height) {
       const half = Math.round(this.size.width / 2);
       const nx = clamp(((half + (half - x)) - 1), 0, this.size.width - 1);
@@ -189,23 +394,23 @@ export class WorldMap {
   }
 
   getHexNeighborTerrain(x: number, y: number): Record<Direction, TerrainType> {
-    const se_hex = this.getHexNeighbor(x, y, Direction.SE);
-    const se_hex_terrain = this.getTerrainForHex(se_hex[0], se_hex[1]);
+    const se_hex = this.getHexNeighborCoord(x, y, Direction.SE);
+    const se_hex_terrain = this.getTerrainForCoord(se_hex[0], se_hex[1]);
 
-    const ne_hex = this.getHexNeighbor(x, y, Direction.NE);
-    const ne_hex_terrain = this.getTerrainForHex(ne_hex[0], ne_hex[1]);
+    const ne_hex = this.getHexNeighborCoord(x, y, Direction.NE);
+    const ne_hex_terrain = this.getTerrainForCoord(ne_hex[0], ne_hex[1]);
 
-    const n_hex = this.getHexNeighbor(x, y, Direction.N);
-    const n_hex_terrain = this.getTerrainForHex(n_hex[0], n_hex[1]);
+    const n_hex = this.getHexNeighborCoord(x, y, Direction.N);
+    const n_hex_terrain = this.getTerrainForCoord(n_hex[0], n_hex[1]);
 
-    const nw_hex = this.getHexNeighbor(x, y, Direction.NW);
-    const nw_hex_terrain = this.getTerrainForHex(nw_hex[0], nw_hex[1]);
+    const nw_hex = this.getHexNeighborCoord(x, y, Direction.NW);
+    const nw_hex_terrain = this.getTerrainForCoord(nw_hex[0], nw_hex[1]);
 
-    const sw_hex = this.getHexNeighbor(x, y, Direction.SW);
-    const sw_hex_terrain = this.getTerrainForHex(sw_hex[0], sw_hex[1]);
+    const sw_hex = this.getHexNeighborCoord(x, y, Direction.SW);
+    const sw_hex_terrain = this.getTerrainForCoord(sw_hex[0], sw_hex[1]);
 
-    const s_hex = this.getHexNeighbor(x, y, Direction.S);
-    const s_hex_terrain = this.getTerrainForHex(s_hex[0], s_hex[1]);
+    const s_hex = this.getHexNeighborCoord(x, y, Direction.S);
+    const s_hex_terrain = this.getTerrainForCoord(s_hex[0], s_hex[1]);
 
     return {
       [Direction.SE]: se_hex_terrain,

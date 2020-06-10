@@ -136,9 +136,6 @@ export class MapViewer {
   setupTilemap() {
     console.log('resources', this.resources);
 
-    console.log('setup terrain');
-    console.time('setup terrain');
-
     this.manager.updateViewport(this.viewport);
     this.viewport.on('moved', () => {
       this.manager.updateViewport(this.viewport);
@@ -149,12 +146,16 @@ export class MapViewer {
       this.manager.updateViewport(this.viewport);
     });
 
-    this.manager.worldMap.generateTerrain();
-
-    console.timeEnd('setup terrain');
+    this.manager.worldMap.generate();
 
     const tilemap = new HexTilemap(this.app, this.manager.worldMap, this.viewport, this.resources, this.fonts);
 
+    document.addEventListener('keyup', event => {
+      if (event.key === 'o') {
+        console.log('toggle overlay');
+        tilemap.overlayLayer.alpha = tilemap.overlayLayer.alpha === 0 ? 0.75 : 0;
+      }
+    }, false);
     // update selected hex layer when selected hex changes
     this.manager.selectHex$.subscribe(hexCoordinate => {
       if (hexCoordinate) {
