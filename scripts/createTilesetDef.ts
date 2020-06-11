@@ -135,6 +135,15 @@ const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainTy
     [TerrainType.TUNDRA]: oceanColors,
     [TerrainType.GLACIAL]: oceanColors,
   },
+  [TerrainType.RIVER]: {
+    [TerrainType.RIVER]: oceanColors,
+    [TerrainType.GRASSLAND]: oceanColors,
+    [TerrainType.FOREST]: oceanColors,
+    [TerrainType.DESERT]: oceanColors,
+    [TerrainType.TAIGA]: oceanColors,
+    [TerrainType.TUNDRA]: oceanColors,
+    [TerrainType.GLACIAL]: oceanColors,
+  },
   [TerrainType.GRASSLAND]: {
     [TerrainType.GRASSLAND]: [
       Jimp.rgbaToInt(120, 178, 76, 255),
@@ -144,6 +153,13 @@ const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainTy
       Jimp.rgbaToInt(108, 160, 68, 255),
     ],
     [TerrainType.OCEAN]: [
+      Jimp.rgbaToInt(120, 178, 76, 255),
+      Jimp.rgbaToInt(247, 226, 107, 255), // beach
+      Jimp.rgbaToInt(190, 204, 93, 255),
+      Jimp.rgbaToInt(143, 194, 72, 255),
+      Jimp.rgbaToInt(108, 160, 68, 255),
+    ],
+    [TerrainType.RIVER]: [
       Jimp.rgbaToInt(120, 178, 76, 255),
       Jimp.rgbaToInt(247, 226, 107, 255), // beach
       Jimp.rgbaToInt(190, 204, 93, 255),
@@ -194,6 +210,13 @@ const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainTy
       Jimp.rgbaToInt(143, 194, 72, 255),
       Jimp.rgbaToInt(108, 160, 68, 255),
     ],
+    [TerrainType.RIVER]: [
+      Jimp.rgbaToInt(108, 155, 73, 255),
+      Jimp.rgbaToInt(247, 226, 107, 255), // beach
+      Jimp.rgbaToInt(190, 204, 93, 255),
+      Jimp.rgbaToInt(143, 194, 72, 255),
+      Jimp.rgbaToInt(108, 160, 68, 255),
+    ],
     [TerrainType.GRASSLAND]: [
       Jimp.rgbaToInt(108, 155, 73, 255),
       Jimp.rgbaToInt(120, 178, 76, 255),
@@ -231,6 +254,13 @@ const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainTy
       Jimp.rgbaToInt(224, 208, 114, 255),
       Jimp.rgbaToInt(224, 208, 114, 255),
     ],
+    [TerrainType.RIVER]: [
+      Jimp.rgbaToInt(233, 216, 121, 255),
+      Jimp.rgbaToInt(228, 207, 91, 255),
+      Jimp.rgbaToInt(231, 212, 107, 255),
+      Jimp.rgbaToInt(224, 208, 114, 255),
+      Jimp.rgbaToInt(224, 208, 114, 255),
+    ],
     [TerrainType.GRASSLAND]: [
       Jimp.rgbaToInt(233, 216, 121, 255),
       Jimp.rgbaToInt(228, 207, 91, 255),
@@ -255,6 +285,13 @@ const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainTy
       Jimp.rgbaToInt(108, 160, 68, 255),
     ],
     [TerrainType.OCEAN]: [
+      Jimp.rgbaToInt(121, 168, 86, 255),
+      Jimp.rgbaToInt(233, 216, 121, 255),
+      Jimp.rgbaToInt(172, 190, 102, 255),
+      Jimp.rgbaToInt(143, 194, 72, 255),
+      Jimp.rgbaToInt(108, 160, 68, 255),
+    ],
+    [TerrainType.RIVER]: [
       Jimp.rgbaToInt(121, 168, 86, 255),
       Jimp.rgbaToInt(233, 216, 121, 255),
       Jimp.rgbaToInt(172, 190, 102, 255),
@@ -319,6 +356,13 @@ const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainTy
       Jimp.rgbaToInt(118, 138, 77, 255),
       Jimp.rgbaToInt(118, 138, 77, 255),
     ],
+    [TerrainType.RIVER]: [
+      Jimp.rgbaToInt(132, 146, 101, 255),
+      Jimp.rgbaToInt(130, 141, 105, 255),
+      Jimp.rgbaToInt(130, 141, 105, 255),
+      Jimp.rgbaToInt(118, 138, 77, 255),
+      Jimp.rgbaToInt(118, 138, 77, 255),
+    ],
     [TerrainType.TAIGA]: [
       Jimp.rgbaToInt(132, 146, 101, 255),
       Jimp.rgbaToInt(130, 141, 105, 255),
@@ -336,6 +380,13 @@ const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainTy
       Jimp.rgbaToInt(229, 237, 255, 255),
     ],
     [TerrainType.OCEAN]: [
+      Jimp.rgbaToInt(242, 242, 242, 255),
+      Jimp.rgbaToInt(235, 239, 245, 255),
+      Jimp.rgbaToInt(237, 241, 246, 255),
+      Jimp.rgbaToInt(229, 237, 255, 255),
+      Jimp.rgbaToInt(229, 237, 255, 255),
+    ],
+    [TerrainType.RIVER]: [
       Jimp.rgbaToInt(242, 242, 242, 255),
       Jimp.rgbaToInt(235, 239, 245, 255),
       Jimp.rgbaToInt(237, 241, 246, 255),

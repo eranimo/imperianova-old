@@ -8,6 +8,7 @@ export enum TerrainType {
   TAIGA = 5,
   TUNDRA = 6,
   GLACIAL = 7,
+  RIVER = 8,
 }
 export const terrainTypes = [
   TerrainType.MAP_EDGE,
@@ -18,19 +19,21 @@ export const terrainTypes = [
   TerrainType.TAIGA,
   TerrainType.TUNDRA,
   TerrainType.GLACIAL,
+  TerrainType.RIVER,
 ];
-export const terrainTypeMax = 7;
+export const terrainTypeMax = 8;
 
 // a map of center terrain types to edge terrain types
 // representing which terrains have transitions
 // center -> edge
 export const terrainTransitions: Partial<Record<TerrainType, TerrainType[]>> = {
-  [TerrainType.GRASSLAND]: [TerrainType.DESERT, TerrainType.FOREST, TerrainType.TAIGA],
+  [TerrainType.GRASSLAND]: [TerrainType.RIVER, TerrainType.DESERT, TerrainType.FOREST, TerrainType.TAIGA],
   [TerrainType.OCEAN]: [TerrainType.DESERT, TerrainType.GRASSLAND, TerrainType.FOREST, TerrainType.TAIGA, TerrainType.TUNDRA, TerrainType.GLACIAL],
-  [TerrainType.FOREST]: [TerrainType.TAIGA],
-  [TerrainType.DESERT]: [TerrainType.FOREST],
-  [TerrainType.TUNDRA]: [TerrainType.GLACIAL, TerrainType.TAIGA],
-  [TerrainType.TAIGA]: [TerrainType.GLACIAL],
+  [TerrainType.FOREST]: [TerrainType.RIVER, TerrainType.TAIGA],
+  [TerrainType.DESERT]: [TerrainType.RIVER, TerrainType.FOREST],
+  [TerrainType.TUNDRA]: [TerrainType.RIVER, TerrainType.GLACIAL, TerrainType.TAIGA],
+  [TerrainType.TAIGA]: [TerrainType.RIVER, TerrainType.GLACIAL],
+  [TerrainType.GLACIAL]: [TerrainType.RIVER],
 };
 
 // edge -> center
@@ -55,6 +58,7 @@ export const terrainColors: Record<TerrainType, number> = {
   [TerrainType.TAIGA]: 0x006259,
   [TerrainType.TUNDRA]: 0x96D1C3,
   [TerrainType.GLACIAL]: 0xFAFAFA,
+  [TerrainType.RIVER]: 0x3F78CB,
 };
 
 export const terrainMinimapColors: Record<TerrainType, string> = {
@@ -66,6 +70,7 @@ export const terrainMinimapColors: Record<TerrainType, string> = {
   [TerrainType.TAIGA]: '#006259',
   [TerrainType.TUNDRA]: '#96D1C3',
   [TerrainType.GLACIAL]: '#FAFAFA',
+  [TerrainType.RIVER]: '#3F78CB', // not used
 };
 
 export const terrainTypeTitles: Record<TerrainType, string> = {
@@ -77,6 +82,7 @@ export const terrainTypeTitles: Record<TerrainType, string> = {
   [TerrainType.TAIGA]: 'Taiga',
   [TerrainType.TUNDRA]: 'Tundra',
   [TerrainType.GLACIAL]: 'Glacial',
+  [TerrainType.RIVER]: 'River',
 };
 
 export enum Direction {
