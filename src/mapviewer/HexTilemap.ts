@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 import { Viewport } from "pixi-viewport";
 import * as Honeycomb from 'honeycomb-grid';
 import { IHex, Hex, HEX_ADJUST_Y } from "./MapViewer";
-import { TerrainType, terrainColors, terrainTypeTitles, terrainTypes, Direction } from './constants';
+import { TerrainType, terrainColors, terrainTypeTitles, terrainTypes, Direction, indexOrder, oppositeDirections } from './constants';
 import { Tileset } from "./Tileset";
 import { WorldMap, WorldMapHex, Edge } from './WorldMap';
 import { TerrainTileset } from './TerrainTileset';
@@ -71,7 +71,6 @@ export class HexTilemap extends PIXI.Container {
   overlayTexture: PIXI.RenderTexture;
   selectionTexture: PIXI.Texture;
   gridTexture: PIXI.Texture;
-  hexRiverEdges: MultiDictionary<WorldMapHex, Edge>;
 
   constructor(
     public app: PIXI.Application,
@@ -81,12 +80,6 @@ export class HexTilemap extends PIXI.Container {
     public fonts: Record<string, any>) {
     super();
     this.tilesetMap = new Map();
-    this.hexRiverEdges = new MultiDictionary();
-    for (const riverEdges of worldMap.rivers) {
-      for (const edge of riverEdges) {
-        this.hexRiverEdges.setValue(edge.h1, edge);
-      }
-    }
     this.overlayLayer = new PIXI.Container();
     this.chunksLayer = new PIXI.Container();
     this.overlayLayer.alpha = 0.75;
@@ -108,8 +101,19 @@ export class HexTilemap extends PIXI.Container {
     this.terrainTileset = SectionalTileset.fromXML(
       this.resources.terrainPNG.texture.baseTexture,
       this.resources.terrainXML.data,
+      this.worldMap.size,
     );
+    for (const river of worldMap.rivers) {
+      // console.log('river', river);
+      for (const edge of river) {
+        // console.log('\t', edge.h1.index, edge.direction)
+        this.terrainTileset.hexRivers.setValue(edge.h1.index, edge.direction);
+        // this.terrainTileset.hexRivers.setValue(edge.h2.index, edge.direction);
+      }
+    }
+    
     console.log('terrainTileset', this.terrainTileset);
+    console.log('hexRivers', this.terrainTileset.hexRivers);
     this.tilesets = new Map();
     this.tilesets.set('ui', tileset);
     this.selectionHex = null;
@@ -219,7 +223,6 @@ export class HexTilemap extends PIXI.Container {
         console.log(this.worldMap.debugNeighborTerrain(hex.x, hex.y));
         const mask = this.worldMapTiles.tileMasks.get(hex.x, hex.y);
         console.log(
-          this.terrainTileset.hexTileSectionalTileCache.get(mask),
           this.terrainTileset.hexTileDebugInfo.get(mask),
           this.terrainTileset.hexTileErrors.get(mask),
         )
@@ -260,12 +263,12 @@ export class HexTilemap extends PIXI.Container {
     overlayGraphics.lineTo(firstCorner.x / SCALE, firstCorner.y / SCALE);
     overlayGraphics.endFill();
 
-    if (this.hexRiverEdges.containsKey(hex)) {
+    if (this.worldMap.hexRiverEdges.containsKey(hex)) {
       overlayGraphics.lineStyle(3 / 30, 0x0000FF);
-      for (const riverEdge of this.hexRiverEdges.getValue(hex)) {
+      for (const [p1, p2] of this.worldMap.hexRiverPoints.getValue(hex)) {
         // console.log('draw', riverEdge.p1);
-        overlayGraphics.moveTo(riverEdge.p1.x / SCALE, riverEdge.p1.y / SCALE); 
-        overlayGraphics.lineTo(riverEdge.p2.x / SCALE, riverEdge.p2.y / SCALE); 
+        overlayGraphics.moveTo(p1.x / SCALE, p1.y / SCALE); 
+        overlayGraphics.lineTo(p2.x / SCALE, p2.y / SCALE); 
       }
     }
 
@@ -301,10 +304,13 @@ export class HexTilemap extends PIXI.Container {
     hexes.forEach((hex, index) => {
       const terrainType = this.worldMap.getTerrainForCoord(hex.x, hex.y);
       if (terrainType === TerrainType.MAP_EDGE) return;
+      const hexObj = this.worldMap.getHex(hex.x, hex.y);
+      const riverDirections = this.worldMap.hexRiverEdges.getValue(hexObj);
       const textures = this.terrainTileset.getTile(
         this.worldMapTiles.tileMasks.get(hex.x, hex.y),
         terrainType,
         this.worldMap.getHexNeighborTerrain(hex.x, hex.y),
+        riverDirections,
       );
       if (textures) {
         const [ x, y ] = hexPosititions[index];

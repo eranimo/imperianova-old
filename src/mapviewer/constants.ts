@@ -58,7 +58,7 @@ export const terrainColors: Record<TerrainType, number> = {
   [TerrainType.TAIGA]: 0x006259,
   [TerrainType.TUNDRA]: 0x96D1C3,
   [TerrainType.GLACIAL]: 0xFAFAFA,
-  [TerrainType.RIVER]: 0x3F78CB,
+  [TerrainType.RIVER]: 0x6793d5,
 };
 
 export const terrainMinimapColors: Record<TerrainType, string> = {
@@ -70,7 +70,7 @@ export const terrainMinimapColors: Record<TerrainType, string> = {
   [TerrainType.TAIGA]: '#006259',
   [TerrainType.TUNDRA]: '#96D1C3',
   [TerrainType.GLACIAL]: '#FAFAFA',
-  [TerrainType.RIVER]: '#3F78CB', // not used
+  [TerrainType.RIVER]: '#6793d5', // not used
 };
 
 export const terrainTypeTitles: Record<TerrainType, string> = {

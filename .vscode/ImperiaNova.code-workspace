@@ -1,10 +1,10 @@
 {
-	"folders": [
-		{
-			"path": "/Users/kaelan/www/imperianova"
-		}
-	],
-	"settings": {
-		"typescript.tsdk": "node_modules/typescript/lib"
-	}
+  "settings": {
+    "typescript.tsdk": "node_modules/typescript/lib"
+  },
+  "folders": [
+    {
+      "path": ".."
+    }
+  ]
 }

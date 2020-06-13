@@ -8,6 +8,7 @@ import { IHex, Grid } from "./MapViewer";
 import { Direction, terrainTypeTitles, TerrainType, oddq_directions, directionTitles, renderOrder, indexOrder, oppositeDirections, adjacentDirections } from './constants';
 import { octaveNoise, logGroupTime } from './utils';
 import { Subject } from 'rxjs';
+import { MultiDictionary } from "typescript-collections";
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
@@ -52,6 +53,8 @@ export class WorldMap {
   
   public terrainUpdates$: Subject<WorldMapHex[]>;
   rivers: Edge[][];
+  hexRiverEdges: MultiDictionary<WorldMapHex, Direction>;
+  hexRiverPoints: MultiDictionary<WorldMapHex, [Honeycomb.Point, Honeycomb.Point]>;
 
   constructor(
     options: IWorldOptions
@@ -214,7 +217,11 @@ export class WorldMap {
             hexEdgesMap.set(neighbors[dir], getEmptyEdgeMap());
           }
           const [adj1Dir, adj2Dir ] = adjacentDirections[dir];
-          const id = hex.index * neighbors[dir].index;
+          const id = (
+            ((this.size.width * this.size.height ** 0) * hex.index) + 
+            ((this.size.width * this.size.height ** 1) * neighbors[dir].index) +
+            ((indexOrder.length ** 3) * dir)
+          );
           if (hexIDs.has(id)) {
             edges[dir] = hexEdgesMap.get(neighbors[dir])[oppositeDirections[dir]];
           } else {
@@ -265,7 +272,7 @@ export class WorldMap {
       if (
         edge.o1 && edge.o2
       ) {
-        edge.upstream = this.heightmap.get(edge.o1.x, edge.o1.y) < this.heightmap.get(edge.o2.x, edge.p2.y)
+        edge.upstream = this.heightmap.get(edge.o1.x, edge.o1.y) < this.heightmap.get(edge.o2.x, edge.o2.y)
           ? 2
           : 1;
         edge.height = getEdgeHeight(edge);
@@ -296,7 +303,7 @@ export class WorldMap {
     console.log('coastlineEdges', coastlineEdges);
 
     // build rivers
-    const edgeHasRiver: Map<Edge, boolean> = new Map();
+    const edgeHasRiver: Map<number, boolean> = new Map();
 
     const buildRiver = (currentEdge: Edge, lastEdges: Edge[] = []): Edge[] => {
       let highestEdge: Edge = null;
@@ -307,7 +314,7 @@ export class WorldMap {
       ];
       if (
         edges.length === 0 ||
-        edgeHasRiver.has(currentEdge) ||
+        edgeHasRiver.has(currentEdge.id) ||
         (
           lastEdges.length > 0
           ? (
@@ -326,26 +333,34 @@ export class WorldMap {
         }
       }
       if (highestEdgeHeight > currentEdge.height) {
-        edgeHasRiver.set(currentEdge, true);
-        if (edgeHasRiver.get(highestEdge)) {
+        edgeHasRiver.set(currentEdge.id, true);
+        if (edgeHasRiver.get(highestEdge.id)) {
           return lastEdges;
         }
-        return [
-          ...lastEdges,
-          ...buildRiver(highestEdge, [...lastEdges, currentEdge]),
-        ];
+        return buildRiver(highestEdge, [...lastEdges, currentEdge]);
       }
       return lastEdges;
     }
 
     const rng = Alea(this.seed);
 
-    this.rivers = coastlineEdges.map(e => {
-      if (rng() < 0.1) {
-        return buildRiver(e);
-      }
-    }).filter(i => i);
+    this.rivers = coastlineEdges
+      .filter(i => rng() < 0.33)
+      .map(edge => buildRiver(edge))
+      .filter(edges => edges.length > 0);
     console.log('rivers', this.rivers);
+
+    this.hexRiverEdges = new MultiDictionary();
+    this.hexRiverPoints = new MultiDictionary();
+    for (const riverEdges of this.rivers) {
+      for (const edge of riverEdges) {
+        this.hexRiverEdges.setValue(edge.h1, edge.direction);
+        this.hexRiverEdges.setValue(edge.h2, oppositeDirections[edge.direction]);
+        this.hexRiverPoints.setValue(edge.h1, [edge.p1, edge.p2]);
+        this.hexRiverPoints.setValue(edge.h2, [edge.p1, edge.p2]);
+      }
+    }
+    console.log('hexRiverEdges', this.hexRiverEdges);
   }
 
   getHexNeighbors(hex: WorldMapHex): Record<Direction, WorldMapHex> {

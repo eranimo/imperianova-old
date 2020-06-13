@@ -1,7 +1,8 @@
 import * as PIXI from "pixi.js";
-import { Direction, directionShort, TerrainType, adjacentDirections, renderOrder, terrainTypeTitles, terrainBackTransitions, terrainTypeMax } from './constants';
+import { Direction, directionShort, TerrainType, adjacentDirections, renderOrder, terrainTypeTitles, terrainBackTransitions, terrainTypeMax, indexOrder } from './constants';
 import { mapValues, random, groupBy, mapKeys } from "lodash";
 import {MultiDictionary } from 'typescript-collections';
+import ndarray from 'ndarray';
 
 
 export type SectionalTilesetTile = {
@@ -45,28 +46,30 @@ type XMLTileProperties = {
 export class SectionalTileset {
   sectionalTileTextures: Map<number, PIXI.Texture>;
   sectionalTileMaskToTileIDs: MultiDictionary<number, number>;
-  hexTileSectionalTileCache: Map<number, PIXI.Texture[]>;
+  hexTileSectionalTileCache: Map<string, PIXI.Texture[]>;
   hexTileErrors: Map<number, string>;
   hexTileDebugInfo: Map<number, any>;
+  hexRivers: MultiDictionary<number, Direction>;
   
-
   constructor(
     public baseTexture: PIXI.BaseTexture,
     public options: SectionalTilesetOptions,
+    size: PIXI.ISize, // TODO: remove
   ) {
-    const { padding, tileSize: { width, height } } = this.options;
+    const { padding, tileSize } = this.options;
     this.sectionalTileTextures = new Map();
     this.hexTileSectionalTileCache = new Map();
     this.sectionalTileMaskToTileIDs = new MultiDictionary();
     this.hexTileErrors = new Map();
     this.hexTileDebugInfo = new Map();
+    this.hexRivers = new MultiDictionary();
 
     for (const tile of options.sectionalTiles) {
       const texture = new PIXI.Texture(this.baseTexture, new PIXI.Rectangle(
-        Math.round((tile.tileID % this.options.columns) * (width + padding)),
-        Math.round((Math.floor(tile.tileID / this.options.columns)) * (height + padding)),
-        width,
-        height
+        Math.round((tile.tileID % this.options.columns) * (tileSize.width + padding)),
+        Math.round((Math.floor(tile.tileID / this.options.columns)) * (tileSize.height + padding)),
+        tileSize.width,
+        tileSize.height
       ));
       this.sectionalTileMaskToTileIDs.setValue(tile.tileMask, tile.tileID);
       this.sectionalTileTextures.set(tile.tileID, texture);
@@ -77,7 +80,8 @@ export class SectionalTileset {
 
   static fromXML(
     baseTexture: PIXI.BaseTexture,
-    document: Document
+    document: Document,
+    size: PIXI.ISize,
   ) {
     const tiles = document.querySelectorAll('tile');
     const tileset = document.querySelector('tileset');
@@ -116,7 +120,7 @@ export class SectionalTileset {
         adj2TerrainType,
       });
     });
-    return new SectionalTileset(baseTexture, options);
+    return new SectionalTileset(baseTexture, options, size);
   }
 
   static getTileHash(
@@ -127,11 +131,11 @@ export class SectionalTileset {
     adj2TerrainType: TerrainType,
   ) {
     return (
-      ((terrainTypeMax ** 1) * terrainType) +
-      ((terrainTypeMax ** 2) * terrainTypeCenter) +
-      ((renderOrder.length ** 3) * direction) +
-      ((terrainTypeMax ** 4) * adj1TerrainType) +
-      ((terrainTypeMax ** 5) * adj2TerrainType)
+      ((terrainTypeMax ** 2) * terrainType) +
+      ((terrainTypeMax ** 4) * terrainTypeCenter) +
+      ((renderOrder.length ** 6) * direction) +
+      ((terrainTypeMax ** 8) * adj1TerrainType) +
+      ((terrainTypeMax ** 10) * adj2TerrainType)
     );
   }
 
@@ -153,9 +157,11 @@ export class SectionalTileset {
     mask: number,
     terrainTypeCenter: TerrainType,
     neighborTerrainTypes: Record<Direction, TerrainType>,
+    riverDirections: Direction[],
   ): PIXI.Texture[] {
-    if (this.hexTileSectionalTileCache.has(mask)) {
-      return this.hexTileSectionalTileCache.get(mask);
+    const cachekey = `${mask}-${riverDirections.join('')}`;
+    if (this.hexTileSectionalTileCache.has(cachekey)) {
+      return this.hexTileSectionalTileCache.get(cachekey);
     }
 
     let newNeighborTerrainTypes = neighborTerrainTypes;
@@ -178,6 +184,11 @@ export class SectionalTileset {
         [Direction.S]: neighborsToChange[Direction.S] ? terrainTypeCenter : neighborTerrainTypes[Direction.S],
       };
     }
+    if (riverDirections.length > 0) {
+      for (const dir of riverDirections) {
+        newNeighborTerrainTypes[dir] = TerrainType.RIVER;
+      }
+    }
 
     const debugInfo = {};
     const textures = renderOrder.map(dir => {
@@ -185,11 +196,22 @@ export class SectionalTileset {
       const terrainType = newNeighborTerrainTypes[dir];
       const adj1TerrainType = newNeighborTerrainTypes[adjDir1];
       const adj2TerrainType = newNeighborTerrainTypes[adjDir2];
+
       const hash = SectionalTileset.getTileHash(terrainType, terrainTypeCenter, dir, adj1TerrainType, adj2TerrainType);
       const possibleTiles = this.sectionalTileMaskToTileIDs.getValue(hash);
       const chosenTile = possibleTiles[random(possibleTiles.length - 1)];
       if (chosenTile === undefined || !this.sectionalTileTextures.has(chosenTile)) {
-        const err = `Could not find tile: dir: ${directionShort[dir]}, terrainType: ${terrainTypeTitles[terrainType]}, terrainTypeCenter: ${terrainTypeTitles[terrainTypeCenter]}, adj1TerrainType: ${terrainTypeTitles[adj1TerrainType]}, adj2TerrainType: ${terrainTypeTitles[adj2TerrainType]}) \n${JSON.stringify(newNeighborTerrainTypes, null, 2)}`;
+        const err = `
+          Could not find tile:
+          
+          dir: ${directionShort[dir]}
+          terrainType: ${terrainTypeTitles[terrainType]}
+          terrainTypeCenter: ${terrainTypeTitles[terrainTypeCenter]}
+          adj1TerrainType: ${terrainTypeTitles[adj1TerrainType]}
+          adj2TerrainType: ${terrainTypeTitles[adj2TerrainType]})
+          
+          ${JSON.stringify(newNeighborTerrainTypes, null, 2)}
+        `;
         this.hexTileErrors.set(mask, err);
         return null;
       }
@@ -201,8 +223,10 @@ export class SectionalTileset {
       debugInfo,
       terrainTypeCenter,
       neighborTerrainTypes,
+      riverDirections,
+      cachekey,
     });
-    this.hexTileSectionalTileCache.set(mask, textures);
+    this.hexTileSectionalTileCache.set(cachekey, textures);
 
     return textures;
   }
