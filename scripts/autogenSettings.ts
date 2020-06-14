@@ -80,8 +80,8 @@ const oceanColors = [
 ];
 const oceanRiverTransitionColors = [
   Jimp.rgbaToInt(39, 121, 201, 255),
-  Jimp.rgbaToInt(39, 121, 201, 255),
-  Jimp.rgbaToInt(39, 121, 201, 255),
+  Jimp.rgbaToInt(107, 182, 210, 255),
+  Jimp.rgbaToInt(69, 145, 203, 255),
   Jimp.rgbaToInt(38, 115, 197, 255),
   Jimp.rgbaToInt(39, 121, 201, 255),
 ];
