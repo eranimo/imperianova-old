@@ -199,8 +199,12 @@ async function buildTemplateTileset(
     if (!(tile.terrainTypeCenter in terrainTemplates)) {
       throw new Error(`${tile.terrainTypeCenter} does not have an assigned tileset template`);
     }
-    const tilesetTemplate = terrainTemplates[colorGroupTerrain[AutogenColorGroup.PRIMARY][0]];
-    const pickedTemplate = templates[tilesetTemplate[0]];
+    let tilesetTemplate = AutogenTemplate.MAIN;
+    // terrainTemplates[colorGroupTerrain[AutogenColorGroup.PRIMARY][0]];
+    if (tile.terrainType === TerrainType.RIVER || adj1 === TerrainType.RIVER || adj2 === TerrainType.RIVER) {
+      tilesetTemplate = AutogenTemplate.RIVERS;
+    }
+    const pickedTemplate = templates[tilesetTemplate];
     outTileset.blit(pickedTemplate, tx, ty, coord.x, coord.y, tileWidth, tileHeight);
     // console.log(colorGroupTerrain);
     outTileset.scan(tx, ty, tileWidth, tileHeight, (x, y) => {
@@ -277,7 +281,8 @@ async function buildTilesetDef(template: Jimp, templates: AutogenTemplateImages)
     neighbors: TerrainType[],
     shouldAddTile: (adj1: TerrainType, adj2: TerrainType) => boolean = () => true,
   ) => {
-    console.log(`\tBuilding tile type ${terrainTypeTitles[terrainTypeCenter]} (center) <--> ${terrainTypeTitles[terrainType]} (edge)\t\t[${neighbors.map(terrainType => terrainTypeTitles[terrainType]).join(', ')}]`)
+    const count = neighbors.length * neighbors.length;
+    console.log(`\tBuilding ${count} tiles: ${terrainTypeTitles[terrainTypeCenter]} (center) <--> ${terrainTypeTitles[terrainType]} (edge)\t\t[${neighbors.map(terrainType => terrainTypeTitles[terrainType]).join(', ')}]`)
     for (const adj1 of neighbors) {
       for (const adj2 of neighbors) {
         if (!shouldAddTile(adj1, adj2)) {
@@ -474,6 +479,19 @@ async function buildTilesetDef(template: Jimp, templates: AutogenTemplateImages)
         )
       );
     }
+  }
+  console.log('\nAdding river mouths');
+  for (const edgeTerrainType of terrainTransitions[TerrainType.OCEAN]) {
+    addTileType(
+      TerrainType.OCEAN,
+      edgeTerrainType,
+      union([
+        TerrainType.RIVER,
+        edgeTerrainType,
+        ...(terrainTransitions[edgeTerrainType] || []),
+        ...(terrainBackTransitions[edgeTerrainType] || []),
+      ]),
+    );
   }
 
   const tilesWidth = 24;

@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 import { Viewport } from "pixi-viewport";
 import * as Honeycomb from 'honeycomb-grid';
 import { IHex, Hex, HEX_ADJUST_Y } from "./MapViewer";
-import { TerrainType, terrainColors, terrainTypeTitles, terrainTypes, Direction, indexOrder, oppositeDirections } from './constants';
+import { TerrainType, terrainColors, terrainTypeTitles, terrainTypes, Direction, indexOrder, oppositeDirections, renderOrder } from './constants';
 import { Tileset } from "./Tileset";
 import { WorldMap, WorldMapHex, Edge } from './WorldMap';
 import { TerrainTileset } from './TerrainTileset';
@@ -311,6 +311,9 @@ export class HexTilemap extends PIXI.Container {
         terrainType,
         this.worldMap.getHexNeighborTerrain(hex.x, hex.y),
         riverDirections,
+        this.worldMap,
+        hexObj,
+        this.worldMap.riverHexPairs,
       );
       if (textures) {
         const [ x, y ] = hexPosititions[index];

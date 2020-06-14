@@ -55,6 +55,7 @@ export class WorldMap {
   rivers: Edge[][];
   hexRiverEdges: MultiDictionary<WorldMapHex, Direction>;
   hexRiverPoints: MultiDictionary<WorldMapHex, [Honeycomb.Point, Honeycomb.Point]>;
+  riverHexPairs: Map<WorldMapHex, Set<WorldMapHex>>;
 
   constructor(
     options: IWorldOptions
@@ -352,8 +353,19 @@ export class WorldMap {
 
     this.hexRiverEdges = new MultiDictionary();
     this.hexRiverPoints = new MultiDictionary();
+    this.riverHexPairs = new Map();
     for (const riverEdges of this.rivers) {
       for (const edge of riverEdges) {
+        if (this.riverHexPairs.has(edge.h1)) {
+          this.riverHexPairs.get(edge.h1).add(edge.h2);
+        } else {
+          this.riverHexPairs.set(edge.h1, new Set([edge.h2]));
+        }
+        if (this.riverHexPairs.has(edge.h2)) {
+          this.riverHexPairs.get(edge.h2).add(edge.h1);
+        } else {
+          this.riverHexPairs.set(edge.h2, new Set([edge.h1]));
+        }
         this.hexRiverEdges.setValue(edge.h1, edge.direction);
         this.hexRiverEdges.setValue(edge.h2, oppositeDirections[edge.direction]);
         this.hexRiverPoints.setValue(edge.h1, [edge.p1, edge.p2]);

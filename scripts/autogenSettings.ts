@@ -78,6 +78,13 @@ const oceanColors = [
   Jimp.rgbaToInt(38, 115, 197, 255),
   Jimp.rgbaToInt(39, 121, 201, 255),
 ];
+const oceanRiverTransitionColors = [
+  Jimp.rgbaToInt(39, 121, 201, 255),
+  Jimp.rgbaToInt(39, 121, 201, 255),
+  Jimp.rgbaToInt(39, 121, 201, 255),
+  Jimp.rgbaToInt(38, 115, 197, 255),
+  Jimp.rgbaToInt(39, 121, 201, 255),
+];
 export const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainType, number[]>>>> = {
   [TerrainType.OCEAN]: {
     [TerrainType.OCEAN]: oceanColors,
@@ -87,6 +94,7 @@ export const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<Te
     [TerrainType.TAIGA]: oceanColors,
     [TerrainType.TUNDRA]: oceanColors,
     [TerrainType.GLACIAL]: oceanColors,
+    [TerrainType.RIVER]: oceanRiverTransitionColors,
   },
   [TerrainType.RIVER]: {
     [TerrainType.RIVER]: oceanColors,
@@ -96,6 +104,7 @@ export const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<Te
     [TerrainType.TAIGA]: oceanColors,
     [TerrainType.TUNDRA]: oceanColors,
     [TerrainType.GLACIAL]: oceanColors,
+    [TerrainType.OCEAN]: oceanRiverTransitionColors,
   },
   [TerrainType.GRASSLAND]: {
     [TerrainType.GRASSLAND]: [

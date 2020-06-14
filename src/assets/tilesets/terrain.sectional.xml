@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<tileset version="1.2" tiledversion="1.3.4" name="terrain" tilewidth="32" tileheight="48" tilecount="4212" columns="24" spacing="15">
+<tileset version="1.2" tiledversion="1.3.4" name="terrain" tilewidth="32" tileheight="48" tilecount="4584" columns="24" spacing="15">
   <tileoffset x="0" y="2"/>
-  <image source="terrain.sectional.png" width="1128" height="11088"/>
+  <image source="terrain.sectional.png" width="1128" height="12033"/>
   <tile id="0">
     <properties>
       <property name="direction" value="SE" type="str"/>
@@ -37908,6 +37908,3354 @@
       <property name="terrainTypeCenter" value="7" type="int"/>
       <property name="terrainTypeSE" value="6" type="int"/>
       <property name="terrainTypeSW" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4212">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4213">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4214">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4215">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4216">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4217">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4218">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="4" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4219">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="4" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4220">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="4" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4221">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="4" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4222">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="4" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4223">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="4" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4224">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4225">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4226">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4227">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4228">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4229">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4230">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4231">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4232">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4233">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4234">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4235">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4236">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4237">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4238">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4239">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4240">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4241">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4242">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="4" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4243">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="4" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4244">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="4" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4245">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="4" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4246">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="4" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4247">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="4" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4248">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="3" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4249">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="3" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4250">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="3" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4251">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="3" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4252">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="3" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4253">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="3" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4254">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4255">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4256">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4257">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4258">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4259">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4260">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="2" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4261">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="2" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4262">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="2" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4263">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="2" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4264">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="2" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4265">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="4" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="2" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4266">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4267">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4268">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4269">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4270">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4271">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4272">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4273">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4274">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4275">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4276">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4277">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4278">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="4" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4279">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="4" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4280">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="4" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4281">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="4" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4282">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="4" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4283">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="4" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4284">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4285">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4286">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4287">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4288">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4289">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4290">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4291">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4292">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4293">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4294">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4295">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4296">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4297">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4298">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4299">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4300">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4301">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4302">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="2" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4303">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="2" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4304">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="2" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4305">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="2" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4306">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="2" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4307">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="2" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4308">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="4" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4309">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="4" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4310">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="4" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4311">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="4" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4312">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="4" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4313">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="4" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4314">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="3" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4315">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="3" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4316">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="3" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4317">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="3" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4318">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="3" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4319">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="3" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4320">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="5" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4321">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="5" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4322">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="5" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4323">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="5" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4324">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="5" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4325">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="5" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4326">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4327">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4328">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4329">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4330">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4331">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="2" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4332">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4333">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4334">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4335">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4336">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4337">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4338">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4339">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4340">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4341">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4342">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4343">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4344">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4345">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4346">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4347">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4348">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4349">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4350">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4351">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4352">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4353">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4354">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4355">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4356">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4357">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4358">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4359">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4360">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4361">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4362">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="4" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4363">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="4" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4364">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="4" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4365">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="4" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4366">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="4" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4367">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="4" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4368">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="3" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4369">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="3" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4370">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="3" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4371">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="3" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4372">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="3" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4373">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="3" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4374">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="5" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4375">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="5" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4376">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="5" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4377">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="5" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4378">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="5" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4379">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="5" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4380">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4381">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4382">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4383">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4384">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4385">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4386">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="2" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4387">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="2" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4388">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="2" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4389">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="2" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4390">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="2" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4391">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="2" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4392">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="4" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4393">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="4" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4394">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="4" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4395">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="4" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4396">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="4" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4397">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="3" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="4" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4398">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4399">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4400">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4401">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4402">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4403">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4404">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4405">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4406">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4407">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4408">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4409">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4410">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="7" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4411">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="7" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4412">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="7" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4413">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="7" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4414">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="7" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4415">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="7" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4416">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4417">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4418">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4419">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4420">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4421">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4422">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4423">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4424">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4425">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4426">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4427">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="2" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4428">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4429">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4430">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4431">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4432">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4433">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="3" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4434">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="6" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4435">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="6" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4436">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="6" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4437">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="6" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4438">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="6" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4439">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="6" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4440">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="5" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4441">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="5" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4442">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="5" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4443">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="5" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4444">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="5" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4445">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="5" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4446">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="7" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4447">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="7" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4448">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="7" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4449">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="7" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4450">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="7" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4451">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="7" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4452">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4453">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4454">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4455">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4456">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4457">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4458">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="2" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4459">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="2" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4460">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="2" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4461">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="2" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4462">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="2" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4463">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="2" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4464">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="3" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4465">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="3" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4466">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="3" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4467">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="3" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4468">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="3" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4469">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="3" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4470">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="6" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4471">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="6" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4472">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="6" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4473">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="6" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4474">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="6" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4475">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="5" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="6" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4476">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4477">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4478">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4479">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4480">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4481">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4482">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="6" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4483">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="6" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4484">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="6" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4485">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="6" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4486">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="6" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4487">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="6" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4488">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="7" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4489">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="7" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4490">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="7" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4491">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="7" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4492">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="7" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4493">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="7" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4494">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4495">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4496">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4497">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4498">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4499">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4500">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4501">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4502">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4503">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4504">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4505">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4506">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="6" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4507">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="6" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4508">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="6" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4509">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="6" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4510">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="6" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4511">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="6" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4512">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="7" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4513">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="7" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4514">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="7" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4515">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="7" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4516">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="7" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4517">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="7" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4518">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="5" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4519">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="5" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4520">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="5" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4521">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="5" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4522">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="5" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4523">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="5" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4524">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4525">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4526">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4527">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4528">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4529">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="6" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4530">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4531">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4532">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4533">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4534">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4535">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4536">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="7" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4537">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="7" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4538">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="7" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4539">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="7" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4540">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="7" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4541">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="7" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4542">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4543">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4544">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4545">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4546">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4547">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="1" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4548">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4549">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4550">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4551">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4552">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4553">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="5" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4554">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+      <property name="terrainTypeS" value="6" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4555">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+      <property name="terrainTypeSE" value="6" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4556">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+      <property name="terrainTypeNE" value="6" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4557">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+      <property name="terrainTypeN" value="6" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4558">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+      <property name="terrainTypeNW" value="6" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4559">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+      <property name="terrainTypeSW" value="6" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4560">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="7" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4561">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="7" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4562">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="7" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4563">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="7" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4564">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="7" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4565">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="7" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4566">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="1" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4567">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="1" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4568">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="1" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4569">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="1" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4570">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="1" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4571">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="1" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4572">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="5" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4573">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="5" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4574">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="5" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4575">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="5" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4576">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="5" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4577">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="5" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4578">
+    <properties>
+      <property name="direction" value="SE" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNE" value="6" type="int"/>
+      <property name="terrainTypeS" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4579">
+    <properties>
+      <property name="direction" value="NE" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeN" value="6" type="int"/>
+      <property name="terrainTypeSE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4580">
+    <properties>
+      <property name="direction" value="N" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeNW" value="6" type="int"/>
+      <property name="terrainTypeNE" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4581">
+    <properties>
+      <property name="direction" value="NW" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSW" value="6" type="int"/>
+      <property name="terrainTypeN" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4582">
+    <properties>
+      <property name="direction" value="SW" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeS" value="6" type="int"/>
+      <property name="terrainTypeNW" value="8" type="int"/>
+    </properties>
+  </tile>
+  <tile id="4583">
+    <properties>
+      <property name="direction" value="S" type="str"/>
+      <property name="terrainType" value="7" type="int"/>
+      <property name="terrainTypeCenter" value="1" type="int"/>
+      <property name="terrainTypeSE" value="6" type="int"/>
+      <property name="terrainTypeSW" value="8" type="int"/>
     </properties>
   </tile>
 </tileset>

@@ -1,8 +1,9 @@
 import * as PIXI from "pixi.js";
-import { Direction, directionShort, TerrainType, adjacentDirections, renderOrder, terrainTypeTitles, terrainBackTransitions, terrainTypeMax, indexOrder } from './constants';
+import { Direction, directionShort, TerrainType, adjacentDirections, renderOrder, terrainTypeTitles, terrainBackTransitions, terrainTypeMax, indexOrder, oppositeDirections } from './constants';
 import { mapValues, random, groupBy, mapKeys } from "lodash";
 import {MultiDictionary } from 'typescript-collections';
 import ndarray from 'ndarray';
+import { WorldMapHex, WorldMap } from './WorldMap';
 
 
 export type SectionalTilesetTile = {
@@ -153,16 +154,27 @@ export class SectionalTileset {
     );
   }
 
+  getSectionalTile(
+    terrainType: TerrainType,
+    adj1TerrainType: TerrainType,
+    adj2TerrainType: TerrainType,
+  ) {
+
+  }
+
   getTile(
     mask: number,
     terrainTypeCenter: TerrainType,
     neighborTerrainTypes: Record<Direction, TerrainType>,
     riverDirections: Direction[],
+    worldMap: WorldMap,
+    hex: WorldMapHex,
+    riverHexPairs: Map<WorldMapHex, Set<WorldMapHex>>,
   ): PIXI.Texture[] {
-    const cachekey = `${mask}-${riverDirections.join('')}`;
-    if (this.hexTileSectionalTileCache.has(cachekey)) {
-      return this.hexTileSectionalTileCache.get(cachekey);
-    }
+    // const cachekey = `${mask}-${riverDirections.join('')}`;
+    // if (this.hexTileSectionalTileCache.has(cachekey)) {
+    //   return this.hexTileSectionalTileCache.get(cachekey);
+    // }
 
     let newNeighborTerrainTypes = neighborTerrainTypes;
     if (terrainTypeCenter in terrainBackTransitions) {
@@ -194,9 +206,30 @@ export class SectionalTileset {
     const textures = renderOrder.map(dir => {
       const [adjDir1, adjDir2] = adjacentDirections[dir];
       const terrainType = newNeighborTerrainTypes[dir];
-      const adj1TerrainType = newNeighborTerrainTypes[adjDir1];
-      const adj2TerrainType = newNeighborTerrainTypes[adjDir2];
-
+      let adj1TerrainType = newNeighborTerrainTypes[adjDir1];
+      let adj2TerrainType = newNeighborTerrainTypes[adjDir2];
+      // if (terrainTypeCenter === TerrainType.OCEAN && terrainType !== TerrainType.OCEAN) {
+      // check both adjacent direction neighbors for rivers
+      const neighborHex = worldMap.getHexNeighbor(hex.x, hex.y, dir);
+      const neighborAdj1Hex = worldMap.getHexNeighbor(hex.x, hex.y, adjDir1);
+      const neighborAdj2Hex = worldMap.getHexNeighbor(hex.x, hex.y, adjDir2);
+      const adjRiverEdges = {};
+      if (riverHexPairs.has(neighborHex)) {
+        const hexRivers = riverHexPairs.get(neighborHex);
+        // console.log('found river', hex, neighborHex, neighborAdj1Hex, neighborAdj2Hex, dir, hexRivers);
+        if (hexRivers.has(neighborAdj1Hex)) {
+          adjRiverEdges[adjDir1] = [hex, neighborHex, neighborAdj1Hex];
+          adj1TerrainType = TerrainType.RIVER;
+        } else {
+          adjRiverEdges[adjDir1] = false;
+        }
+        if (hexRivers.has(neighborAdj2Hex)) {
+          adjRiverEdges[adjDir2] = [hex, neighborHex, neighborAdj2Hex];
+          adj2TerrainType = TerrainType.RIVER;
+        } else {
+          adjRiverEdges[adjDir2] = false;
+        }
+      }
       const hash = SectionalTileset.getTileHash(terrainType, terrainTypeCenter, dir, adj1TerrainType, adj2TerrainType);
       const possibleTiles = this.sectionalTileMaskToTileIDs.getValue(hash);
       const chosenTile = possibleTiles[random(possibleTiles.length - 1)];
@@ -215,7 +248,7 @@ export class SectionalTileset {
         this.hexTileErrors.set(mask, err);
         return null;
       }
-      debugInfo[dir] = { hash, possibleTiles, terrainType, adj1TerrainType, adj2TerrainType, chosenTile };
+      debugInfo[dir] = { hash, possibleTiles, terrainType, adj1TerrainType, adj2TerrainType, chosenTile, adjRiverEdges };
       return this.sectionalTileTextures.get(chosenTile);
     });
     this.hexTileDebugInfo.set(mask, {
@@ -224,9 +257,9 @@ export class SectionalTileset {
       terrainTypeCenter,
       neighborTerrainTypes,
       riverDirections,
-      cachekey,
+      // cachekey,
     });
-    this.hexTileSectionalTileCache.set(cachekey, textures);
+    // this.hexTileSectionalTileCache.set(cachekey, textures);
 
     return textures;
   }

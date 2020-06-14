@@ -28,12 +28,12 @@ export const terrainTypeMax = 8;
 // center -> edge
 export const terrainTransitions: Partial<Record<TerrainType, TerrainType[]>> = {
   [TerrainType.GRASSLAND]: [TerrainType.RIVER, TerrainType.DESERT, TerrainType.FOREST, TerrainType.TAIGA],
-  [TerrainType.OCEAN]: [TerrainType.DESERT, TerrainType.GRASSLAND, TerrainType.FOREST, TerrainType.TAIGA, TerrainType.TUNDRA, TerrainType.GLACIAL],
+  [TerrainType.OCEAN]: [TerrainType.RIVER, TerrainType.DESERT, TerrainType.GRASSLAND, TerrainType.FOREST, TerrainType.TAIGA, TerrainType.TUNDRA, TerrainType.GLACIAL],
   [TerrainType.FOREST]: [TerrainType.RIVER, TerrainType.TAIGA],
   [TerrainType.DESERT]: [TerrainType.RIVER, TerrainType.FOREST],
   [TerrainType.TUNDRA]: [TerrainType.RIVER, TerrainType.GLACIAL, TerrainType.TAIGA],
   [TerrainType.TAIGA]: [TerrainType.RIVER, TerrainType.GLACIAL],
-  [TerrainType.GLACIAL]: [TerrainType.RIVER],
+  [TerrainType.GLACIAL]: [TerrainType.RIVER]
 };
 
 // edge -> center
