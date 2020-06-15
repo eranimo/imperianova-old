@@ -201,7 +201,10 @@ async function buildTemplateTileset(
     }
     let tilesetTemplate = AutogenTemplate.MAIN;
     // terrainTemplates[colorGroupTerrain[AutogenColorGroup.PRIMARY][0]];
-    if (tile.terrainType === TerrainType.RIVER || adj1 === TerrainType.RIVER || adj2 === TerrainType.RIVER) {
+    if (
+      tile.terrainType === TerrainType.RIVER ||
+      (tile.terrainTypeCenter === TerrainType.OCEAN && (adj1 === TerrainType.RIVER || adj2 === TerrainType.RIVER))
+    ) {
       tilesetTemplate = AutogenTemplate.RIVERS;
     }
     const pickedTemplate = templates[tilesetTemplate];
