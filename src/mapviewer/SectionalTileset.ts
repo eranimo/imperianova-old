@@ -154,14 +154,6 @@ export class SectionalTileset {
     );
   }
 
-  getSectionalTile(
-    terrainType: TerrainType,
-    adj1TerrainType: TerrainType,
-    adj2TerrainType: TerrainType,
-  ) {
-
-  }
-
   getTile(
     mask: number,
     terrainTypeCenter: TerrainType,

@@ -37,19 +37,21 @@ const argv = yargs.options({
 
 enum AutogenTemplate {
   MAIN,
-  RIVERS,
+  RIVER,
+  RIVER_MOUTH,
 };
 
 type AutogenTemplateImages = Record<AutogenTemplate, Jimp>;
 
 const autogenTemplatePaths = {
   [AutogenTemplate.MAIN]: getFilePath('src', 'assets', 'autogen-template-2.png'),
-  [AutogenTemplate.RIVERS]: getFilePath('src', 'assets', 'autogen-template-river.png'),
+  [AutogenTemplate.RIVER]: getFilePath('src', 'assets', 'autogen-template-river.png'),
+  [AutogenTemplate.RIVER_MOUTH]: getFilePath('src', 'assets', 'autogen-template-rivermouth.png'),
 }
 
 // template for terrainType (edge)
 const terrainTemplates: Partial<Record<TerrainType, AutogenTemplate[]>> = {
-  [TerrainType.RIVER]: [AutogenTemplate.RIVERS],
+  [TerrainType.RIVER]: [AutogenTemplate.RIVER],
   [TerrainType.OCEAN]: [AutogenTemplate.MAIN],
   [TerrainType.GRASSLAND]: [AutogenTemplate.MAIN],
   [TerrainType.FOREST]: [AutogenTemplate.MAIN],
@@ -203,9 +205,11 @@ async function buildTemplateTileset(
     // terrainTemplates[colorGroupTerrain[AutogenColorGroup.PRIMARY][0]];
     if (
       tile.terrainType === TerrainType.RIVER ||
-      (tile.terrainTypeCenter === TerrainType.OCEAN && (adj1 === TerrainType.RIVER || adj2 === TerrainType.RIVER))
+      (tile.terrainTypeCenter !== TerrainType.OCEAN && (adj1 === TerrainType.RIVER || adj2 === TerrainType.RIVER))
     ) {
-      tilesetTemplate = AutogenTemplate.RIVERS;
+      tilesetTemplate = AutogenTemplate.RIVER;
+    } else if (tile.terrainTypeCenter === TerrainType.OCEAN && (adj1 === TerrainType.RIVER || adj2 === TerrainType.RIVER)) {
+      tilesetTemplate = AutogenTemplate.RIVER_MOUTH;
     }
     const pickedTemplate = templates[tilesetTemplate];
     outTileset.blit(pickedTemplate, tx, ty, coord.x, coord.y, tileWidth, tileHeight);
@@ -541,7 +545,8 @@ async function main() {
   const template = await Jimp.read(getFilePath('src', 'assets', 'template.png'));
   const autogenTemplates: AutogenTemplateImages = {
     [AutogenTemplate.MAIN]: await Jimp.read(autogenTemplatePaths[AutogenTemplate.MAIN]),
-    [AutogenTemplate.RIVERS]: await Jimp.read(autogenTemplatePaths[AutogenTemplate.RIVERS]),
+    [AutogenTemplate.RIVER]: await Jimp.read(autogenTemplatePaths[AutogenTemplate.RIVER]),
+    [AutogenTemplate.RIVER_MOUTH]: await Jimp.read(autogenTemplatePaths[AutogenTemplate.RIVER_MOUTH]),
   };
 
   try {
