@@ -64,6 +64,14 @@ export const autogenColors = {
     Jimp.rgbaToInt(217, 243, 243, 255),
   ]
 };
+
+export const autogenObjectsChance: Partial<Record<TerrainType, number>> = {
+  [TerrainType.TUNDRA]: 0.25,
+  [TerrainType.FOREST]: 1,
+  [TerrainType.TAIGA]: 1,
+  [TerrainType.GRASSLAND]: 1,
+}
+
 /**
  * 0 = main color
  * 1 = border color
@@ -85,6 +93,9 @@ const oceanRiverTransitionColors = [
   Jimp.rgbaToInt(38, 115, 197, 255),
   Jimp.rgbaToInt(39, 121, 201, 255),
 ];
+const tundraPrimary = Jimp.rgbaToInt(138, 154, 100, 255);
+const tundraBorder = Jimp.rgbaToInt(125, 139, 90, 255);
+const tundraBorderAccent = Jimp.rgbaToInt(130, 145, 94, 255);
 export const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<TerrainType, number[]>>>> = {
   [TerrainType.OCEAN]: {
     [TerrainType.OCEAN]: oceanColors,
@@ -291,44 +302,44 @@ export const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<Te
   },
   [TerrainType.TUNDRA]: {
     [TerrainType.TUNDRA]: [
-      Jimp.rgbaToInt(132, 146, 101, 255),
-      Jimp.rgbaToInt(119, 128, 102, 255),
-      Jimp.rgbaToInt(130, 141, 105, 255),
+      tundraPrimary,
+      tundraBorder,
+      tundraBorderAccent,
       Jimp.rgbaToInt(118, 138, 77, 255),
       Jimp.rgbaToInt(118, 138, 77, 255),
     ],
     [TerrainType.GLACIAL]: [
-      Jimp.rgbaToInt(132, 146, 101, 255),
-      Jimp.rgbaToInt(119, 128, 102, 255),
-      Jimp.rgbaToInt(130, 141, 105, 255),
+      tundraPrimary,
+      tundraBorder,
+      tundraBorderAccent,
       Jimp.rgbaToInt(118, 138, 77, 255),
       Jimp.rgbaToInt(118, 138, 77, 255),
     ],
     [TerrainType.GLACIAL]: [
-      Jimp.rgbaToInt(132, 146, 101, 255),
-      Jimp.rgbaToInt(119, 128, 102, 255),
-      Jimp.rgbaToInt(130, 141, 105, 255),
+      tundraPrimary,
+      tundraBorder,
+      tundraBorderAccent,
       Jimp.rgbaToInt(118, 138, 77, 255),
       Jimp.rgbaToInt(118, 138, 77, 255),
     ],
     [TerrainType.OCEAN]: [
-      Jimp.rgbaToInt(132, 146, 101, 255),
-      Jimp.rgbaToInt(130, 141, 105, 255),
-      Jimp.rgbaToInt(130, 141, 105, 255),
+      tundraPrimary,
+      tundraBorder,
+      tundraBorderAccent,
       Jimp.rgbaToInt(118, 138, 77, 255),
       Jimp.rgbaToInt(118, 138, 77, 255),
     ],
     [TerrainType.RIVER]: [
-      Jimp.rgbaToInt(132, 146, 101, 255),
-      Jimp.rgbaToInt(130, 141, 105, 255),
-      Jimp.rgbaToInt(130, 141, 105, 255),
+      tundraPrimary,
+      tundraBorder,
+      tundraBorderAccent,
       Jimp.rgbaToInt(118, 138, 77, 255),
       Jimp.rgbaToInt(118, 138, 77, 255),
     ],
     [TerrainType.TAIGA]: [
-      Jimp.rgbaToInt(132, 146, 101, 255),
-      Jimp.rgbaToInt(130, 141, 105, 255),
-      Jimp.rgbaToInt(130, 141, 105, 255),
+      tundraPrimary,
+      tundraBorder,
+      tundraBorderAccent,
       Jimp.rgbaToInt(118, 138, 77, 255),
       Jimp.rgbaToInt(118, 138, 77, 255),
     ],

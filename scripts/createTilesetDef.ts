@@ -22,7 +22,7 @@ import { newImage, getFilePath, propertyTypeProcess } from './shared';
 import Jimp from 'jimp';
 import { union, random } from 'lodash';
 import { MultiDictionary } from 'typescript-collections';
-import { getAutogenSettings, AutogenColorGroup, autogenColorGroups, autogenColors, autogenTerrainColors } from './autogenSettings';
+import { getAutogenSettings, AutogenColorGroup, autogenColorGroups, autogenColors, autogenTerrainColors, autogenObjectsChance } from './autogenSettings';
 
 yargs.command('* <tilesetDefName>', 'Builds tileset definition xml file');
 
@@ -263,11 +263,12 @@ async function buildTemplateTileset(
             const newColorSet = autogenTerrainColors[matchingTerrainTypes[0]][matchingTerrainTypes[1] || matchingTerrainTypes[0]];
             // place object here
             const object = getRandomObject(matchingTerrainTypes[0]);
-            if (object) {
+            const shouldPlace = Math.random() < (autogenObjectsChance[matchingTerrainTypes[0]] || 1);
+            if (object && shouldPlace) {
               outTileset.blit(autogenObjectsTileset, x - 7, y - 14, object.x, object.y, 15, 15);
             } else {
               // console.log(`Missing objects for ${terrainTypeTitles[matchingTerrainTypes[0]]} - ${terrainTypeTitles[matchingTerrainTypes[1] || matchingTerrainTypes[0]]}`)
-              outTileset.setPixelColor(newColorSet[index + 3], x, y);
+              outTileset.setPixelColor(newColorSet[0], x, y);
             }
           }
         });
