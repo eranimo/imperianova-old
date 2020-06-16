@@ -5,10 +5,10 @@ import Jimp from 'jimp';
 import { parseStringPromise, parseString } from 'xml2js';
 import ndarray from 'ndarray';
 import { getTilesetMask } from '../src/mapviewer/utils';
-import { TerrainType, Direction, directionShort, terrainTypeMax, terrainTypes, renderOrder, adjacentDirections, terrainTypeTitles, terrainTransitions, terrainBackTransitions } from '../src/mapviewer/constants';
+import { SectionalTile, TileVariant, TerrainType, Direction, directionShort, terrainTypeMax, terrainTypes, renderOrder, adjacentDirections, terrainTypeTitles, terrainTransitions, terrainBackTransitions } from '../src/mapviewer/constants';
 import { sum } from 'lodash';
 import yargs from 'yargs';
-import { SectionalTile, TileVariant, newImage, getFilePath, propertyTypeProcess } from './shared';
+import { newImage, getFilePath, propertyTypeProcess } from './shared';
 
 
 yargs.command('* <tilesetName>', 'Builds tilesets from Tiled definition');

@@ -1,6 +1,6 @@
 import { TerrainType, directionShort, Direction, terrainTypeTitles, terrainBackTransitions } from '../src/mapviewer/constants';
 import Jimp from 'jimp';
-import { templateDirectionCoords, tileWidth } from './createTilesetDef';
+
 
 export enum AutogenColorGroup {
   PRIMARY,
@@ -376,7 +376,10 @@ export const getAutogenSettings = (
   terrainTypeCenter: TerrainType,
   adj1TerrainType: TerrainType,
   adj2TerrainType: TerrainType,
-  direction: Direction) => {
+  direction: Direction,
+  templateDirectionCoords: Record<Direction, { x: number, y: number }>,
+  tileWidth: number,
+) => {
   let group: number;
   let colorsTerrainMap: Partial<Record<AutogenColorGroup, TerrainType>> = {};
   let colorsTerrainMapAdj: Partial<Record<AutogenColorGroup, TerrainType>> = {};
@@ -439,7 +442,7 @@ export const getAutogenSettings = (
     adj2TerrainType !== terrainType &&
     adj2TerrainType !== terrainTypeCenter) {
     group = 9; // like 2
-    if (terrainBackTransitions[terrainType].includes(adj1TerrainType)) {
+    if (terrainBackTransitions[terrainType] && terrainBackTransitions[terrainType].includes(adj1TerrainType)) {
       group = 2;
     }
   }
@@ -447,7 +450,7 @@ export const getAutogenSettings = (
     adj1TerrainType !== terrainTypeCenter &&
     adj1TerrainType !== adj2TerrainType) {
     group = 10; // like 3
-    if (terrainBackTransitions[terrainType].includes(adj1TerrainType)) {
+    if (terrainBackTransitions[terrainType] && terrainBackTransitions[terrainType].includes(adj1TerrainType)) {
       group = 3;
     }
   }
@@ -455,7 +458,7 @@ export const getAutogenSettings = (
     adj2TerrainType !== terrainTypeCenter &&
     adj2TerrainType !== adj1TerrainType) {
     group = 11; // like 4
-    if (terrainBackTransitions[terrainType].includes(adj2TerrainType)) {
+    if (terrainBackTransitions[terrainType] && terrainBackTransitions[terrainType].includes(adj2TerrainType)) {
       group = 4;
     }
   }
@@ -464,7 +467,7 @@ export const getAutogenSettings = (
     adj1TerrainType !== adj2TerrainType &&
     adj2TerrainType !== terrainTypeCenter) {
     group = 12;
-    if (terrainBackTransitions[terrainType].includes(adj2TerrainType)) {
+    if (terrainBackTransitions[terrainType] && terrainBackTransitions[terrainType].includes(adj2TerrainType)) {
       group = 4;
     }
   }
@@ -473,7 +476,7 @@ export const getAutogenSettings = (
     adj2TerrainType !== adj1TerrainType &&
     adj1TerrainType !== terrainTypeCenter) {
     group = 13;
-    if (terrainBackTransitions[terrainType].includes(adj1TerrainType)) {
+    if (terrainBackTransitions[terrainType] && terrainBackTransitions[terrainType].includes(adj1TerrainType)) {
       group = 3;
     }
   }
@@ -484,8 +487,8 @@ export const getAutogenSettings = (
     adj2TerrainType !== terrainType &&
     adj2TerrainType !== terrainTypeCenter) {
     group = 14;
-    const isTransitionAdj1 = terrainBackTransitions[terrainType].includes(adj1TerrainType);
-    const isTransitionAdj2 = terrainBackTransitions[terrainType].includes(adj2TerrainType);
+    const isTransitionAdj1 = terrainBackTransitions[terrainType] && terrainBackTransitions[terrainType].includes(adj1TerrainType);
+    const isTransitionAdj2 = terrainBackTransitions[terrainType] && terrainBackTransitions[terrainType].includes(adj2TerrainType);
     if (isTransitionAdj1 && isTransitionAdj2) {
       group = 2;
     }

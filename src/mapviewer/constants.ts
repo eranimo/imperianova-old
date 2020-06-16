@@ -1,5 +1,5 @@
 
-export enum TerrainType {
+export const enum TerrainType {
   MAP_EDGE = 0,
   OCEAN = 1,
   GRASSLAND = 2,
@@ -27,14 +27,21 @@ export const terrainTypeMax = 8;
 // representing which terrains have transitions
 // center -> edge
 export const terrainTransitions: Partial<Record<TerrainType, TerrainType[]>> = {
-  [TerrainType.GRASSLAND]: [TerrainType.RIVER, TerrainType.DESERT, TerrainType.FOREST, TerrainType.TAIGA],
-  [TerrainType.OCEAN]: [TerrainType.RIVER, TerrainType.DESERT, TerrainType.GRASSLAND, TerrainType.FOREST, TerrainType.TAIGA, TerrainType.TUNDRA, TerrainType.GLACIAL],
-  [TerrainType.FOREST]: [TerrainType.RIVER, TerrainType.TAIGA],
-  [TerrainType.DESERT]: [TerrainType.RIVER, TerrainType.FOREST],
-  [TerrainType.TUNDRA]: [TerrainType.RIVER, TerrainType.GLACIAL, TerrainType.TAIGA],
-  [TerrainType.TAIGA]: [TerrainType.RIVER, TerrainType.GLACIAL],
-  [TerrainType.GLACIAL]: [TerrainType.RIVER]
+  [TerrainType.GRASSLAND]: [TerrainType.DESERT, TerrainType.FOREST, TerrainType.TAIGA],
+  [TerrainType.OCEAN]: [TerrainType.DESERT, TerrainType.GRASSLAND, TerrainType.FOREST, TerrainType.TAIGA, TerrainType.TUNDRA, TerrainType.GLACIAL],
+  [TerrainType.FOREST]: [TerrainType.TAIGA],
+  [TerrainType.DESERT]: [TerrainType.FOREST],
+  [TerrainType.TUNDRA]: [TerrainType.GLACIAL, TerrainType.TAIGA],
+  [TerrainType.TAIGA]: [TerrainType.GLACIAL],
 };
+
+export const riverTransitions: TerrainType[] = [
+  TerrainType.GRASSLAND,
+  TerrainType.FOREST,
+  TerrainType.DESERT,
+  TerrainType.TUNDRA,
+  TerrainType.TAIGA,
+];
 
 // edge -> center
 export const terrainBackTransitions: Partial<Record<TerrainType, TerrainType[]>> = {};
@@ -159,3 +166,26 @@ export const oddq_directions = [
     [-1, 0], [-1, +1], [0, +1]
   ],
 ];
+
+
+export type SectionalTile = {
+  tileID: number;
+  direction: Direction;
+  terrainType: TerrainType;
+  terrainTypeCenter: TerrainType;
+
+  terrainTypeSE?: TerrainType;
+  terrainTypeNE?: TerrainType;
+  terrainTypeN?: TerrainType;
+  terrainTypeNW?: TerrainType;
+  terrainTypeSW?: TerrainType;
+  terrainTypeS?: TerrainType;
+};
+
+export type TileVariant = {
+  terrainTypeCenter: TerrainType;
+  neighborTerrainTypes: Record<Direction, TerrainType>;
+  sideTileIDs: Record<Direction, number>;
+  variantID: string;
+  mask: number;
+};

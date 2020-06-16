@@ -3,14 +3,26 @@
 import path from 'path';
 import fs from 'fs';
 import { parseStringPromise, Builder } from 'xml2js';
-import yargs, { number, boolean } from 'yargs';
-import { TerrainType, terrainTypeMax, directionShort, Direction, terrainColors, indexOrder, terrainMinimapColors, terrainTransitions, terrainTypeTitles, terrainBackTransitions, adjacentDirections, renderOrder } from '../src/mapviewer/constants';
-import { newImage, SectionalTile, getFilePath, propertyTypeProcess } from './shared';
+import yargs from 'yargs';
+import {
+  TerrainType,
+  terrainTypeMax,
+  directionShort,
+  Direction,
+  indexOrder,
+  terrainMinimapColors,
+  terrainTransitions,
+  terrainTypeTitles,
+  terrainBackTransitions,
+  adjacentDirections,
+  SectionalTile,
+  riverTransitions,
+} from '../src/mapviewer/constants';
+import { newImage, getFilePath, propertyTypeProcess } from './shared';
 import Jimp from 'jimp';
 import { union, random } from 'lodash';
 import { MultiDictionary } from 'typescript-collections';
 import { getAutogenSettings, AutogenColorGroup, autogenColorGroups, autogenColors, autogenTerrainColors } from './autogenSettings';
-
 
 yargs.command('* <tilesetDefName>', 'Builds tileset definition xml file');
 
@@ -183,7 +195,7 @@ async function buildTemplateTileset(
     const adj2 = tile[`terrainType${directionShort[adjacentDirections[tile.direction][1]]}`] as TerrainType;
     const {
       group, coord, colorsTerrainMap, colorsTerrainMapAdj,
-    } = getAutogenSettings(tile.terrainType, tile.terrainTypeCenter, adj1, adj2, tile.direction);
+    } = getAutogenSettings(tile.terrainType, tile.terrainTypeCenter, adj1, adj2, tile.direction, templateDirectionCoords, tileWidth);
     // console.log(tile.tileID, group, colorsTerrainMap, colorsTerrainMapAdj);
     if (group === undefined) {
       console.log(`Skipping terrainType: ${terrainTypeTitles[tile.terrainType]}, terrainTypeCenter: ${terrainTypeTitles[tile.terrainTypeCenter]}, adj1: ${terrainTypeTitles[adj1]}, adj2: ${terrainTypeTitles[adj2]}`);
@@ -487,6 +499,32 @@ async function buildTilesetDef(template: Jimp, templates: AutogenTemplateImages)
       );
     }
   }
+  console.log('\nAdding river edges');
+  for (const riverTransitionType of riverTransitions) {
+    addTileType(
+      TerrainType.RIVER,
+      riverTransitionType,
+      [riverTransitionType, TerrainType.RIVER, ...terrainTransitions[riverTransitionType]],
+    );
+    addTileType(
+      riverTransitionType,
+      riverTransitionType,
+      [riverTransitionType, TerrainType.RIVER, ...terrainTransitions[riverTransitionType]],
+    );
+    addTileType(
+      riverTransitionType,
+      TerrainType.RIVER,
+      [riverTransitionType, TerrainType.RIVER, ...terrainTransitions[riverTransitionType]],
+    );
+    for (const edgeTerrainType of terrainTransitions[riverTransitionType]) {
+      addTileType(
+        riverTransitionType,
+        edgeTerrainType,
+        [TerrainType.RIVER, riverTransitionType, ...(terrainTransitions[riverTransitionType] || [])],
+      );
+    }
+  }
+
   console.log('\nAdding river mouths');
   for (const edgeTerrainType of terrainTransitions[TerrainType.OCEAN]) {
     addTileType(

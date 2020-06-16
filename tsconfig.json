@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
+    "rootDir": "./",
     "baseUrl": "./",
     "outDir": "./dist/",
     "noImplicitAny": false,
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "target": "es5",
     "sourceMap": true,
@@ -15,7 +16,6 @@
       "scripthost",
     ],
     "jsx": "react",
-    "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "typeRoots": [
       "./node_modules/@types",

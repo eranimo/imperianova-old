@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": "./scripts",
     "module": "commonjs",
     "moduleResolution": "node",
     "target": "es5",
