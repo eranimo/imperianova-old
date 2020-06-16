@@ -223,8 +223,8 @@ export class HexTilemap extends PIXI.Container {
         console.log(this.worldMap.debugNeighborTerrain(hex.x, hex.y));
         const mask = this.worldMapTiles.tileMasks.get(hex.x, hex.y);
         console.log(
-          this.terrainTileset.hexTileDebugInfo.get(mask),
-          this.terrainTileset.hexTileErrors.get(mask),
+          this.terrainTileset.hexTileDebugInfo.get(hex),
+          this.terrainTileset.hexTileErrors.get(hex),
         )
 
         this.updateSelection(hex);
@@ -305,12 +305,10 @@ export class HexTilemap extends PIXI.Container {
       const terrainType = this.worldMap.getTerrainForCoord(hex.x, hex.y);
       if (terrainType === TerrainType.MAP_EDGE) return;
       const hexObj = this.worldMap.getHex(hex.x, hex.y);
-      const riverDirections = this.worldMap.hexRiverEdges.getValue(hexObj);
       const textures = this.terrainTileset.getTile(
         this.worldMapTiles.tileMasks.get(hex.x, hex.y),
         terrainType,
         this.worldMap.getHexNeighborTerrain(hex.x, hex.y),
-        riverDirections,
         this.worldMap,
         hexObj,
         this.worldMap.riverHexPairs,

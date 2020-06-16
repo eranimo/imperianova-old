@@ -48,8 +48,8 @@ export class SectionalTileset {
   sectionalTileTextures: Map<number, PIXI.Texture>;
   sectionalTileMaskToTileIDs: MultiDictionary<number, number>;
   hexTileSectionalTileCache: Map<string, PIXI.Texture[]>;
-  hexTileErrors: Map<number, string>;
-  hexTileDebugInfo: Map<number, any>;
+  hexTileErrors: Map<WorldMapHex, string>;
+  hexTileDebugInfo: Map<WorldMapHex, any>;
   hexRivers: MultiDictionary<number, Direction>;
   
   constructor(
@@ -158,7 +158,6 @@ export class SectionalTileset {
     mask: number,
     terrainTypeCenter: TerrainType,
     neighborTerrainTypes: Record<Direction, TerrainType>,
-    riverDirections: Direction[],
     worldMap: WorldMap,
     hex: WorldMapHex,
     riverHexPairs: Map<WorldMapHex, Set<WorldMapHex>>,
@@ -188,13 +187,21 @@ export class SectionalTileset {
         [Direction.S]: neighborsToChange[Direction.S] ? terrainTypeCenter : neighborTerrainTypes[Direction.S],
       };
     }
-    if (riverDirections.length > 0) {
-      for (const dir of riverDirections) {
-        newNeighborTerrainTypes[dir] = TerrainType.RIVER;
+
+    const riverDirections = {};
+    if (riverHexPairs.has(hex)) {
+      for (const dir of indexOrder) {
+        const neighborHex = worldMap.getHexNeighbor(hex.x, hex.y, dir);
+        if (riverHexPairs.get(hex).has(neighborHex)) {
+          newNeighborTerrainTypes[dir] = TerrainType.RIVER;
+          riverDirections[dir] = neighborHex;
+        }
       }
     }
+    // for each adj dir hex of this river edge that is not ocean terrain,
 
     const debugInfo = {};
+    const sideTiles = {};
     const textures = renderOrder.map(dir => {
       const [adjDir1, adjDir2] = adjacentDirections[dir];
       const terrainType = newNeighborTerrainTypes[dir];
@@ -222,6 +229,10 @@ export class SectionalTileset {
           adjRiverEdges[adjDir2] = false;
         }
       }
+      if (riverDirections[dir]) {
+        adj1TerrainType = TerrainType.RIVER;
+        adj2TerrainType = TerrainType.RIVER;
+      }
       const hash = SectionalTileset.getTileHash(terrainType, terrainTypeCenter, dir, adj1TerrainType, adj2TerrainType);
       const possibleTiles = this.sectionalTileMaskToTileIDs.getValue(hash);
       const chosenTile = possibleTiles[random(possibleTiles.length - 1)];
@@ -237,18 +248,22 @@ export class SectionalTileset {
           
           ${JSON.stringify(newNeighborTerrainTypes, null, 2)}
         `;
-        this.hexTileErrors.set(mask, err);
+        this.hexTileErrors.set(hex, err);
         return null;
       }
+      sideTiles[dir] = chosenTile;
       debugInfo[dir] = { hash, possibleTiles, terrainType, adj1TerrainType, adj2TerrainType, chosenTile, adjRiverEdges };
       return this.sectionalTileTextures.get(chosenTile);
     });
-    this.hexTileDebugInfo.set(mask, {
+    this.hexTileDebugInfo.set(hex, {
       mask,
       debugInfo,
       terrainTypeCenter,
       neighborTerrainTypes,
       riverDirections,
+      riverHexPairs: riverHexPairs.get(hex),
+      newNeighborTerrainTypes,
+      sideTiles,
       // cachekey,
     });
     // this.hexTileSectionalTileCache.set(cachekey, textures);

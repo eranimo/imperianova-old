@@ -505,24 +505,26 @@ async function buildTilesetDef(template: Jimp, templates: AutogenTemplateImages)
     addTileType(
       TerrainType.RIVER,
       riverTransitionType,
-      [riverTransitionType, TerrainType.RIVER, ...terrainTransitions[riverTransitionType]],
+      [riverTransitionType, TerrainType.RIVER, ...(terrainTransitions[riverTransitionType] || [])],
     );
     addTileType(
       riverTransitionType,
       riverTransitionType,
-      [riverTransitionType, TerrainType.RIVER, ...terrainTransitions[riverTransitionType]],
+      [riverTransitionType, TerrainType.RIVER, ...(terrainTransitions[riverTransitionType] || [])],
     );
     addTileType(
       riverTransitionType,
       TerrainType.RIVER,
-      [riverTransitionType, TerrainType.RIVER, ...terrainTransitions[riverTransitionType]],
+      [riverTransitionType, TerrainType.RIVER, ...(terrainTransitions[riverTransitionType] || [])],
     );
-    for (const edgeTerrainType of terrainTransitions[riverTransitionType]) {
-      addTileType(
-        riverTransitionType,
-        edgeTerrainType,
-        [TerrainType.RIVER, riverTransitionType, ...(terrainTransitions[riverTransitionType] || [])],
-      );
+    if (terrainTransitions[riverTransitionType]) {
+      for (const edgeTerrainType of terrainTransitions[riverTransitionType]) {
+        addTileType(
+          riverTransitionType,
+          edgeTerrainType,
+          [TerrainType.RIVER, riverTransitionType, ...(terrainTransitions[riverTransitionType] || [])],
+        );
+      }
     }
   }
 
