@@ -22,7 +22,7 @@ import { newImage, getFilePath, propertyTypeProcess } from './shared';
 import Jimp from 'jimp';
 import { union, random } from 'lodash';
 import { MultiDictionary } from 'typescript-collections';
-import { getAutogenSettings, AutogenColorGroup, autogenColorGroups, autogenColors, autogenTerrainColors, autogenObjectsChance } from './autogenSettings';
+import { getAutogenSettings, AutogenColorGroup, autogenColorGroups, autogenColors, autogenTerrainColors, autogenObjectsChance, autogenVariations, getAutogenGroup } from './autogenSettings';
 
 yargs.command('* <tilesetDefName>', 'Builds tileset definition xml file');
 
@@ -223,6 +223,7 @@ async function buildTemplateTileset(
     } else if (tile.terrainTypeCenter === TerrainType.OCEAN && (adj1 === TerrainType.RIVER || adj2 === TerrainType.RIVER)) {
       tilesetTemplate = AutogenTemplate.RIVER_MOUTH;
     }
+
     const pickedTemplate = templates[tilesetTemplate];
     outTileset.blit(pickedTemplate, tx, ty, coord.x, coord.y, tileWidth, tileHeight);
     // console.log(colorGroupTerrain);
@@ -309,69 +310,82 @@ async function buildTilesetDef(template: Jimp, templates: AutogenTemplateImages)
           // console.log(`\t\tHIDING ${terrainTypeTitles[adj1]} - ${terrainTypeTitles[adj2]}`)
           continue;
         }
-        const cacheKey = `${terrainTypeCenter},${terrainType},${adj1},${adj2}`;
-        if (tileCache.has(cacheKey)) continue;
-        tileCache.set(cacheKey, true);
-        // console.log(`\t\t(${cacheKey}) ${terrainTypeTitles[adj1]} - ${terrainTypeTitles[adj2]}`)
-        indexOrder.forEach(direction => {
-          const adj1Terrain = `terrainType${directionShort[adjacentDirections[direction][0]]}`;
-          const adj2Terrain = `terrainType${directionShort[adjacentDirections[direction][1]]}`;
-          const properties = [
-            {
-              $: {
-                name: 'direction',
-                value: directionShort[direction],
-                type: 'str',
-              }
-            },
-            {
-              $: {
-                name: 'terrainType',
-                value: terrainType,
-                type: 'int',
-              }
-            },
-            {
-              $: {
-                name: 'terrainTypeCenter',
-                value: terrainTypeCenter,
-                type: 'int',
-              }
-            },
-            {
-              $: {
-                name: adj1Terrain,
-                value: adj1,
-                type: 'int',
-              },
-            },
-            {
-              $: {
-                name: adj2Terrain,
-                value: adj2,
-                type: 'int',
-              },
-            }
-          ];
-          tiles.push({
-            tileID,
-            direction,
-            terrainType: (terrainType as unknown) as TerrainType,
-            terrainTypeCenter,
-            [adj1Terrain]: adj1,
-            [adj2Terrain]: adj2,
-          })
 
-          tilesXML.push({
-            $: {
-              id: tileID,
-            },
-            properties: {
-              property: properties, 
-            }
-          })
-          tileID++;
-        });
+        let group = getAutogenGroup(terrainType, terrainTypeCenter, adj1, adj2);
+        let variations = 1;
+        if (
+          terrainTypeCenter in autogenVariations &&
+          group in autogenVariations[terrainTypeCenter]
+        ) {
+          variations = autogenVariations[terrainTypeCenter][group];
+          console.log(`(group: ${group}) Building ${variations} variations of`, terrainTypeCenter, terrainType, adj1, adj2);
+        }
+        for (let variantID = 0; variantID < variations; variantID++) {
+          const cacheKey = `${terrainTypeCenter},${terrainType},${adj1},${adj2},${variantID}`;
+          if (tileCache.has(cacheKey)) continue;
+          tileCache.set(cacheKey, true);
+
+          // console.log(`\t\t(${cacheKey}) ${terrainTypeTitles[adj1]} - ${terrainTypeTitles[adj2]}`)
+          indexOrder.forEach(direction => {
+            const adj1Terrain = `terrainType${directionShort[adjacentDirections[direction][0]]}`;
+            const adj2Terrain = `terrainType${directionShort[adjacentDirections[direction][1]]}`;
+            const properties = [
+              {
+                $: {
+                  name: 'direction',
+                  value: directionShort[direction],
+                  type: 'str',
+                }
+              },
+              {
+                $: {
+                  name: 'terrainType',
+                  value: terrainType,
+                  type: 'int',
+                }
+              },
+              {
+                $: {
+                  name: 'terrainTypeCenter',
+                  value: terrainTypeCenter,
+                  type: 'int',
+                }
+              },
+              {
+                $: {
+                  name: adj1Terrain,
+                  value: adj1,
+                  type: 'int',
+                },
+              },
+              {
+                $: {
+                  name: adj2Terrain,
+                  value: adj2,
+                  type: 'int',
+                },
+              }
+            ];
+            tiles.push({
+              tileID,
+              direction,
+              terrainType: (terrainType as unknown) as TerrainType,
+              terrainTypeCenter,
+              [adj1Terrain]: adj1,
+              [adj2Terrain]: adj2,
+            })
+
+            tilesXML.push({
+              $: {
+                id: tileID,
+              },
+              properties: {
+                property: properties, 
+              }
+            })
+            tileID++;
+          });
+        }
       }
     }
   }
@@ -400,7 +414,8 @@ async function buildTilesetDef(template: Jimp, templates: AutogenTemplateImages)
       addTileType(
         terrainTypeCenter,
         terrainTypeCenter,
-        [terrainTypeCenter, edgeTerrainType]
+        [terrainTypeCenter, edgeTerrainType],
+        (adj1, adj2) => !(terrainTypeCenter === adj1 && terrainTypeCenter === adj2)
       );
     }
   }
@@ -541,6 +556,8 @@ async function buildTilesetDef(template: Jimp, templates: AutogenTemplateImages)
       ]),
     );
   }
+
+
 
   const tilesWidth = 24;
   const tilesHeight = Math.ceil(tileID / tilesWidth);

@@ -1,5 +1,6 @@
 import { TerrainType, directionShort, Direction, terrainTypeTitles, terrainBackTransitions } from '../src/mapviewer/constants';
 import Jimp from 'jimp';
+import { group } from 'yargs';
 
 
 export enum AutogenColorGroup {
@@ -63,6 +64,21 @@ export const autogenColors = {
     Jimp.rgbaToInt(178, 230, 228, 255),
     Jimp.rgbaToInt(217, 243, 243, 255),
   ]
+};
+
+export const autogenVariations: Partial<Record<TerrainType, Record<number, number>>> = {
+  [TerrainType.TUNDRA]: {
+    0: 10,
+  },
+  [TerrainType.FOREST]: {
+    0: 10,
+  },
+  [TerrainType.GRASSLAND]: {
+    0: 10,
+  },
+  [TerrainType.TAIGA]: {
+    0: 10,
+  },
 };
 
 export const autogenObjectsChance: Partial<Record<TerrainType, number>> = {
@@ -382,18 +398,14 @@ export const autogenTerrainColors: Partial<Record<TerrainType, Partial<Record<Te
     ],
   },
 };
-export const getAutogenSettings = (
+
+export const getAutogenGroup = (
   terrainType: TerrainType,
   terrainTypeCenter: TerrainType,
   adj1TerrainType: TerrainType,
   adj2TerrainType: TerrainType,
-  direction: Direction,
-  templateDirectionCoords: Record<Direction, { x: number, y: number }>,
-  tileWidth: number,
 ) => {
   let group: number;
-  let colorsTerrainMap: Partial<Record<AutogenColorGroup, TerrainType>> = {};
-  let colorsTerrainMapAdj: Partial<Record<AutogenColorGroup, TerrainType>> = {};
   if (
     // all equal
     terrainTypeCenter === terrainType &&
@@ -510,6 +522,26 @@ export const getAutogenSettings = (
       group = 10;
     }
   }
+  return group;
+}
+
+export const getAutogenSettings = (
+  terrainType: TerrainType,
+  terrainTypeCenter: TerrainType,
+  adj1TerrainType: TerrainType,
+  adj2TerrainType: TerrainType,
+  direction: Direction,
+  templateDirectionCoords: Record<Direction, { x: number, y: number }>,
+  tileWidth: number,
+) => {
+  let group = getAutogenGroup(
+    terrainType,
+    terrainTypeCenter,
+    adj1TerrainType,
+    adj2TerrainType,
+  );
+  let colorsTerrainMap: Partial<Record<AutogenColorGroup, TerrainType>> = {};
+  let colorsTerrainMapAdj: Partial<Record<AutogenColorGroup, TerrainType>> = {};
 
   if (group === 0) {
     colorsTerrainMap[AutogenColorGroup.PRIMARY] = terrainType;
