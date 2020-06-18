@@ -23,6 +23,13 @@ export interface IHex {
   index: number,
 }
 
+export interface Label {
+  x: number,
+  y: number,
+  size: number,
+  text: string
+};
+
 export const Hex = Honeycomb.extendHex<IHex>({
   size: {
     width: HEX_WIDTH,
@@ -39,6 +46,7 @@ export class MapViewer {
   movePoint: PIXI.Point;
   keyMap: Record<string, boolean>;
   mapFocused$: BehaviorSubject<boolean>;
+  mapLabels: Label[];
 
   constructor(
     protected element: HTMLElement,
@@ -55,6 +63,8 @@ export class MapViewer {
       antialias: false,
     });
     const app = this.app;
+
+    this.mapLabels = [];
   
     element.appendChild(app.view);
 

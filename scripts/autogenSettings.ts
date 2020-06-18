@@ -79,6 +79,9 @@ export const autogenVariations: Partial<Record<TerrainType, Record<number, numbe
   [TerrainType.TAIGA]: {
     0: 10,
   },
+  [TerrainType.DESERT]: {
+    0: 10,
+  },
 };
 
 export const autogenObjectsChance: Partial<Record<TerrainType, number>> = {
@@ -86,6 +89,7 @@ export const autogenObjectsChance: Partial<Record<TerrainType, number>> = {
   [TerrainType.FOREST]: 1,
   [TerrainType.TAIGA]: 1,
   [TerrainType.GRASSLAND]: 1,
+  [TerrainType.DESERT]: 0.25,
 }
 
 /**
