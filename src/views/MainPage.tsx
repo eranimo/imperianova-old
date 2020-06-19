@@ -208,3 +208,5 @@ export const MainPage: React.FC = () => {
   }
   return <MainPageLoaded resources={resources} />;
 }
+
+export default MainPage;

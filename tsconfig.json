@@ -4,9 +4,9 @@
     "baseUrl": "./",
     "outDir": "./dist/",
     "noImplicitAny": false,
-    "module": "commonjs",
+    "module": "esnext",
     "moduleResolution": "node",
-    "target": "es5",
+    "target": "es2017",
     "sourceMap": true,
     "lib": [
       "dom",

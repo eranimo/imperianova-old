@@ -2,6 +2,7 @@ const path = require("path");
 var HtmlWebpackPlugin = require("html-webpack-plugin");
 var webpack = require("webpack");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const ThreadsPlugin = require('threads-plugin');
 
 module.exports = {
   entry: {
@@ -66,6 +67,7 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     publicPath: "/",
     pathinfo: false,
+    globalObject: 'self'
   },
   plugins: [
     new webpack.ProvidePlugin({
@@ -77,6 +79,7 @@ module.exports = {
     new ForkTsCheckerWebpackPlugin({
       reportFiles: ["src/**/*.{ts,tsx}"],
     }),
+    new ThreadsPlugin(),
   ],
   devServer: {
     compress: true,
