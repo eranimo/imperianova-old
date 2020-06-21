@@ -13,7 +13,7 @@ let game: Game;
 export class GameClient {
   public initialized: boolean;
   private thread: any;
-  gameState: Int32Array;
+  gameState: ObjectView;
 
   constructor() {
     this.initialized = false;
@@ -27,10 +27,8 @@ export class GameClient {
     });
     const thread = await spawn(new Worker('./worker/gameWorker'));
 
-    const sab = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 2);
-    this.gameState = new Int32Array(sab);
-    this.gameState[0] = 0;
-    this.gameState[1] = game.day$.value;
+    const sab = new SharedArrayBuffer(GameState.getLength());
+    this.gameState = new GameState(sab);
 
     await thread.init(sab);
 
@@ -40,21 +38,19 @@ export class GameClient {
     this.initialized = true;
 
     game.day$.subscribe(day => {
-      Atomics.store(this.gameState, 1, day);
-      Atomics.notify(this.gameState, 1, 1);
+      thread.newDay(day);
+      this.gameState.set('days', day);
     })
   }
 
   play() {
     game.play();
-    Atomics.store(this.gameState, 0, 1);
-    Atomics.notify(this.gameState, 0, 1);
+    this.thread.play();
   }
 
   pause() {
     game.pause();
-    Atomics.store(this.gameState, 0, 0);
-    Atomics.notify(this.gameState, 0, 1);
+    this.thread.pause();
   }
 
   setSpeed(speed: GameSpeed) {
