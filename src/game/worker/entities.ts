@@ -7,22 +7,42 @@ export class Entity {
     public id: number,
     public type: string,
     public data: MapView,
-  ) {}
+    private gameState: ObjectView,
+    private store: EntityStore,
+  ) {
+  }
+
+  setValue(field: string, value: any) {
+    this.store.lastTickUpdates.add(this.id);
+    this.data.set(field, value);
+  }
+
+  getValue(field: string) {
+    return this.data.get(field);
+  }
 }
 
 export class EntityStore {
+  lastTickUpdates: Set<number>;
+
   constructor(
     public name: string,
     public factory: typeof MapView,
     private entities: Map<number, Entity> = new Map()
-  ) {}
+  ) {
+    this.lastTickUpdates = new Set();
+  }
 
   addEntity(entity: Entity) {
     this.entities.set(entity.id, entity);
   }
 
-  removeEntity(entity: Entity) {
-    this.entities.delete(entity.id);
+  getEntity(entityID: number) {
+    return this.entities.get(entityID);
+  }
+
+  removeEntity(entityID: number) {
+    this.entities.delete(entityID);
   }
 }
 
@@ -46,7 +66,7 @@ export class System {
 
   constructor(options: SystemOptions) {
     this.name = options.name;
-    this.enabled = options.enabled || true;
+    this.enabled = options.enabled !== false;
     this.filterEntities = options.filterEntities;
     this.updateEntity = options.updateEntity;
     this.interval = options.interval;
@@ -66,7 +86,6 @@ export class System {
     if (this.interval) {
       if (this.currentWait > 0) {
         this.currentWait--;
-        return;
       } else if (this.currentWait === 0) {
         this.currentWait = this.interval;
       }
@@ -83,17 +102,21 @@ export class EntityManager {
   public systems: Set<System>;
   public entities: Set<Entity>;
   public addEntity$: Subject<Entity>;
+  public removeEntity$: Subject<Entity>;
   private lastEntityID: number;
+  gameState: ObjectView;
 
   constructor() {
     this.entityTypes = new Map();
     this.systems = new Set();
     this.entities = new Set();
     this.addEntity$ = new Subject();
+    this.removeEntity$ = new Subject();
     this.lastEntityID = 0;
   }
 
-  init() {
+  init(gameState: ObjectView) {
+    this.gameState = gameState;
     for (const system of this.systems) {
       system.init(this);
     }
@@ -122,10 +145,22 @@ export class EntityManager {
       throw new Error(`Unrecognized entity type ${entityType}`);
     }
     const store = this.entityTypes.get(entityType);
-    const entity = new Entity(this.lastEntityID, entityType, store.factory.from(data));
+    const entity = new Entity(this.lastEntityID, entityType, store.factory.from(data), this.gameState, store);
     this.entities.add(entity);
     this.lastEntityID++;
     this.addEntity$.next(entity);
     store.addEntity(entity);
+  }
+
+  removeEntity(
+    entityType: string,
+    entityID: number,
+  ) {
+    if (!this.entityTypes.has(entityType)) {
+      throw new Error(`Unrecognized entity type ${entityType}`);
+    }
+    const store = this.entityTypes.get(entityType);
+    this.removeEntity$.next(store.getEntity(entityID));
+    store.removeEntity(entityID);
   }
 }

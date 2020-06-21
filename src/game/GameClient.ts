@@ -30,9 +30,13 @@ export class GameClient {
     const sab = new SharedArrayBuffer(GameState.getLength());
     this.gameState = new GameState(sab);
 
+    thread.entityUpdates().subscribe(update => {
+      console.log('(client) update', update);
+    });
+
     await thread.init(sab);
 
-    console.log(thread);
+    console.log('thread instance', thread);
 
     this.thread = thread;
     this.initialized = true;
@@ -40,7 +44,9 @@ export class GameClient {
     game.day$.subscribe(day => {
       thread.newDay(day);
       this.gameState.set('days', day);
-    })
+    });
+
+    thread.watchEntity('pop', 0);
   }
 
   play() {

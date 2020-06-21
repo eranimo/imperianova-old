@@ -1,4 +1,5 @@
 import { ObjectViewMixin, MapViewMixin } from 'structurae';
+import { add } from 'lodash';
 
 
 export enum GameSpeed {
@@ -38,5 +39,18 @@ export const Pop = MapViewMixin({
   properties: {
     age: { type: 'integer', default: 0 },
     size: { type: 'integer', default: 0 },
+    birthDay: { type: 'integer', default: 0 },
+    growthRate: { type: 'number', btype: 'float32', default: 0 },
   }
 });
+
+export enum UpdateType {
+  ADD = 'Add',
+  REMOVE = 'Remove',
+  UPDATE = 'Update',
+}
+export type UpdateMessage = {
+  entityID: number;
+  entityType: string;
+  updateType: UpdateType,
+}
