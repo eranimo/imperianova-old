@@ -36,19 +36,12 @@ export class GameLoop {
     }
     
     const ellapsedTime = self.performance.now() - this.lastUpdateTime;
-    this.lastUpdateTime = self.performance.now();
-    this.lagTime += ellapsedTime;
 
     // process input would go here
-
-    // console.log(this.lagTime, this.MS_PER_UPDATE);
-    while (this.lagTime >= this.MS_PER_UPDATE) {
+    if (ellapsedTime >= this.MS_PER_UPDATE) {
       this.lastUpdateTime = self.performance.now();
       this.updateFunc(ellapsedTime);
-      this.lagTime -= this.MS_PER_UPDATE;
     }
-
-    // render would go here
 
     this.rafID = self.requestAnimationFrame(this.update.bind(this));
   }

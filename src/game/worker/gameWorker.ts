@@ -1,57 +1,42 @@
 import { expose } from "threads/worker"
-import { GameState } from '../shared';
-import { ObjectView } from 'structurae';
+import { GameState, Pop } from '../shared';
+import { ObjectView, MapViewMixin, MapView } from 'structurae';
+import { iteratee } from "lodash";
+import { Subject } from "rxjs";
+import { EntityManager, System } from './entities';
+import * as SYSTEMS from './systems';
 
-class GameWorkerLoop {
-  private rafID: number;
-  lastUpdateDay: number;
-
-  constructor(private gameState: ObjectView) {
-    this.lastUpdateDay = 0;
-  }
-
-  play() {
-    if (this.rafID) {
-      this.pause();
-    }
-    this.rafID = requestAnimationFrame(this.update.bind(this));
-  }
-
-  pause() {
-    if (this.rafID) {
-      cancelAnimationFrame(this.rafID);
-    }
-  }
-
-  private update() {
-    const days = this.gameState.get('days');
-    if (this.lastUpdateDay < days) {
-      this.lastUpdateDay = days;
-    }
-    this.rafID = requestAnimationFrame(this.update.bind(this));
-  }
-}
 
 let gameState: ObjectView;
-let loop: GameWorkerLoop;
+let entityManager: EntityManager;
 
 expose({
   init(sab) {
     console.log('init worker', sab);
     gameState = new GameState(sab);
-    loop = new GameWorkerLoop(gameState);
     console.log('(worker) game state', gameState);
+    entityManager = new EntityManager();
+
+    entityManager.addEntityType('pop', Pop);
+    for (const system of Object.values(SYSTEMS)) {
+      entityManager.systems.add(system);
+    }
+
+    entityManager.init();
+
+    entityManager.addEntity('pop', {
+      age: 26,
+      size: 1,
+    });
   },
 
-  play() {
-    loop.play();
-  },
-
-  pause() {
-    loop.pause();
+  entities() {
+    return entityManager.addEntity$;
   },
 
   newDay(day: number) {
-    gameState[1] = day;
+    gameState.set('days', day);
+    console.log(`Day: ${day} Entities: ${entityManager.entities.size}`);
+    entityManager.update(gameState);
   }
 })

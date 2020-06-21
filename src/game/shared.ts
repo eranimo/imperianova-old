@@ -1,4 +1,4 @@
-import { ObjectViewMixin } from 'structurae';
+import { ObjectViewMixin, MapViewMixin } from 'structurae';
 
 
 export enum GameSpeed {
@@ -30,4 +30,13 @@ export const GameState = ObjectViewMixin({
   properties: {
     days: { type: 'integer', default: 0, },
   },
+});
+
+export const Pop = MapViewMixin({
+  $id: 'Pop',
+  type: 'object',
+  properties: {
+    age: { type: 'integer', default: 0 },
+    size: { type: 'integer', default: 0 },
+  }
 });

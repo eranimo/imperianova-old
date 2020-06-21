@@ -45,12 +45,10 @@ export class GameClient {
 
   play() {
     game.play();
-    this.thread.play();
   }
 
   pause() {
     game.pause();
-    this.thread.pause();
   }
 
   setSpeed(speed: GameSpeed) {
