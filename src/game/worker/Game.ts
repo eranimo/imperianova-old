@@ -1,4 +1,5 @@
 import { BehaviorSubject } from 'rxjs';
+import { GameSpeed, GAME_SPEED_FPS } from '../shared';
 
 export interface IGameOptions {
   currentDay: number,
@@ -6,12 +7,6 @@ export interface IGameOptions {
 
 const defaultOptions = {
   currentDay: 0,
-}
-
-export enum GameSpeed {
-  SLOW = 30,
-  NORMAL = 60,
-  FAST = 120,
 }
 
 export class GameLoop {
@@ -27,8 +22,12 @@ export class GameLoop {
     this.updateFunc(0);
   }
 
+  setSpeed(fps: GameSpeed) {
+    this.targetFPS = fps;
+  }
+
   private get MS_PER_UPDATE() {
-    return 1000 / this.targetFPS;
+    return 1000 / GAME_SPEED_FPS[this.targetFPS];
   }
 
   private update() {
@@ -69,16 +68,38 @@ export class GameLoop {
 
 export class Game {
   loop: GameLoop;
-  public day: BehaviorSubject<number>;
+  public day$: BehaviorSubject<number>;
+  public speed$: BehaviorSubject<GameSpeed>;
+  public isPlaying$: BehaviorSubject<boolean>;
 
   constructor(options: IGameOptions = defaultOptions) {
-    this.day = new BehaviorSubject(options.currentDay);
-    this.loop = new GameLoop(() => this.update());
+    this.day$ = new BehaviorSubject(options.currentDay);
+    this.speed$ = new BehaviorSubject(GameSpeed.NORMAL);
+    this.isPlaying$ = new BehaviorSubject(false);
+    this.loop = new GameLoop(() => this.update(), this.speed$.value);
     // this.loop.play();
   }
 
+  get speed() {
+    return this.loop.targetFPS;
+  }
+
+  set speed(fps: GameSpeed) {
+    this.loop.targetFPS = fps;
+    this.speed$.next(fps);
+  }
+
+  play() {
+    this.loop.play();
+    this.isPlaying$.next(true);
+  }
+
+  pause() {
+    this.loop.pause();
+    this.isPlaying$.next(false);
+  }
+  
   update() {
-    // console.log(1);
-    this.day.next(this.day.value + 1);
+    this.day$.next(this.day$.value + 1);
   }
 }

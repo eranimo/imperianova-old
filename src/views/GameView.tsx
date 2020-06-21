@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Grid, Spinner, Heading, Flex, Box, ButtonGroup, Button } from '@chakra-ui/core';
+import { Grid, Spinner, Heading, Flex, Box, ButtonGroup, Button, IconButton, Divider } from '@chakra-ui/core';
 import { GameClient } from '../game/GameClient';
-import { FaPlay, FaPause } from 'react-icons/fa';
+import { FaPlay, FaPause, FaBackward, FaForward, FaMinus, FaPlus } from 'react-icons/fa';
 import { useObservable } from 'react-use';
+import { GameSpeed, GAME_SPEED_TITLE } from '../game/shared';
 
 
 const client = new GameClient();
@@ -22,35 +23,63 @@ export const GameClientContext = React.createContext<GameClient>(null);
 
 const TimeDisplay = () => {
   const client = useContext(GameClientContext);
-  const day = useObservable(client.day$, client.day);
+  const day = useObservable(client.days$, client.days$.value);
+  return <>{day}</>;
+}
 
+const TimeControls = () => {
+  const client = useContext(GameClientContext);
+  const isPlaying = useObservable(client.isPlaying$, client.isPlaying$.value);
+  const canGoSlower = useObservable(client.canGoSlower$, client.speed$.value !== GameSpeed.SLOW);
+  const canGoFaster = useObservable(client.canGoFaster$, client.speed$.value !== GameSpeed.FAST);
+  const speed = useObservable(client.speed$, client.speed$.value);
+
+  // console.log('GameControls isPlaying', isPlaying);
   return (
-    <span>
-      {day}
-    </span>
+    <ButtonGroup spacing={2}>
+      <Button
+        leftIcon={isPlaying ? FaPause : FaPlay}
+        onClick={() => {
+          if (isPlaying) {
+            client.pause()
+          } else {
+            client.play()
+          }
+        }}
+      >
+        {isPlaying ? 'Pause' : 'Play'}
+      </Button>
+      <IconButton
+        aria-label="Slower"
+        icon={FaMinus}
+        isDisabled={!canGoSlower}
+        onClick={() => {
+          client.setSpeed(speed - 1);
+        }}
+      />
+      <Button variant="ghost">
+        {GAME_SPEED_TITLE[speed]}
+      </Button>
+      <IconButton
+        aria-label="Faster"
+        icon={FaPlus}
+        isDisabled={!canGoFaster}
+        onClick={() => {
+          client.setSpeed(speed + 1);
+        }}
+      />
+    </ButtonGroup>
   );
 }
+
 const GameControls: React.FC = () => {
-  const client = useContext(GameClientContext);
-  (window as any).client = client;
-  const playState = useObservable(client.playState$, client.playState);
   
-  console.log('GameControls playState', playState);
+  (window as any).client = client;
+
   return (
     <Box>
       <ButtonGroup spacing={5}>
-        <Button
-          leftIcon={playState.isPlaying ? FaPause : FaPlay}
-          onClick={() => {
-            if (playState.isPlaying) {
-              client.pause()
-            } else {
-              client.play()
-            }
-          }}
-        >
-          {playState.isPlaying ? 'Pause' : 'Play'}
-        </Button>
+        <TimeControls />
       </ButtonGroup>
       <TimeDisplay />
     </Box>
