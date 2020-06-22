@@ -1,9 +1,10 @@
 import { System } from './entities';
+import { EntityType } from '../shared';
 
 
 export const popAgeSystem = new System({
   name: 'PopAgeSystem',
-  filterEntities: (entity) => entity.type === 'pop',
+  filterEntities: (entity) => entity.type === EntityType.POP,
   updateEntity: (entity, gameState) => {
     entity.setValue('age', entity.getValue('age') + 1);
     entity.setValue('size', entity.getValue('size') + 1);

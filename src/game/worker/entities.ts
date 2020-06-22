@@ -1,12 +1,13 @@
 import { Subject } from "rxjs";
-import { ObjectView, MapViewMixin, MapView } from 'structurae';
+import { ObjectView, ObjectViewMixin } from 'structurae';
+import { EntityType, entityFactories } from '../shared';
 
 
 export class Entity {
   constructor(
     public id: number,
-    public type: string,
-    public data: MapView,
+    public type: EntityType,
+    public data: ObjectView,
     private gameState: ObjectView,
     private store: EntityStore,
   ) {
@@ -27,7 +28,7 @@ export class EntityStore {
 
   constructor(
     public name: string,
-    public factory: typeof MapView,
+    public factory: typeof ObjectView,
     private entities: Map<number, Entity> = new Map()
   ) {
     this.lastTickUpdates = new Set();
@@ -98,7 +99,7 @@ export class System {
 }
 
 export class EntityManager {
-  public entityTypes: Map<string, EntityStore>;
+  public entityTypes: Map<EntityType, EntityStore>;
   public systems: Set<System>;
   public entities: Set<Entity>;
   public addEntity$: Subject<Entity>;
@@ -123,8 +124,8 @@ export class EntityManager {
   }
 
   addEntityType(
-    entityType: string,
-    factory: typeof MapView,
+    entityType: EntityType,
+    factory: typeof ObjectView,
   ) {
     this.entityTypes.set(entityType, new EntityStore(entityType, factory))
   }
@@ -138,14 +139,22 @@ export class EntityManager {
   }
 
   addEntity(
-    entityType: string,
+    entityType: EntityType,
     data: any,
   ) {
     if (!this.entityTypes.has(entityType)) {
       throw new Error(`Unrecognized entity type ${entityType}`);
     }
     const store = this.entityTypes.get(entityType);
-    const entity = new Entity(this.lastEntityID, entityType, store.factory.from(data), this.gameState, store);
+    const length = store.factory.getLength();
+    const sab = new SharedArrayBuffer(length)
+    // const objectview = store.factory.from({});
+    const objectview = new store.factory(sab);
+    // console.log(objectview);
+    for (const field of store.factory.fields) {
+      objectview.set(field, data[field]);
+    }
+    const entity = new Entity(this.lastEntityID, entityType, objectview, this.gameState, store);
     this.entities.add(entity);
     this.lastEntityID++;
     this.addEntity$.next(entity);
@@ -153,7 +162,7 @@ export class EntityManager {
   }
 
   removeEntity(
-    entityType: string,
+    entityType: EntityType,
     entityID: number,
   ) {
     if (!this.entityTypes.has(entityType)) {

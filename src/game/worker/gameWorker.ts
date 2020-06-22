@@ -1,7 +1,7 @@
 import { expose } from "threads/worker"
 import { Subject as WorkerSubject, Observable as WorkerObservable } from "threads/observable";
-import { GameState, Pop, UpdateMessage, UpdateType } from '../shared';
-import { ObjectView, MapViewMixin, MapView } from 'structurae';
+import { GameState, UpdateMessage, UpdateType, entityFactories, EntityType } from '../shared';
+import { ObjectView, ObjectViewMixin } from 'structurae';
 import { iteratee } from "lodash";
 import { EntityManager, System } from './entities';
 import * as SYSTEMS from './systems';
@@ -12,7 +12,7 @@ import { MultiDictionary } from 'typescript-collections';
 let gameState: ObjectView;
 let entityManager: EntityManager;
 let entityUpdates: WorkerSubject<UpdateMessage> = new WorkerSubject();
-let watchers: Map<string, Set<number>>;
+let watchers: Map<EntityType, Set<number>>;
 
 expose({
   init(sab) {
@@ -21,7 +21,7 @@ expose({
     console.log('(worker) game state', gameState);
     entityManager = new EntityManager();
 
-    entityManager.addEntityType('pop', Pop);
+    entityManager.addEntityType(EntityType.POP, entityFactories[EntityType.POP])
     for (const system of Object.values(SYSTEMS)) {
       entityManager.systems.add(system);
     }
@@ -35,7 +35,8 @@ expose({
     entityManager.addEntity$.subscribe(entity => entityUpdates.next({
       entityID: entity.id,
       entityType: entity.type,
-      updateType: UpdateType.ADD
+      updateType: UpdateType.ADD,
+      sab: entity.data.buffer as SharedArrayBuffer,
     }));
 
     entityManager.removeEntity$.subscribe(entity => entityUpdates.next({
@@ -48,8 +49,8 @@ expose({
     //   console.log('(worker) update', update);
     // });
 
-    for (let i = 0; i < 10; i++) {
-      entityManager.addEntity('pop', {
+    for (let i = 0; i < 2; i++) {
+      entityManager.addEntity(EntityType.POP, {
         age: 0,
         size: 1,
         birthDay: gameState.get('days'),
@@ -58,11 +59,13 @@ expose({
     }
   },
 
-  watchEntity(entityType: string, entityID: number) {
+  watchEntity(entityType: EntityType, entityID: number) {
+    // console.log('watch', entityType, entityID);
     watchers.get(entityType).add(entityID);
   },
 
-  unwatchEntity(entityType: string, entityID: number) {
+  unwatchEntity(entityType: EntityType, entityID: number) {
+    // console.log('unwatch', entityType, entityID);
     watchers.get(entityType).delete(entityID);
   },
 
@@ -87,6 +90,15 @@ expose({
         }
       }
       store.lastTickUpdates = new Set();
+    }
+
+    if (Math.random() < 0.1) {
+      entityManager.addEntity(EntityType.POP, {
+        age: 0,
+        size: 1,
+        birthDay: gameState.get('days'),
+        growthRate: 1/10,
+      });
     }
   }
 })

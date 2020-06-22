@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Grid, Spinner, Heading, Flex, Box, ButtonGroup, Button, IconButton, Divider } from '@chakra-ui/core';
+import { Grid, Spinner, Heading, Flex, Box, ButtonGroup, Button, IconButton, Divider, Link, List, ListItem } from '@chakra-ui/core';
 import { GameClient } from '../game/GameClient';
 import { FaPlay, FaPause, FaBackward, FaForward, FaMinus, FaPlus } from 'react-icons/fa';
-import { useObservable } from 'react-use';
-import { GameSpeed, GAME_SPEED_TITLE } from '../game/shared';
+import { useObservable, useEffectOnce } from 'react-use';
+import { GameSpeed, GAME_SPEED_TITLE, EntityType, entityTypes } from '../game/shared';
+import { useObservableSet } from '../game/ObservableSet';
 
 
 const client = new GameClient();
@@ -73,9 +74,6 @@ const TimeControls = () => {
 }
 
 const GameControls: React.FC = () => {
-  
-  (window as any).client = client;
-
   return (
     <Box>
       <ButtonGroup spacing={5}>
@@ -85,6 +83,93 @@ const GameControls: React.FC = () => {
     </Box>
   )
 }
+
+const EntityDetails: React.FC<{
+  entityType: EntityType,
+  entityID: number,
+}> = ({ entityType, entityID }) => {
+  const client = useContext(GameClientContext);
+  useEffect(() => {
+    client.watchEntity(entityType, entityID);
+    return () => client.unwatchEntity(entityType, entityID);
+  }, [entityType, entityID]);
+  const entityView = useObservable(
+    client.entityViewManager.entityViewStore.get(EntityType.POP).getEntity$(entityID),
+    client.entityViewManager.entityViewStore.get(EntityType.POP).getEntity$(entityID).value,
+  );
+  // console.log(entityType, entityID, entityView);
+  return (
+    <Box>
+      EntityType: {entityType}<br />
+      EntityID: {entityID}<br />
+      {JSON.stringify(entityView, null, 2)}
+    </Box>
+  )
+}
+
+const EntityTypeList: React.FC<{
+  entityType: EntityType,
+  activeEntityID: number,
+  setActiveEntityID: (value: number) => void,
+}> = ({ entityType, activeEntityID, setActiveEntityID }) => {
+  const client = useContext(GameClientContext);
+  const entities = useObservableSet(client.entityViewManager.entityViewStore.get(entityType).entities$);
+  return (
+    <Box>
+      <Heading size="md">{entityType} entities:</Heading>
+      <List spacing={5}>
+        {entities.map(entity => (
+          <div key={entity.entityID}>
+            <ListItem
+              onClick={() => {
+                if (activeEntityID === entity.entityID) {
+                  setActiveEntityID(null);
+                } else {
+                  setActiveEntityID(entity.entityID);
+                }
+              }}
+              style={{ fontWeight: activeEntityID === entity.entityID ? 'bold' : 'normal' }}
+            >
+              {entity.entityID}
+            </ListItem>
+          </div>
+        ))}
+      </List>
+    </Box>
+  )
+}
+
+const EntityDebug = () => {
+  const [activeEntityType, setActiveEntityType] = useState(null);
+  const [activeEntityID, setActiveEntityID] = useState(null);
+  return (
+    <Grid templateColumns="repeat(3, 1fr)">
+      <Box>
+        <Heading size="md">Entity Types:</Heading>
+        <List spacing={5}>
+          {entityTypes.map(entityType => (
+            <div key={entityType}>
+              <ListItem
+                onClick={() => {
+                  if (entityType === activeEntityType) {
+                    setActiveEntityType(null);
+                  } else {
+                    setActiveEntityType(entityType);
+                  }
+                }}
+                style={{ fontWeight: activeEntityType === entityType ? 'bold' : 'normal' }}
+              >
+                {entityType}
+              </ListItem>
+            </div>
+          ))}
+        </List>
+      </Box>
+      {activeEntityType && <EntityTypeList entityType={activeEntityType} activeEntityID={activeEntityID} setActiveEntityID={setActiveEntityID} />}
+      {activeEntityType && activeEntityID !== null && <EntityDetails entityType={activeEntityType} entityID={activeEntityID} />}
+    </Grid>
+  )
+};
 
 export const GameView: React.FC = ({ }) => {
   const [isLoaded, setLoaded] = useState(false);
@@ -104,8 +189,9 @@ export const GameView: React.FC = ({ }) => {
 
   return (
     <GameClientContext.Provider value={client}>
-      <Box m={5}>
+      <Box m={5} style={{ height: '100vh', overflow: 'auto' }}>
         <GameControls />
+        <EntityDebug />
       </Box>
     </GameClientContext.Provider>
   );
