@@ -199,6 +199,7 @@ export class WorldMap {
       [Direction.SW]: null,
       [Direction.S]: null,
     });
+    console.time('build edge map');
     this.hexgrid.forEach((hex, index) => {
       const neighbors = this.getHexNeighbors(hex);
       const edges = hexEdgesMap.get(hex) || getEmptyEdgeMap();
@@ -245,8 +246,10 @@ export class WorldMap {
       }
       hexEdgesMap.set(hex, edges);
     });
+    console.timeEnd('build edge map');
 
     // find adjacent edges for each edge
+    console.time('find adjacent edges');
     this.hexgrid.forEach((hex, index) => {
       const edges = hexEdgesMap.get(hex);
       for (const dir of indexOrder) {
@@ -264,10 +267,12 @@ export class WorldMap {
       }
       hexEdgesMap.set(hex, edges);
     });
+    console.timeEnd('find adjacent edges');
     console.log('hexEdges', hexEdges);
     console.log('hexEdgesMap', hexEdgesMap);
 
     // calculate upstream edge and heights
+    console.time('find edge height');
     const getEdgeHeight = (edge: Edge) => Math.max((this.heightmap.get(edge.h1.x, edge.h1.y) + this.heightmap.get(edge.h2.x, edge.h2.y)) / 2);
     for (const edge of hexEdges) {
       if (
@@ -279,10 +284,12 @@ export class WorldMap {
         edge.height = getEdgeHeight(edge);
       }
     }
+    console.timeEnd('find edge height');
 
     const coastlineEdges: Edge[] = [];
 
     // find coastline
+    console.time('find coastlines');
     for (const edge of hexEdges) {
       if (
         edge.o1 && edge.o2 &&
@@ -300,6 +307,7 @@ export class WorldMap {
         coastlineEdges.push(edge);
       }
     }
+    console.timeEnd('find coastlines');
 
     console.log('coastlineEdges', coastlineEdges);
 
@@ -343,14 +351,16 @@ export class WorldMap {
       return lastEdges;
     }
 
+    console.time('build rivers');
     const rng = Alea(this.seed);
-
     this.rivers = coastlineEdges
       .filter(i => rng() < 0.33)
       .map(edge => buildRiver(edge))
       .filter(edges => edges.length > 0);
+    console.timeEnd('build rivers');
     console.log('rivers', this.rivers);
 
+    console.time('build river data structures');
     this.hexRiverEdges = new MultiDictionary();
     this.hexRiverPoints = new MultiDictionary();
     this.riverHexPairs = new Map();
@@ -372,6 +382,7 @@ export class WorldMap {
         this.hexRiverPoints.setValue(edge.h2, [edge.p1, edge.p2]);
       }
     }
+    console.timeEnd('build river data structures');
     console.log('hexRiverEdges', this.hexRiverEdges);
   }
 
