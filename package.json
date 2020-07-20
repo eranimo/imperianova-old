@@ -45,7 +45,7 @@
     "alea": "^1.0.0",
     "emotion-theming": "^10.0.27",
     "honeycomb-grid": "^3.1.7",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "ndarray": "^1.0.19",
     "pixi-cull": "^0.6.0",
     "pixi-tilemap": "^2.0.6",
